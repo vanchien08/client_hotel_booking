@@ -1,0 +1,54 @@
+.background-login {
+    background-image: linear-gradient(to bottom right, #18A5A7, #B6C0C5);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 450px;
+    width: 400px;
+    background-color: #fff;
+    border-radius: 20px;
+}
+.input-login{
+    margin-top:10px;
+    background-color:#ebebeb;
+}
+
+.tittle-form-login{
+    margin-bottom:30px;
+    font-weight: 600;
+    font-size: 30px;
+}
+.login-button{
+    width:100%;
+    margin-top:20px;
+    background-image: linear-gradient(to bottom right, #18A5A7, #B6C0C5);
+}
+
+.icon-login{
+    font-size:30px;
+}
+
+.icon-fb-gg:hover{
+    cursor:pointer;
+}
+
+.social-login{
+    margin-top: 10px;
+
+}
+
+
+
+.fa-facebook{
+    color:#0866ff;
+}
+.fa-google {
+    color:#dc3545;
+}

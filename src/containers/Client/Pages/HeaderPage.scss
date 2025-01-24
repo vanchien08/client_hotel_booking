@@ -1,0 +1,33 @@
+.navbar-nav {
+    margin-left: auto;
+  }
+  
+  /* Hover effect for nav links */
+  .nav-link {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    background-color: #007bff; /* Blue background on hover */
+    color: #ffffff; /* White text on hover */
+    border-radius: 5px; /* Optional: rounded corners */
+  }
+  
+  /* Specific styles for active link */
+  .nav-link.active {
+    background-color: #007bff;
+    color: #ffffff;
+    border-radius: 5px;
+  }
+  
+  /* Dropdown menu styles */
+  .dropdown-menu {
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #007bff;
+    color: #ffffff;
+  }
+  

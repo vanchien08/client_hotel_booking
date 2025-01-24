@@ -1,0 +1,55 @@
+
+.button-search-container{
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 117px;
+  
+    width:800px;
+    text-align: center;
+    margin:auto;
+}
+.search-container {
+    background: #003580;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: white;
+    text-align: center;
+    max-width: 1000px;  /* Tăng giới hạn tối đa */
+    width: 900px;       /* Tăng chiều rộng thực tế */
+   
+    height:auto;
+  
+}
+.search-container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+.input-group {
+    display: flex;
+    gap: 10px;
+}
+.search-container input, 
+.search-container button {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+}
+.search-container input {
+    color: #333;
+}
+.search-container button {
+    background-color: #febb02;
+    color: #003580;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+}
+.search-container button:hover {
+    background-color: #e09d00;
+}

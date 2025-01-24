@@ -1,0 +1,58 @@
+html, body {
+  height: 100%;  /* Đảm bảo body có chiều cao 100% */
+  margin: 0;     /* Loại bỏ khoảng cách mặc định của body */
+  overflow-y: auto; /* Kích hoạt thanh cuộn dọc cho toàn bộ trang */
+}
+
+
+.headerPage{
+     border: 1px solid red;
+     height:150px;
+     width:100%;
+     display:flex;
+     background-color: #18A5A7;
+     justify-content: center;
+     align-items: center;
+}
+.logoShopViet{
+  margin-left:30px;
+}
+.search-container {
+  /*   margin: 0 20px; */
+     position: relative;
+     width: 70%; 
+     height:40px;
+    
+   }
+   
+   .search-bar {
+     width: 100%;
+     padding-right: 40px; /* Thêm khoảng trống cho icon bên phải */
+     height: 40px;
+   }
+   
+   .fa-magnifying-glass {
+     color:#fff;
+     border-radius: 2px;
+     margin:2px;
+     background-color: #0c797b;
+     padding:7px 10px;
+     position: absolute;
+     right: 10px; /* Khoảng cách từ bên phải */
+     top:50%;
+     transform: translateY(-50%); /* Căn giữa icon theo chiều dọc */
+    // color: #999; /* Màu của icon */
+     //pointer-events: none; /* Đảm bảo rằng người dùng có thể tương tác với input mà không bị icon cản trở */
+   }
+   .fa-magnifying-glass:hover {
+     cursor: pointer;
+   }
+   
+   .cart-shop{
+     font-size: 20px;
+     margin-right: 15px;
+     cursor:pointer;
+   }
+   .isLogin{
+    cursor:pointer;
+   }
