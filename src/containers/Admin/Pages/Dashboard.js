@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import UserManage from "./userManage";
+import Hotel from "./Hotel";
+import Reviews from "./Reviews";
 import "./Dashboard.scss";
 import {
   LaptopOutlined,
@@ -30,9 +32,9 @@ const items2 = [
   {
     key: "sub2",
     icon: React.createElement(LaptopOutlined),
-    label: "Quản trị Laptop",
+    label: "Quản lý đánh giá",
     children: [
-      { key: "3", label: "Danh sách Laptop" },
+      { key: "3", label: "Danh sách đánh giá" },
       { key: "4", label: "Thêm Laptop" },
     ],
   },
@@ -100,9 +102,13 @@ const Dashboard = ({ isLoggedIn, navigate }) => {
           </Sider>
 
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
-            {selectedContent === "UserManage" && <UserManage />}
-            {selectedContent === "DeleteUser" && <div>Xoá người dùng</div>}
-            {selectedContent === "LaptopList" && <div>Danh sách Laptop</div>}
+            {selectedContent === "UserManage" && <Hotel />}
+            {selectedContent === "DeleteUser" && <div> thêm</div>}
+            {selectedContent === "LaptopList" && (
+              <div>
+                <Reviews />
+              </div>
+            )}
             {selectedContent === "AddLaptop" && <div>Thêm Laptop</div>}
             {selectedContent === "NotificationList" && (
               <div>Danh sách thông báo</div>

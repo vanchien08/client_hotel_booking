@@ -8,4 +8,16 @@ const handelGetUserApi = () => {
   return axios.post("/getAllUser");
 };
 
-export { handelLoginApi, handelGetUserApi };
+const handelGetHotelApi = () => {
+  return axios.get("/getAllHotel");
+};
+
+const handelGetReviewsApi = () => {
+  return axios.get("/getAllReviews");
+};
+export {
+  handelLoginApi,
+  handelGetUserApi,
+  handelGetHotelApi,
+  handelGetReviewsApi,
+};
