@@ -1,9 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { connect } from "react-redux";
 import { Table } from "antd";
 import { handelGetReviewsApi } from "../../../services/userService";
+import { handelDeleteReviewsApi } from "../../../services/ReviewService";
 import { push } from "connected-react-router";
 import "./Reviews.scss";
+
+import { Button, Modal } from "antd";
 
 class Reviews extends Component {
   constructor(props) {
@@ -11,6 +14,16 @@ class Reviews extends Component {
     this.state = {
       isLoggedIn: false,
       data: null,
+      isModalOpen: false,
+      id: "",
+      user: "",
+      email: "",
+      rating: "",
+      comment: "",
+      hotel: "",
+      hoteladdress: "",
+      createat: "",
+      selectedReview: null,
     };
   }
 
@@ -30,12 +43,73 @@ class Reviews extends Component {
     navigate(`${url}`);
   };
 
+  handleUpdate = (record) => {
+    this.setState({
+      isModalOpen: true,
+      selectedReview: record, // Lưu thông tin review cần chỉnh sửa
+    });
+  };
   // Xử lý xóa review
   handleDelete = async (id) => {
-    window.confirm("Are you sure you want to delete this review?");
-    console.log("action delteee");
+    if (window.confirm("Are you sure you want to delete this review?")) {
+      try {
+        const res = await handelDeleteReviewsApi(id);
+        if (res.errCode === 1) {
+          alert("Review deleted successfully!");
+          // Cập nhật lại dữ liệu sau khi xóa
+          this.componentDidMount();
+        } else {
+          alert(
+            res.errMessage || "Failed to delete the review. Please try again."
+          );
+        }
+      } catch (error) {
+        console.error("Error deleting review:", error);
+        alert("An unexpected error occurred while deleting the review.");
+      }
+    }
+  };
+  handleOk = () => {
+    this.setState({
+      isModalOpen: false,
+    });
+
+    console.log("check state", this.state);
+  };
+  handleCancel = () => {
+    this.setState({
+      isModalOpen: false,
+    });
+  };
+  handelonChangeInput = (id, event) => {
+    this.setState({
+      selectedReview: {
+        ...this.state.selectedReview, // Giữ lại các thuộc tính cũ của selectedReview
+        [id]: event.target.value, // Chỉ cập nhật thuộc tính id
+      },
+    });
+  };
+  handelonChangeInputChildUser = (id, event) => {
+    this.setState({
+      selectedReview: {
+        ...this.state.selectedReview, // Giữ lại các thuộc tính cũ của selectedReview
+        user: {
+          [id]: event.target.value,
+        }, // Chỉ cập nhật thuộc tính id
+      },
+    });
   };
 
+  handelonChangeInputChildHotel = (id, event) => {
+    this.setState({
+      selectedReview: {
+        ...this.state.selectedReview, // Giữ lại các thuộc tính cũ của selectedReview
+        hotel: {
+          [id]: event.target.value,
+        }, // Chỉ cập nhật thuộc tính id
+      },
+    });
+  };
   // Cấu hình các cột trong bảng
   getColumns = () => [
     {
@@ -108,15 +182,177 @@ class Reviews extends Component {
   ];
 
   render() {
-    const { data } = this.state;
+    const { data, isModalOpen, selectedReview } = this.state;
     return (
-      <div className="text-center">
+      <div classNameName="text-center">
         <h1>Reviews MANAGER</h1>
         {data == null ? (
           <p>Loading data, please wait...</p> // Hiển thị thông báo khi dữ liệu chưa có
         ) : (
           <Table columns={this.getColumns()} dataSource={data} rowKey="id" />
         )}
+
+        <Modal
+          title="Update Review"
+          open={isModalOpen}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          width={1000}
+        >
+          {selectedReview ? (
+            <form>
+              <div className="container">
+                <div className="row">
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="input1" className="form-label">
+                        ID
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="id"
+                        value={this.state.selectedReview.id}
+                        onChange={(event) =>
+                          this.handelonChangeInput(event.target.id, event)
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="input2" className="form-label">
+                        Tên
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="name"
+                        value={this.state.selectedReview.user.name}
+                        onChange={(event) =>
+                          this.handelonChangeInputChildUser(
+                            event.target.id,
+                            event
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="input3" className="form-label">
+                        Email
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="email"
+                        value={this.state.selectedReview.user.email}
+                        onChange={(event) =>
+                          this.handelonChangeInputChildUser(
+                            event.target.id,
+                            event
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="input4" className="form-label">
+                        Đánh giá
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="rate"
+                        value={this.state.selectedReview.rating}
+                        onChange={(event) =>
+                          this.handelonChangeInput(event.target.id, event)
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="input5" className="form-label">
+                        Bình luận
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="comment"
+                        value={this.state.selectedReview.comment}
+                        onChange={(event) =>
+                          this.handelonChangeInput(event.target.id, event)
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="input6" className="form-label">
+                        Khách Sạn
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="hotel"
+                        value={this.state.selectedReview.hotel.name}
+                        onChange={(event) =>
+                          this.handelonChangeInputChildHotel(
+                            event.target.id,
+                            event
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="input7" className="form-label">
+                        Địa chỉ
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="address"
+                        value={this.state.selectedReview.hotel.address}
+                        onChange={(event) =>
+                          this.handelonChangeInputChildHotel(
+                            event.target.id,
+                            event
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="col-md-3">
+                    <div className="mb-3">
+                      <label for="input8" className="form-label">
+                        Lúc
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="createdAt"
+                        value={this.state.selectedReview.createdAt}
+                        onChange={(event) =>
+                          this.handelonChangeInput(event.target.id, event)
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          ) : (
+            <p>Loading...</p>
+          )}
+        </Modal>
       </div>
     );
   }
