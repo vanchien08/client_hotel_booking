@@ -2,7 +2,10 @@ import React, { Component, useState } from "react";
 import { connect } from "react-redux";
 import { Table } from "antd";
 import { handelGetReviewsApi } from "../../../services/userService";
-import { handelDeleteReviewsApi } from "../../../services/ReviewService";
+import {
+  handelDeleteReviewsApi,
+  handelUpdateReviewsApi,
+} from "../../../services/ReviewService";
 import { push } from "connected-react-router";
 import "./Reviews.scss";
 
@@ -69,13 +72,32 @@ class Reviews extends Component {
       }
     }
   };
-  handleOk = () => {
-    this.setState({
-      isModalOpen: false,
-    });
+  handleOk = async () => {
+    try {
+      // Đóng modal trước khi gọi API
+      await this.setState({ isModalOpen: false });
 
-    console.log("check state", this.state);
+      // Kiểm tra state sau khi cập nhật
+      console.log("check state", this.state.selectedReview);
+
+      // Kiểm tra nếu selectedReview tồn tại
+      if (!this.state.selectedReview) {
+        throw new Error("selectedReview is undefined or null");
+      }
+
+      // Gọi API cập nhật
+      let respon = await handelUpdateReviewsApi(
+        this.state.selectedReview.id,
+        this.state.selectedReview.rating,
+        this.state.selectedReview.comment
+      );
+      this.componentDidMount();
+      console.log("respon update", respon);
+    } catch (error) {
+      console.error("Error during update:", error);
+    }
   };
+
   handleCancel = () => {
     this.setState({
       isModalOpen: false,
@@ -209,13 +231,11 @@ class Reviews extends Component {
                         ID
                       </label>
                       <input
+                        disabled
                         type="text"
                         className="form-control"
                         id="id"
                         value={this.state.selectedReview.id}
-                        onChange={(event) =>
-                          this.handelonChangeInput(event.target.id, event)
-                        }
                       />
                     </div>
                   </div>
@@ -225,6 +245,7 @@ class Reviews extends Component {
                         Tên
                       </label>
                       <input
+                        disabled
                         type="text"
                         className="form-control"
                         id="name"
@@ -244,6 +265,7 @@ class Reviews extends Component {
                         Email
                       </label>
                       <input
+                        disabled
                         type="text"
                         className="form-control"
                         id="email"
@@ -263,9 +285,11 @@ class Reviews extends Component {
                         Đánh giá
                       </label>
                       <input
-                        type="text"
+                        type="number"
+                        min="1"
+                        max="5"
                         className="form-control"
-                        id="rate"
+                        id="rating"
                         value={this.state.selectedReview.rating}
                         onChange={(event) =>
                           this.handelonChangeInput(event.target.id, event)
@@ -298,6 +322,7 @@ class Reviews extends Component {
                         Khách Sạn
                       </label>
                       <input
+                        disabled
                         type="text"
                         className="form-control"
                         id="hotel"
@@ -317,6 +342,7 @@ class Reviews extends Component {
                         Địa chỉ
                       </label>
                       <input
+                        disabled
                         type="text"
                         className="form-control"
                         id="address"
@@ -336,6 +362,7 @@ class Reviews extends Component {
                         Lúc
                       </label>
                       <input
+                        disabled
                         type="text"
                         className="form-control"
                         id="createdAt"
