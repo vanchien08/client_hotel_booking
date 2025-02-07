@@ -4,6 +4,8 @@ export const path = {
   LOG_OUT: "/logout",
   SYSTEM: "/system",
   SHOPVIET: "/shopviet",
+  SEARCH: "/searchresult",
+  ROOMDETAIL: "/roomdetail",
 };
 
 export const languages = {
