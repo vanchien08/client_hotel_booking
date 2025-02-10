@@ -8,6 +8,8 @@ import * as actions from "../../../store/actions";
 import { handleSearchRoom } from "../../../services/searchResultService";
 import { Button, Modal } from "antd";
 import HomePages from "./HomePages";
+import HeaderPage from "./HeaderPage";
+import Footer from "./Footer";
 class HomePage1 extends Component {
   constructor(props) {
     super(props);
@@ -77,6 +79,7 @@ class HomePage1 extends Component {
         >
           Ngày bắt đầu phải nhỏ hơn ngày kết thúc !
         </Modal>
+        <HeaderPage />
         <div className="fh5co-hero">
           <div className="fh5co-overlay"></div>
           <div
@@ -277,6 +280,7 @@ class HomePage1 extends Component {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     );
   }

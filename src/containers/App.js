@@ -23,6 +23,7 @@ import { CustomToastCloseButton } from "../components/CustomToast";
 import ConfirmModal from "../components/ConfirmModal";
 import SearchResult from "./Client/Pages/SearchResult";
 import RoomDetail from "./Client/Pages/RoomDetail";
+import HomePage1 from "./Client/Pages/HomePage1";
 class App extends Component {
   handlePersistorState = () => {
     const { persistor } = this.props;
@@ -52,7 +53,7 @@ class App extends Component {
 
             <span className="content-container">
               <Switch>
-                <Route path={path.HOME} exact component={Headershop} />
+                <Route path={path.HOME} exact component={HomePage1} />
 
                 <Route path={path.SEARCH} exact component={SearchResult} />
                 <Route path={path.ROOMDETAIL} exact component={RoomDetail} />
