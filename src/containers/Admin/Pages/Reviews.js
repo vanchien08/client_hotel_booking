@@ -1,10 +1,10 @@
 import React, { Component, useState } from "react";
 import { connect } from "react-redux";
 import { Table } from "antd";
-import { handelGetReviewsApi } from "../../../services/userService";
+import { handleGetReviewsApi } from "../../../services/userService";
 import {
-  handelDeleteReviewsApi,
-  handelUpdateReviewsApi,
+  handleDeleteReviewsApi,
+  handleUpdateReviewsApi,
 } from "../../../services/ReviewService";
 import { push } from "connected-react-router";
 import "./Reviews.scss";
@@ -32,7 +32,7 @@ class Reviews extends Component {
 
   // Lấy dữ liệu khi component mount
   async componentDidMount() {
-    let reviews = await handelGetReviewsApi();
+    let reviews = await handleGetReviewsApi();
     console.log("reviews", reviews);
     this.setState({
       data: reviews,
@@ -56,7 +56,7 @@ class Reviews extends Component {
   handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this review?")) {
       try {
-        const res = await handelDeleteReviewsApi(id);
+        const res = await handleDeleteReviewsApi(id);
         if (res.errCode === 1) {
           alert("Review deleted successfully!");
           // Cập nhật lại dữ liệu sau khi xóa
@@ -86,7 +86,7 @@ class Reviews extends Component {
       }
 
       // Gọi API cập nhật
-      let respon = await handelUpdateReviewsApi(
+      let respon = await handleUpdateReviewsApi(
         this.state.selectedReview.id,
         this.state.selectedReview.rating,
         this.state.selectedReview.comment
@@ -103,7 +103,7 @@ class Reviews extends Component {
       isModalOpen: false,
     });
   };
-  handelonChangeInput = (id, event) => {
+  handleonChangeInput = (id, event) => {
     this.setState({
       selectedReview: {
         ...this.state.selectedReview, // Giữ lại các thuộc tính cũ của selectedReview
@@ -111,7 +111,7 @@ class Reviews extends Component {
       },
     });
   };
-  handelonChangeInputChildUser = (id, event) => {
+  handleonChangeInputChildUser = (id, event) => {
     this.setState({
       selectedReview: {
         ...this.state.selectedReview, // Giữ lại các thuộc tính cũ của selectedReview
@@ -122,7 +122,7 @@ class Reviews extends Component {
     });
   };
 
-  handelonChangeInputChildHotel = (id, event) => {
+  handleonChangeInputChildHotel = (id, event) => {
     this.setState({
       selectedReview: {
         ...this.state.selectedReview, // Giữ lại các thuộc tính cũ của selectedReview
@@ -251,7 +251,7 @@ class Reviews extends Component {
                         id="name"
                         value={this.state.selectedReview.user.name}
                         onChange={(event) =>
-                          this.handelonChangeInputChildUser(
+                          this.handleonChangeInputChildUser(
                             event.target.id,
                             event
                           )
@@ -271,7 +271,7 @@ class Reviews extends Component {
                         id="email"
                         value={this.state.selectedReview.user.email}
                         onChange={(event) =>
-                          this.handelonChangeInputChildUser(
+                          this.handleonChangeInputChildUser(
                             event.target.id,
                             event
                           )
@@ -292,7 +292,7 @@ class Reviews extends Component {
                         id="rating"
                         value={this.state.selectedReview.rating}
                         onChange={(event) =>
-                          this.handelonChangeInput(event.target.id, event)
+                          this.handleonChangeInput(event.target.id, event)
                         }
                       />
                     </div>
@@ -311,7 +311,7 @@ class Reviews extends Component {
                         id="comment"
                         value={this.state.selectedReview.comment}
                         onChange={(event) =>
-                          this.handelonChangeInput(event.target.id, event)
+                          this.handleonChangeInput(event.target.id, event)
                         }
                       />
                     </div>
@@ -328,7 +328,7 @@ class Reviews extends Component {
                         id="hotel"
                         value={this.state.selectedReview.hotel.name}
                         onChange={(event) =>
-                          this.handelonChangeInputChildHotel(
+                          this.handleonChangeInputChildHotel(
                             event.target.id,
                             event
                           )
@@ -348,7 +348,7 @@ class Reviews extends Component {
                         id="address"
                         value={this.state.selectedReview.hotel.address}
                         onChange={(event) =>
-                          this.handelonChangeInputChildHotel(
+                          this.handleonChangeInputChildHotel(
                             event.target.id,
                             event
                           )
@@ -368,7 +368,7 @@ class Reviews extends Component {
                         id="createdAt"
                         value={this.state.selectedReview.createdAt}
                         onChange={(event) =>
-                          this.handelonChangeInput(event.target.id, event)
+                          this.handleonChangeInput(event.target.id, event)
                         }
                       />
                     </div>

@@ -1,5 +1,5 @@
 .search-result-container {
-  display: flex;
+
   justify-content: center;
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -159,4 +159,10 @@
 
 .see-availability-button:hover {
   background-color: #005a9c;
+}
+.search-container{
+  margin-top:100px;
+}
+.search-layout{
+  margin-top:100px;
 }

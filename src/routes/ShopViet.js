@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import HomePage from "../containers/Client/Pages/HomePages";
 import ShopCart from "../containers/Client/Pages/ShopCart";
-import Profile from "../containers/Client/Pages/Profile";
+
 class System extends Component {
   render() {
     //  const { systemMenuPath } = this.props;
@@ -13,7 +13,7 @@ class System extends Component {
           <Switch>
             <Route path="/shopviet/home" component={HomePage} />
             <Route path="/shopviet/shopcart" component={ShopCart} />
-            <Route path="/shopviet/profile" component={Profile} />
+
             <Route
               component={() => {
                 return <Redirect to="/shopviet/home" />;

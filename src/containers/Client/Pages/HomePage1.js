@@ -5,14 +5,78 @@ import "./HomePage1.scss";
 import userimg from "../../../assets/images/user.png";
 import BodyHomePage from "./BodyHomePage";
 import * as actions from "../../../store/actions";
-
+import { handleSearchRoom } from "../../../services/searchResultService";
+import { Button, Modal } from "antd";
+import HomePages from "./HomePages";
 class HomePage1 extends Component {
-  handelClickSeacrch = () => {};
+  constructor(props) {
+    super(props);
+    this.state = {
+      isModalOpen: false,
+      checkOut: this.getCurrentDate(),
+      checkIn: this.getCurrentDate(),
+      address: "",
+    };
+  }
+  getCurrentDate() {
+    const today = new Date();
+    return today.toISOString().split("T")[0]; // Format YYYY-MM-DD
+  }
+  // Lấy dữ liệu khi component mount
+  async componentDidMount() {}
+  handleClickSeacrch = async () => {
+    let { address, checkIn, checkOut } = this.state;
+    console.log("event vbvb>>", this.state);
+    if (checkIn > checkOut) {
+      //   console.log("ngay checkin phai nho hon>>");
+      this.setState({
+        isModalOpen: true,
+      });
+    } else {
+      let searchRoom = await handleSearchRoom(address, checkIn, checkOut);
+      console.log("data search room", searchRoom);
+    }
+  };
+  handleGetAddress = (event) => {
+    this.setState({
+      address: event.target.value,
+    });
+  };
+  handleGetDate = (event) => {
+    if (event.target.id == "checkin") {
+      this.setState({
+        checkIn: event.target.value,
+      });
+    } else {
+      this.setState({
+        checkOut: event.target.value,
+      });
+    }
+  };
+  handleOkModal = () => {
+    this.setState({
+      isModalOpen: false,
+    });
+  };
+  handleCancelModal = () => {
+    this.setState({
+      isModalOpen: false,
+    });
+  };
   render() {
     let isLoggedIn = this.props.isLoggedIn;
+    let isModalOpen = this.state.isModalOpen;
     console.log("state login >>", isLoggedIn);
     return (
       <div>
+        <Modal
+          title="Thông báo"
+          open={isModalOpen}
+          onOk={this.handleOkModal}
+          onCancel={this.handleCancelModal}
+        >
+          Ngày bắt đầu phải nhỏ hơn ngày kết thúc !
+        </Modal>
         <div className="fh5co-hero">
           <div className="fh5co-overlay"></div>
           <div
@@ -36,11 +100,23 @@ class HomePage1 extends Component {
                     <input
                       type="text"
                       placeholder="Bạn muốn đi đâu?"
-                      id="location"
+                      id="address"
+                      value={this.state.address}
+                      onChange={(event) => this.handleGetAddress(event)}
                     />
-                    <input type="date" id="checkin" />
-                    <input type="date" id="checkout" />
-                    <button onclick={() => this.handelClickSeacrch()}>
+                    <input
+                      type="date"
+                      id="checkin"
+                      value={this.state.checkIn}
+                      onChange={(event) => this.handleGetDate(event)}
+                    />
+                    <input
+                      type="date"
+                      id="checkout"
+                      value={this.state.checkOut}
+                      onChange={(event) => this.handleGetDate(event)}
+                    />
+                    <button onClick={() => this.handleClickSeacrch()}>
                       Tìm
                     </button>
                   </div>

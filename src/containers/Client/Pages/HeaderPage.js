@@ -226,8 +226,8 @@ class HeaderPage extends Component {
             </div>
           </nav>
         </div>
-        <HomePage1 />
-        <Footer />
+        {/* <HomePage1 />
+        <Footer /> */}
       </div>
     );
   }

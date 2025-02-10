@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./RoomDetail.scss";
 import { Search, Star, MapPin } from "lucide-react";
-import { handelGetAllHotelApi } from "../../../services/searchResultService";
+import { handleGetAllHotelApi } from "../../../services/searchResultService";
 
 class RoomDetail extends Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class RoomDetail extends Component {
   }
 
   async componentDidMount() {
-    let listhotel = await handelGetAllHotelApi();
+    let listhotel = await handleGetAllHotelApi();
     this.setState({
       listHotel: listhotel,
     });

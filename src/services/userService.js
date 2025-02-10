@@ -1,23 +1,23 @@
 import axios from "../axios";
 
-const handelLoginApi = (username, password) => {
+const handleLoginApi = (username, password) => {
   return axios.post("/login", { username, password });
 };
 
-const handelGetUserApi = () => {
+const handleGetUserApi = () => {
   return axios.post("/getAllUser");
 };
 
-const handelGetHotelApi = () => {
+const handleGetHotelApi = () => {
   return axios.get("/getAllHotel");
 };
 
-const handelGetReviewsApi = () => {
+const handleGetReviewsApi = () => {
   return axios.get("/getAllReviews");
 };
 export {
-  handelLoginApi,
-  handelGetUserApi,
-  handelGetHotelApi,
-  handelGetReviewsApi,
+  handleLoginApi,
+  handleGetUserApi,
+  handleGetHotelApi,
+  handleGetReviewsApi,
 };

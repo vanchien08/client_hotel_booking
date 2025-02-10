@@ -9,7 +9,7 @@ class ShopCart extends Component {
     super(props);
     this.state = {};
   }
-  handelLogin = () => {
+  handleLogin = () => {
     console.log("login");
     this.redirectToSystemPage();
   };

@@ -7,7 +7,7 @@ import BodyHomePage from "./BodyHomePage";
 import * as actions from "../../../store/actions";
 
 class HomePage1 extends Component {
-  handelClickSeacrch = () => {};
+  handleClickSeacrch = () => {};
   render() {
     let isLoggedIn = this.props.isLoggedIn;
     console.log("state login >>", isLoggedIn);

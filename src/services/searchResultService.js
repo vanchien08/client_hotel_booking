@@ -1,7 +1,11 @@
 import axios from "../axios";
 
-const handelGetAllHotelApi = () => {
+const handleGetAllHotelApi = () => {
   return axios.get("/getAllHotels");
 };
 
-export { handelGetAllHotelApi };
+const handleSearchRoom = (address, checkIn, checkOut) => {
+  return axios.post("/SearchResult", { address, checkIn, checkOut });
+};
+
+export { handleGetAllHotelApi, handleSearchRoom };

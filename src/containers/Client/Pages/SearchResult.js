@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import "./SearchResult.scss";
 import { Search, Star } from "lucide-react";
-import { handelGetAllHotelApi } from "../../../services/searchResultService";
+import { handleGetAllHotelApi } from "../../../services/searchResultService";
+import HomePages from "./HomePages";
+import HeaderPage from "./HeaderPage";
+import SearchButton from "../../../components/SearchButton";
 const filters = [
   { name: "Balcony", count: 1814 },
   { name: "Apartments", count: 1640 },
@@ -28,7 +31,7 @@ class SearchResult extends Component {
   }
 
   async componentDidMount() {
-    let listhotel = await handelGetAllHotelApi();
+    let listhotel = await handleGetAllHotelApi();
     this.setState({
       listHotel: listhotel,
     });
@@ -44,6 +47,8 @@ class SearchResult extends Component {
     let listHotel = this.state.listHotel;
     return (
       <div className="search-result-container">
+        <HeaderPage />
+        <SearchButton className="search-button-component" />
         <div className="search-layout">
           {/* Filter Section */}
           <aside className="filter-section">

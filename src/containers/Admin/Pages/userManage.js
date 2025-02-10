@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Table } from "antd";
-import { handelGetUserApi } from "../../../services/userService";
+import { handleGetUserApi } from "../../../services/userService";
 import { push } from "connected-react-router";
 import "./userManage.scss";
 
@@ -72,7 +72,7 @@ class UserManage extends Component {
   }
 
   async componentDidMount() {
-    let user = await handelGetUserApi();
+    let user = await handleGetUserApi();
     user = user.user.user;
     this.setState({
       data: user,

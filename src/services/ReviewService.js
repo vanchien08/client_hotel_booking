@@ -1,10 +1,10 @@
 import axios from "../axios";
 
-const handelDeleteReviewsApi = (id) => {
+const handleDeleteReviewsApi = (id) => {
   return axios.delete(`/deleteReview/${id}`);
 };
 
-const handelUpdateReviewsApi = (id, rating, comment) => {
+const handleUpdateReviewsApi = (id, rating, comment) => {
   return axios.put("/updateReview", { id, rating, comment });
 };
-export { handelDeleteReviewsApi, handelUpdateReviewsApi };
+export { handleDeleteReviewsApi, handleUpdateReviewsApi };

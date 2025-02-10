@@ -49,11 +49,11 @@ class HomePages extends Component {
       isLoggedIn: false,
     };
   }
-  handelLogin = () => {
+  handleLogin = () => {
     //console.log("login");
     this.redirectToSystemPage("/login");
   };
-  handelToURLShopCart = () => {
+  handleToURLShopCart = () => {
     this.redirectToSystemPage("/shopviet/shopcart");
   };
   handlerKeyDown = (event) => {};
@@ -118,18 +118,17 @@ class HomePages extends Component {
             <input className="search-bar" placeholder="Enter"></input>
             <i class="fa-solid fa-magnifying-glass"></i>
           </div>
-          <div className="cart-shop" onClick={() => this.handelToURLShopCart()}>
+          <div className="cart-shop" onClick={() => this.handleToURLShopCart()}>
             <i class="fa-solid fa-cart-shopping"></i>
           </div>
           {isLoggedIn ? (
             <div className="infor-user">{this.renderDropdown()}</div>
           ) : (
-            <div className="isLogin" onClick={() => this.handelLogin()}>
+            <div className="isLogin" onClick={() => this.handleLogin()}>
               Đăng nhập
             </div>
           )}
         </div>
-        <BodyHomePage />
       </div>
     );
   }

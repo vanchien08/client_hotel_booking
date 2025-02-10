@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import "./login.scss";
 import * as actions from "../../store/actions";
-import { handelLoginApi } from "../../services/userService";
+import { handleLoginApi } from "../../services/userService";
 
 class Login extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class Login extends Component {
   handlerKeyDown = (event) => {};
 
   async componentDidMount() {
-    // let res = await handelLoginApi("vanchien", "12345");
+    // let res = await handleLoginApi("vanchien", "12345");
     //  console.log("resss data >>", res);
     //  this.props.fetchLoginStart("vanchien", "12345");
   }
@@ -40,21 +40,21 @@ class Login extends Component {
     navigate(`${redirectPath}`);
   };
 
-  handelOnChangeUsername = (event) => {
+  handleOnChangeUsername = (event) => {
     this.setState({
       username: event.target.value,
     });
   };
 
-  handelOnChangePw = (event) => {
+  handleOnChangePw = (event) => {
     this.setState({
       password: event.target.value,
     });
   };
 
-  handelSubmit = async () => {
+  handleSubmit = async () => {
     // this.redirectToSystemPage();
-    let res = await handelLoginApi(this.state.username, this.state.password);
+    let res = await handleLoginApi(this.state.username, this.state.password);
     // console.log("resss", res.userInfo);
     if (res.errCode === 1) {
       this.props.fetchLoginSuccess(res.userInfo);
@@ -82,7 +82,7 @@ class Login extends Component {
                   aria-describedby="emailHelp"
                   placeholder="Enter username"
                   value={this.state.username}
-                  onChange={(event) => this.handelOnChangeUsername(event)}
+                  onChange={(event) => this.handleOnChangeUsername(event)}
                 />
               </div>
 
@@ -94,7 +94,7 @@ class Login extends Component {
                   id="exampleInputPassword1"
                   placeholder="Password"
                   value={this.state.password}
-                  onChange={(event) => this.handelOnChangePw(event)}
+                  onChange={(event) => this.handleOnChangePw(event)}
                 />
               </div>
 
@@ -111,7 +111,7 @@ class Login extends Component {
               <button
                 type="submit"
                 class="btn btn-primary login-button"
-                onClick={(event) => this.handelSubmit(event)}
+                onClick={(event) => this.handleSubmit(event)}
               >
                 Đăng nhập
               </button>

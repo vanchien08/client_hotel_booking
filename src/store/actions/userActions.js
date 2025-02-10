@@ -1,11 +1,11 @@
 import actionTypes from "./actionTypes";
-import { handelLoginApi } from "../../services/userService";
+import { handleLoginApi } from "../../services/userService";
 
 export const fetchLoginStart = (username, password) => {
   return async (dispatch, getState) => {
     try {
       // console.log("fire action success");
-      let res = await handelLoginApi(username, password);
+      let res = await handleLoginApi(username, password);
       console.log("resss data >>", res);
       dispatch(fetchLoginSuccess(res));
     } catch (error) {}

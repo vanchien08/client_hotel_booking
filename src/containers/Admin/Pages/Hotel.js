@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Table } from "antd";
 import {
-  handelGetUserApi,
-  handelGetHotelApi,
+  handleGetUserApi,
+  handleGetHotelApi,
 } from "../../../services/userService";
 import { push } from "connected-react-router";
 import "./Hotel.scss";
@@ -65,7 +65,7 @@ class Hotel extends Component {
   }
 
   async componentDidMount() {
-    let user = await handelGetHotelApi();
+    let user = await handleGetHotelApi();
     console.log("user", user);
     //  user = user.user.user;
     this.setState({
