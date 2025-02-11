@@ -2,14 +2,21 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import "./HomePage1.scss";
-import userimg from "../../../assets/images/user.png";
-import BodyHomePage from "./BodyHomePage";
 import * as actions from "../../../store/actions";
 import { handleSearchRoom } from "../../../services/searchResultService";
 import { Button, Modal } from "antd";
 import HomePages from "./HomePages";
 import HeaderPage from "./HeaderPage";
 import Footer from "./Footer";
+import bannerImage from "../../../assets/images/bannerHotel.jpg";
+import imageroom1 from "../../../assets/images/imageroom1.jpg";
+import imageroom2 from "../../../assets/images/imageroom2.jpg";
+import imageroom3 from "../../../assets/images/imageroom3.jpg";
+import imageroom4 from "../../../assets/images/imageroom4.jpg";
+import imageroom5 from "../../../assets/images/imageroom5.jpg";
+import imageroom6 from "../../../assets/images/imageroom6.jpg";
+import travel1 from "../../../assets/images/travel1.jpg";
+import travel2 from "../../../assets/images/travel2.jpg";
 class HomePage1 extends Component {
   constructor(props) {
     super(props);
@@ -93,7 +100,7 @@ class HomePage1 extends Component {
           <div
             className="fh5co-cover text-center"
             style={{
-              backgroundImage: "url('images/cover_bg_1.jpg')",
+              backgroundImage: `url(${bannerImage})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -142,11 +149,7 @@ class HomePage1 extends Component {
             <div className="row">
               <div className="col-md-4 col-sm-6 mb-4">
                 <a className="fh5co-listing-item">
-                  <img
-                    src="images/img-1.jpg"
-                    alt="Paris"
-                    className="img-fluid"
-                  />
+                  <img src={imageroom1} alt="Paris" className="img-fluid" />
                   <div className="fh5co-listing-copy">
                     <h2>Paris</h2>
                     <span className="icon">
@@ -157,11 +160,7 @@ class HomePage1 extends Component {
               </div>
               <div className="col-md-4 col-sm-6 mb-4">
                 <a className="fh5co-listing-item">
-                  <img
-                    src="images/img-2.jpg"
-                    alt="New York"
-                    className="img-fluid"
-                  />
+                  <img src={imageroom2} alt="New York" className="img-fluid" />
                   <div className="fh5co-listing-copy">
                     <h2>New York</h2>
                     <span className="icon">
@@ -172,11 +171,7 @@ class HomePage1 extends Component {
               </div>
               <div className="col-md-4 col-sm-6 mb-4">
                 <a className="fh5co-listing-item">
-                  <img
-                    src="images/img-3.jpg"
-                    alt="London"
-                    className="img-fluid"
-                  />
+                  <img src={imageroom3} alt="London" className="img-fluid" />
                   <div className="fh5co-listing-copy">
                     <h2>London</h2>
                     <span className="icon">
@@ -188,11 +183,7 @@ class HomePage1 extends Component {
 
               <div className="col-md-4 col-sm-6 mb-4">
                 <a className="fh5co-listing-item">
-                  <img
-                    src="images/img-4.jpg"
-                    alt="Amsterdam"
-                    className="img-fluid"
-                  />
+                  <img src={imageroom4} alt="Amsterdam" className="img-fluid" />
                   <div className="fh5co-listing-copy">
                     <h2>Amsterdam</h2>
                     <span className="icon">
@@ -203,11 +194,7 @@ class HomePage1 extends Component {
               </div>
               <div className="col-md-4 col-sm-6 mb-4">
                 <a className="fh5co-listing-item">
-                  <img
-                    src="images/img-5.jpg"
-                    alt="Australia"
-                    className="img-fluid"
-                  />
+                  <img src={imageroom5} alt="Australia" className="img-fluid" />
                   <div className="fh5co-listing-copy">
                     <h2>Australia</h2>
                     <span className="icon">
@@ -218,11 +205,7 @@ class HomePage1 extends Component {
               </div>
               <div className="col-md-4 col-sm-6 mb-4">
                 <a className="fh5co-listing-item">
-                  <img
-                    src="images/img-6.jpg"
-                    alt="Japan"
-                    className="img-fluid"
-                  />
+                  <img src={imageroom6} alt="Japan" className="img-fluid" />
                   <div className="fh5co-listing-copy">
                     <h2>Japan</h2>
                     <span className="icon">
@@ -275,15 +258,11 @@ class HomePage1 extends Component {
               </div>
               <div className="col-md-6">
                 <img
-                  src="images/cover_bg_1.jpg"
+                  src={travel1}
                   alt="News Image"
                   className="img-fluid mb-4"
                 />
-                <img
-                  src="images/cover_bg_1.jpg"
-                  alt="News Image"
-                  className="img-fluid"
-                />
+                <img src={travel2} alt="News Image" className="img-fluid" />
               </div>
             </div>
           </div>
