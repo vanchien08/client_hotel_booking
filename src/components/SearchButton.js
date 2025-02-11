@@ -23,19 +23,16 @@ class SearchButton extends Component {
   }
   // Lấy dữ liệu khi component mount
   async componentDidMount() {}
-  handleClickSeacrch = async () => {
+  handleClickSearch = () => {
     let { address, checkIn, checkOut } = this.state;
-    console.log("event vbvb>>", this.state);
+
     if (checkIn > checkOut) {
-      //   console.log("ngay checkin phai nho hon>>");
-      this.setState({
-        isModalOpen: true,
-      });
-    } else {
-      let searchRoom = await handleSearchRoom(address, checkIn, checkOut);
-      console.log("data search room", searchRoom);
+      this.setState({ isModalOpen: true });
+    } else if (this.props.onSearch) {
+      this.props.onSearch(address, checkIn, checkOut);
     }
   };
+
   handleGetAddress = (event) => {
     this.setState({
       address: event.target.value,
@@ -62,6 +59,7 @@ class SearchButton extends Component {
       isModalOpen: false,
     });
   };
+
   render() {
     let isLoggedIn = this.props.isLoggedIn;
     let isModalOpen = this.state.isModalOpen;
@@ -99,7 +97,7 @@ class SearchButton extends Component {
                 value={this.state.checkOut}
                 onChange={(event) => this.handleGetDate(event)}
               />
-              <button onClick={() => this.handleClickSeacrch()}>Tìm</button>
+              <button onClick={() => this.handleClickSearch()}>Tìm</button>
             </div>
           </div>
         </div>

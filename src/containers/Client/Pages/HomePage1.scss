@@ -1,5 +1,5 @@
 
-.button-search-container{
+.button-search-containerhp{
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     display: flex;
@@ -11,7 +11,7 @@
     text-align: center;
     margin:auto;
 }
-.search-container {
+.search-containerhp {
     background: #003580;
     padding: 30px;
     border-radius: 8px;
@@ -24,7 +24,7 @@
     height:auto;
   
 }
-.search-container h2 {
+.search-containerhp h2 {
     margin-bottom: 20px;
     font-size: 24px;
 }
@@ -32,24 +32,24 @@
     display: flex;
     gap: 10px;
 }
-.search-container input, 
-.search-container button {
+.search-containerhp input, 
+.search-containerhp button {
     flex: 1;
     padding: 15px;
     border: none;
     border-radius: 5px;
     font-size: 18px;
 }
-.search-container input {
+.search-containerhp input {
     color: #333;
 }
-.search-container button {
+.search-containerhp button {
     background-color: #febb02;
     color: #003580;
     font-weight: bold;
     cursor: pointer;
     border: none;
 }
-.search-container button:hover {
+.search-containerhp button:hover {
     background-color: #e09d00;
 }

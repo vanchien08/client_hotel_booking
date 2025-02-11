@@ -36,6 +36,7 @@ class HomePage1 extends Component {
       });
     } else {
       let searchRoom = await handleSearchRoom(address, checkIn, checkOut);
+      this.handleNavigate(address, checkIn, checkOut, searchRoom.dataroom);
       console.log("data search room", searchRoom);
     }
   };
@@ -63,6 +64,13 @@ class HomePage1 extends Component {
   handleCancelModal = () => {
     this.setState({
       isModalOpen: false,
+    });
+  };
+
+  handleNavigate = (address, checkIn, checkOut, listRoom) => {
+    this.props.history.push({
+      pathname: "/searchResult",
+      state: { address, checkIn, checkOut, listRoom },
     });
   };
   render() {
@@ -97,8 +105,8 @@ class HomePage1 extends Component {
                   Get Started
                 </a>
               </span>
-              <div className="button-search-container">
-                <div className="search-container">
+              <div className="button-search-containerhp">
+                <div className="search-containerhp">
                   <div className="input-group">
                     <input
                       type="text"

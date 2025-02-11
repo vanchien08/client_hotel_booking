@@ -23,14 +23,14 @@ class RoomDetail extends Component {
   }
 
   render() {
-    const { hotel, room } = this.props.location.state || {};
+    const { room } = this.props.location.state || {};
     console.log("room >>", room);
     return (
       <div className="room-detail-container">
         <div className="room-header">
           <h1>{room.roomType}</h1>
           <p>
-            <MapPin size={16} /> {hotel.address}
+            <MapPin size={16} /> {room.hotel.address}
           </p>
           <div className="rating">
             <span>4.8</span>
