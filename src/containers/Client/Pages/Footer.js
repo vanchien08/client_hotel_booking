@@ -13,50 +13,87 @@ class HomePage1 extends Component {
     console.log("state login >>", isLoggedIn);
     return (
       <div>
-        <div id="footer">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-6 offset-md-3 text-center">
-                <p className="fh5co-social-icons">
-                  <a href="#">
-                    <i className="icon-twitter"></i>
-                  </a>
-                  <a href="#">
-                    <i className="icon-facebook"></i>
-                  </a>
-                  <a href="#">
-                    <i className="icon-instagram"></i>
-                  </a>
-                  <a href="#">
-                    <i className="icon-dribbble"></i>
-                  </a>
-                  <a href="#">
-                    <i className="icon-youtube"></i>
-                  </a>
-                </p>
-                <p>
-                  Copyright 2016 Free Html5 <a href="#">Listing</a>. All Rights
-                  Reserved. Made with <i className="icon-heart"></i> by{" "}
-                  <a
-                    href="http://freehtml5.co/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Freehtml5.co
-                  </a>{" "}
-                  / Demo Images:{" "}
-                  <a
-                    href="https://unsplash.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Unsplash
-                  </a>
-                </p>
-              </div>
-            </div>
+        <footer className="bg-dark text-center text-white">
+          {/* Grid container */}
+          <div className="container p-4 pb-0">
+            {/* Section: Social media */}
+            <section className="mb-4">
+              {/* Facebook */}
+              <a
+                data-mdb-ripple-init
+                className="btn btn-outline-light btn-floating m-1"
+                href="#!"
+                role="button"
+              >
+                <i className="fab fa-facebook-f"></i>
+              </a>
+
+              {/* Twitter */}
+              <a
+                data-mdb-ripple-init
+                className="btn btn-outline-light btn-floating m-1"
+                href="#!"
+                role="button"
+              >
+                <i className="fab fa-twitter"></i>
+              </a>
+
+              {/* Google */}
+              <a
+                data-mdb-ripple-init
+                className="btn btn-outline-light btn-floating m-1"
+                href="#!"
+                role="button"
+              >
+                <i className="fab fa-google"></i>
+              </a>
+
+              {/* Instagram */}
+              <a
+                data-mdb-ripple-init
+                className="btn btn-outline-light btn-floating m-1"
+                href="#!"
+                role="button"
+              >
+                <i className="fab fa-instagram"></i>
+              </a>
+
+              {/* Linkedin */}
+              <a
+                data-mdb-ripple-init
+                className="btn btn-outline-light btn-floating m-1"
+                href="#!"
+                role="button"
+              >
+                <i className="fab fa-linkedin-in"></i>
+              </a>
+
+              {/* Github */}
+              <a
+                data-mdb-ripple-init
+                className="btn btn-outline-light btn-floating m-1"
+                href="#!"
+                role="button"
+              >
+                <i className="fab fa-github"></i>
+              </a>
+            </section>
+            {/* Section: Social media */}
           </div>
-        </div>
+          {/* Grid container */}
+
+          {/* Copyright */}
+          <div
+            className="text-center p-3"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
+          >
+            © 2025 Copyright:{" "}
+            <a className="text-white" href="">
+              ptithotelbooking.com
+            </a>
+          </div>
+          {/* Copyright */}
+        </footer>
       </div>
     );
   }

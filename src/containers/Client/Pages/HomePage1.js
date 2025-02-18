@@ -17,6 +17,14 @@ import imageroom5 from "../../../assets/images/imageroom5.jpg";
 import imageroom6 from "../../../assets/images/imageroom6.jpg";
 import travel1 from "../../../assets/images/travel1.jpg";
 import travel2 from "../../../assets/images/travel2.jpg";
+const destinations = [
+  { name: "Hà Tiên", distance: "238km", image: "haitien.jpg" },
+  { name: "Phan Rang", distance: "271km", image: "phanrang.jpg" },
+  { name: "Phú Quốc", distance: "298km", image: "phuquoc.jpg" },
+  { name: "Cam Ranh", distance: "301km", image: "camranh.jpg" },
+  { name: "Nha Trang", distance: "322km", image: "nhatrang.jpg" },
+  { name: "Vịnh Ninh Vân", distance: "340km", image: "vinhninhvan.jpg" },
+];
 class HomePage1 extends Component {
   constructor(props) {
     super(props);
@@ -96,7 +104,7 @@ class HomePage1 extends Component {
         </Modal>
         <HeaderPage />
         <div className="fh5co-hero">
-          <div className="fh5co-overlay"></div>
+          {/* <div className="fh5co-overlay"></div> */}
           <div
             className="fh5co-cover text-center"
             style={{
@@ -108,9 +116,9 @@ class HomePage1 extends Component {
             <div className="desc animate-box">
               <h2>Travel Around The World.</h2>
               <span>
-                <a className="btn btn-primary btn-lg" href="#">
+                {/* <a className="btn btn-primary btn-lg" href="#">
                   Get Started
-                </a>
+                </a> */}
               </span>
               <div className="button-search-containerhp">
                 <div className="search-containerhp">
@@ -141,6 +149,32 @@ class HomePage1 extends Component {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="slider-container-hotel p-6 max-w-5xl mx-auto">
+          <h1 className="text-2xl font-bold mb-2">
+            Bạn đang định thực hiện chuyến đi ra sao?
+          </h1>
+          <p className="text-gray-600 mb-4">
+            Tìm điểm đến ở Việt Nam phù hợp với sở thích của bạn
+          </p>
+
+          <div className="row row-cols-6 g-4">
+            {destinations.map((place, index) => (
+              <div key={index} className="col">
+                <div className="rounded-lg overflow-hidden shadow-lg">
+                  <img
+                    src={place.image}
+                    alt={place.name}
+                    className="w-100 h-40 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="font-semibold text-lg">{place.name}</h3>
+                    <p className="text-gray-500">Cách đây {place.distance}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -217,7 +251,6 @@ class HomePage1 extends Component {
             </div>
           </div>
         </div>
-
         <div className="fh5co-section">
           <div className="container">
             <div className="row">
