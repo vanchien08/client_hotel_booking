@@ -5,6 +5,7 @@ import {
   handleGetUserApi,
   handleGetHotelApi,
 } from "../../../services/userService";
+import { handleUpdateHotelApi } from "../../../services/hotelService";
 import { push } from "connected-react-router";
 import "./Hotel.scss";
 import { Button, Modal } from "antd";
@@ -29,6 +30,7 @@ class Hotel extends Component {
 
   async componentDidMount() {
     let user = await handleGetHotelApi();
+
     console.log("data get from api ", user);
     //  user = user.user.user;
     this.setState({
@@ -153,11 +155,20 @@ class Hotel extends Component {
     this.setState({
       selectedReview: {
         ...this.state.selectedReview,
-        user: {
-          [id]: event.target.value,
-        },
+        [id]: event.target.value,
       },
     });
+  };
+
+  handleOk = async () => {
+    let responUpdate = await handleUpdateHotelApi(this.state.selectedReview);
+    if (responUpdate.errCode === 1) {
+      this.componentDidMount();
+      this.setState({
+        isModalOpen: false,
+      });
+    }
+    console.log("update state>>>", responUpdate);
   };
   render() {
     const { isLoggedIn } = this.props;
@@ -190,7 +201,7 @@ class Hotel extends Component {
                         type="text"
                         className="form-control"
                         id="id"
-                        value={selectedReview.id}
+                        value={this.state.selectedReview.id}
                       />
                     </div>
                   </div>
@@ -203,7 +214,7 @@ class Hotel extends Component {
                         type="text"
                         className="form-control"
                         id="name"
-                        value={selectedReview.name}
+                        value={this.state.selectedReview.name}
                         onChange={(event) =>
                           this.handleonChangeInput(event.target.id, event)
                         }
