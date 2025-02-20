@@ -5,7 +5,13 @@ import "./HomePage1.scss";
 import * as actions from "../../../store/actions";
 import { handleSearchRoom } from "../../../services/searchResultService";
 import { Button, Modal } from "antd";
-import HomePages from "./HomePages";
+import { Pagination, Navigation } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react/swiper-react";
+
+import "swiper/swiper.min.css";
+import "swiper/modules/pagination/pagination.min.css";
+import "swiper/modules/navigation/navigation.min.css";
+
 import HeaderPage from "./HeaderPage";
 import Footer from "./Footer";
 import bannerImage from "../../../assets/images/bannerHotel.jpg";
@@ -18,12 +24,48 @@ import imageroom6 from "../../../assets/images/imageroom6.jpg";
 import travel1 from "../../../assets/images/travel1.jpg";
 import travel2 from "../../../assets/images/travel2.jpg";
 const destinations = [
-  { name: "Hà Tiên", distance: "238km", image: "haitien.jpg" },
-  { name: "Phan Rang", distance: "271km", image: "phanrang.jpg" },
-  { name: "Phú Quốc", distance: "298km", image: "phuquoc.jpg" },
-  { name: "Cam Ranh", distance: "301km", image: "camranh.jpg" },
-  { name: "Nha Trang", distance: "322km", image: "nhatrang.jpg" },
-  { name: "Vịnh Ninh Vân", distance: "340km", image: "vinhninhvan.jpg" },
+  {
+    name: "Hà Tiên",
+    distance: "238km",
+    image:
+      "https://res.cloudinary.com/dwkvrufbf/image/upload/v1728194164/samples/landscapes/nature-mountains.jpg",
+  },
+  {
+    name: "Phan Rang",
+    distance: "271km",
+    image:
+      "https://res.cloudinary.com/dwkvrufbf/image/upload/v1728194164/samples/landscapes/nature-mountains.jpg",
+  },
+  {
+    name: "Phú Quốc",
+    distance: "298km",
+    image:
+      "https://res.cloudinary.com/dwkvrufbf/image/upload/v1728194164/samples/landscapes/nature-mountains.jpg",
+  },
+  {
+    name: "Cam Ranh",
+    distance: "301km",
+    image:
+      "https://res.cloudinary.com/dwkvrufbf/image/upload/v1728194164/samples/landscapes/nature-mountains.jpg",
+  },
+  {
+    name: "Nha Trang",
+    distance: "322km",
+    image:
+      "https://res.cloudinary.com/dwkvrufbf/image/upload/v1728194164/samples/landscapes/nature-mountains.jpg",
+  },
+  {
+    name: "Vịnh Ninh Vân",
+    distance: "340km",
+    image:
+      "https://res.cloudinary.com/dwkvrufbf/image/upload/v1728194164/samples/landscapes/nature-mountains.jpg",
+  },
+  {
+    name: "Vịnh Ninh Vân",
+    distance: "340km",
+    image:
+      "https://res.cloudinary.com/dwkvrufbf/image/upload/v1728194164/samples/landscapes/nature-mountains.jpg",
+  },
 ];
 class HomePage1 extends Component {
   constructor(props) {
@@ -88,6 +130,29 @@ class HomePage1 extends Component {
       state: { address, checkIn, checkOut, listRoom },
     });
   };
+
+  swiper = () =>
+    new Swiper(".swiper", {
+      // Optional parameters
+      direction: "vertical",
+      loop: true,
+
+      // If we need pagination
+      pagination: {
+        el: ".swiper-pagination",
+      },
+
+      // Navigation arrows
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+
+      // And if we need scrollbar
+      scrollbar: {
+        el: ".swiper-scrollbar",
+      },
+    });
   render() {
     let isLoggedIn = this.props.isLoggedIn;
     let isModalOpen = this.state.isModalOpen;
@@ -151,31 +216,39 @@ class HomePage1 extends Component {
             </div>
           </div>
         </div>
-        <div className="slider-container-hotel p-6 max-w-5xl mx-auto">
+        <div className="trip-slider">
           <h1 className="text-2xl font-bold mb-2">
             Bạn đang định thực hiện chuyến đi ra sao?
           </h1>
           <p className="text-gray-600 mb-4">
             Tìm điểm đến ở Việt Nam phù hợp với sở thích của bạn
-          </p>
-
-          <div className="row row-cols-6 g-4">
+          </p>{" "}
+          <Swiper
+            modules={[Navigation, Pagination]}
+            spaceBetween={50}
+            slidesPerView={5}
+            navigation
+            pagination={{ clickable: true }}
+            scrollbar={{ draggable: true }}
+            onSwiper={(swiper) => console.log(swiper)}
+            onSlideChange={() => console.log("slide change")}
+          >
             {destinations.map((place, index) => (
-              <div key={index} className="col">
-                <div className="rounded-lg overflow-hidden shadow-lg">
+              <SwiperSlide key={index}>
+                <div className="rounded-lg overflow-hidden">
                   <img
                     src={place.image}
                     alt={place.name}
-                    className="w-100 h-40 object-cover"
+                    className="image-slider w-100 h-40 object-cover"
                   />
-                  <div className="p-4">
-                    <h3 className="font-semibold text-lg">{place.name}</h3>
-                    <p className="text-gray-500">Cách đây {place.distance}</p>
+                  <div className="description-address-slider">
+                    <h3 className="province-address">{place.name}</h3>
+                    <p className="distance-adress">Cách đây {place.distance}</p>
                   </div>
                 </div>
-              </div>
+              </SwiperSlide>
             ))}
-          </div>
+          </Swiper>
         </div>
 
         <div className="fh5co-listing">
