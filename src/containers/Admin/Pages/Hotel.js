@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { connect } from "react-redux";
 import { Table } from "antd";
 import {
@@ -7,8 +7,11 @@ import {
 } from "../../../services/userService";
 import { handleUpdateHotelApi } from "../../../services/hotelService";
 import { push } from "connected-react-router";
+import { FilterOutlined } from "@ant-design/icons";
 import "./Hotel.scss";
-import { Button, Modal } from "antd";
+import { Button, Modal, Popover } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import FilterButton from "../../../components/FilterButton";
 class Hotel extends Component {
   constructor(props) {
     super(props);
@@ -327,6 +330,18 @@ class Hotel extends Component {
           )}
         </Modal>
         <h1>HOTEl MANAGER</h1>
+
+        <Popover
+          placement="bottomRight"
+          content=<FilterButton />
+          title="Title"
+          trigger="click"
+          destroyTooltipOnHide={false}
+        >
+          <Button className="filter-button">
+            <FilterOutlined />
+          </Button>
+        </Popover>
         {data == null ? (
           <p>Loading data, please wait...</p> // Hiển thị thông báo hoặc loader khi dữ liệu chưa có
         ) : (

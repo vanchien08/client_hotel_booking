@@ -199,11 +199,18 @@
 .swiper-button-next,
 .swiper-button-prev {
     background-color: white;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.7);
     right:10px;
     padding: 30px;
     color: #000 !important;
     fill: black !important;
     stroke: black !important;
     border-radius:30px;
+
+}
+
+.filter-button{
+  font-size: 20px;
+  float:right;
+  margin: 20px 20px;
 }
