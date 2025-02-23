@@ -4,4 +4,7 @@ const handleUpdateHotelApi = (body) => {
   return axios.post("/updateHotel", body);
 };
 
-export { handleUpdateHotelApi };
+const handleFilterHotelApi = (body) => {
+  return axios.post("/filterHotels", body);
+};
+export { handleUpdateHotelApi, handleFilterHotelApi };

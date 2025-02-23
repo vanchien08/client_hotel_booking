@@ -22,6 +22,7 @@ import {
   Switch,
   TreeSelect,
   Upload,
+  Space,
 } from "antd";
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -34,6 +35,11 @@ class FilterButton extends Component {
       checkOut: this.getCurrentDate(),
       checkIn: this.getCurrentDate(),
       address: "",
+      id: "",
+      name: "",
+      description: "",
+      city: "",
+      country: "",
     };
   }
   getCurrentDate() {
@@ -49,133 +55,74 @@ class FilterButton extends Component {
     }
     return e?.fileList;
   };
+  handleSubmit = () => {
+    let { id, name, description, city, country } = this.state;
+    this.props.onSubmit({ id, name, description, city, country });
 
+    this.props.onClose();
+  };
+  handleDataFilter = (event, id) => {
+    this.setState({
+      [id]: event.target.value,
+    });
+  };
   FormDisabledDemo = () => {
     return (
       <>
         <Form
-          labelCol={{
-            span: 4,
-          }}
-          wrapperCol={{
-            span: 14,
-          }}
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 14 }}
           layout="horizontal"
-          style={{
-            maxWidth: 600,
+          style={{ maxWidth: 600 }}
+          onFinish={this.handleSubmit} // Gọi hàm handleSubmit khi bấm Submit
+          initialValues={{
+            id: this.state.id, // Đặt giá trị mặc định cho ID
           }}
         >
-          <Form.Item label="ID">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Tên khách sạn">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Mô tả">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Thành phố">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Đất nước">
-            <Input />
-          </Form.Item>
-          <Form.Item label="Checkbox" valuePropName="checked">
-            <Checkbox>Checkbox</Checkbox>
-          </Form.Item>
-          <Form.Item label="Radio">
-            <Radio.Group>
-              <Radio value="apple"> Apple </Radio>
-              <Radio value="pear"> Pear </Radio>
-            </Radio.Group>
-          </Form.Item>
-          <Form.Item label="Select">
-            <Select>
-              <Select.Option value="demo">Demo</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item label="TreeSelect">
-            <TreeSelect
-              treeData={[
-                {
-                  title: "Light",
-                  value: "light",
-                  children: [
-                    {
-                      title: "Bamboo",
-                      value: "bamboo",
-                    },
-                  ],
-                },
-              ]}
+          <Form.Item label="ID" name="id">
+            <Input
+              onChange={(event) =>
+                this.handleDataFilter(event, event.target.id)
+              }
             />
           </Form.Item>
-          <Form.Item label="Cascader">
-            <Cascader
-              options={[
-                {
-                  value: "zhejiang",
-                  label: "Zhejiang",
-                  children: [
-                    {
-                      value: "hangzhou",
-                      label: "Hangzhou",
-                    },
-                  ],
-                },
-              ]}
+          <Form.Item label="Tên khách sạn" name="name">
+            <Input
+              onChange={(event) =>
+                this.handleDataFilter(event, event.target.id)
+              }
             />
           </Form.Item>
-          <Form.Item label="DatePicker">
-            <DatePicker />
+          <Form.Item label="Mô tả" name="description">
+            <Input
+              onChange={(event) =>
+                this.handleDataFilter(event, event.target.id)
+              }
+            />
           </Form.Item>
-          <Form.Item label="RangePicker">
-            <RangePicker />
+          <Form.Item label="Thành phố" name="city">
+            <Input
+              onChange={(event) =>
+                this.handleDataFilter(event, event.target.id)
+              }
+            />
           </Form.Item>
-          <Form.Item label="InputNumber">
-            <InputNumber />
+          <Form.Item label="Đất nước" name="country">
+            <Input
+              onChange={(event) =>
+                this.handleDataFilter(event, event.target.id)
+              }
+            />
           </Form.Item>
-          <Form.Item label="TextArea">
-            <TextArea rows={4} />
-          </Form.Item>
-          <Form.Item label="Switch" valuePropName="checked">
-            <Switch />
-          </Form.Item>
-          <Form.Item
-            label="Upload"
-            valuePropName="fileList"
-            getValueFromEvent={this.normFile}
-          >
-            <Upload action="/upload.do" listType="picture-card">
-              <button
-                style={{
-                  border: 0,
-                  background: "none",
-                }}
-                type="button"
-              >
-                <PlusOutlined />
-                <div
-                  style={{
-                    marginTop: 8,
-                  }}
-                >
-                  Upload
-                </div>
-              </button>
-            </Upload>
-          </Form.Item>
-          <Form.Item label="Button">
-            <Button>Button</Button>
-          </Form.Item>
-          <Form.Item label="Slider">
-            <Slider />
-          </Form.Item>
-          <Form.Item label="ColorPicker">
-            <ColorPicker />
-          </Form.Item>
-          <Form.Item label="Rate">
-            <Rate />
+          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+            <Space>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+              <Button htmlType="button" onClick={this.props.onClose}>
+                Cancel
+              </Button>
+            </Space>
           </Form.Item>
         </Form>
       </>
@@ -184,7 +131,7 @@ class FilterButton extends Component {
   render() {
     let isLoggedIn = this.props.isLoggedIn;
     let isModalOpen = this.state.isModalOpen;
-    console.log("state login >>", isLoggedIn);
+
     return <div>{this.FormDisabledDemo()}</div>;
   }
 }

@@ -5,7 +5,10 @@ import {
   handleGetUserApi,
   handleGetHotelApi,
 } from "../../../services/userService";
-import { handleUpdateHotelApi } from "../../../services/hotelService";
+import {
+  handleUpdateHotelApi,
+  handleFilterHotelApi,
+} from "../../../services/hotelService";
 import { push } from "connected-react-router";
 import { FilterOutlined } from "@ant-design/icons";
 import "./Hotel.scss";
@@ -28,6 +31,7 @@ class Hotel extends Component {
       country: "",
       image: "",
       createAt: "",
+      openFormFilter: false,
     };
   }
 
@@ -172,6 +176,16 @@ class Hotel extends Component {
       });
     }
     console.log("update state>>>", responUpdate);
+  };
+  setOpenFormFilter = (open) => {
+    this.setState({
+      openFormFilter: open,
+    });
+  };
+  onSubmitPopover = async (data) => {
+    let respon = await handleFilterHotelApi(data);
+
+    console.log("respon?>>", respon);
   };
   render() {
     const { isLoggedIn } = this.props;
@@ -333,9 +347,16 @@ class Hotel extends Component {
 
         <Popover
           placement="bottomRight"
-          content=<FilterButton />
+          content={
+            <FilterButton
+              onClose={() => this.setOpenFormFilter(false)}
+              onSubmit={this.onSubmitPopover}
+            />
+          }
           title="Title"
           trigger="click"
+          open={this.state.openFormFilter} // Sử dụng state để quản lý open
+          onOpenChange={(open) => this.setOpenFormFilter(open)} // Cập nhật state khi mở/đóng
           destroyTooltipOnHide={false}
         >
           <Button className="filter-button">
