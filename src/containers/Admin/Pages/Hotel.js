@@ -184,8 +184,11 @@ class Hotel extends Component {
   };
   onSubmitPopover = async (data) => {
     let respon = await handleFilterHotelApi(data);
-
-    //sconsole.log("respon?>>", respon);
+    this.setState({
+      data: respon.datahotel,
+    });
+    //  this.componentDidMount();
+    console.log("respon?>>", respon);
   };
   render() {
     const { isLoggedIn } = this.props;
@@ -348,10 +351,12 @@ class Hotel extends Component {
         <Popover
           placement="bottomRight"
           content={
-            <FilterButton
-              onClose={() => this.setOpenFormFilter(false)}
-              onSubmit={this.onSubmitPopover}
-            />
+            <div style={{ width: 400 }}>
+              <FilterButton
+                onClose={() => this.setOpenFormFilter(false)}
+                onSubmit={this.onSubmitPopover}
+              />
+            </div>
           }
           title="Title"
           trigger="click"

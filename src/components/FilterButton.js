@@ -35,9 +35,10 @@ class FilterButton extends Component {
       checkOut: this.getCurrentDate(),
       checkIn: this.getCurrentDate(),
       address: "",
-      id: "",
+      id: null,
       name: "",
       description: "",
+      address: "",
       city: "",
       country: "",
     };
@@ -56,8 +57,8 @@ class FilterButton extends Component {
     return e?.fileList;
   };
   handleSubmit = () => {
-    let { id, name, description, city, country } = this.state;
-    this.props.onSubmit({ id, name, description, city, country });
+    let { id, name, description, address, city, country } = this.state;
+    this.props.onSubmit({ id, name, description, address, city, country });
 
     this.props.onClose();
   };
@@ -70,10 +71,9 @@ class FilterButton extends Component {
     return (
       <>
         <Form
-          labelCol={{ span: 4 }}
+          labelCol={{ span: 6 }}
           wrapperCol={{ span: 14 }}
           layout="horizontal"
-          style={{ maxWidth: 600 }}
           onFinish={this.handleSubmit} // Gọi hàm handleSubmit khi bấm Submit
           initialValues={{
             id: this.state.id, // Đặt giá trị mặc định cho ID
@@ -94,6 +94,13 @@ class FilterButton extends Component {
             />
           </Form.Item>
           <Form.Item label="Mô tả" name="description">
+            <Input
+              onChange={(event) =>
+                this.handleDataFilter(event, event.target.id)
+              }
+            />
+          </Form.Item>
+          <Form.Item label="Địa chỉ" name="address">
             <Input
               onChange={(event) =>
                 this.handleDataFilter(event, event.target.id)
