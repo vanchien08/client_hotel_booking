@@ -185,7 +185,7 @@ class Hotel extends Component {
   onSubmitPopover = async (data) => {
     let respon = await handleFilterHotelApi(data);
 
-    console.log("respon?>>", respon);
+    //sconsole.log("respon?>>", respon);
   };
   render() {
     const { isLoggedIn } = this.props;
