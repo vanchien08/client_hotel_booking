@@ -365,7 +365,7 @@ class Hotel extends Component {
           destroyTooltipOnHide={false}
         >
           <Button className="filter-button">
-            <FilterOutlined />
+            Filter <FilterOutlined />
           </Button>
         </Popover>
         {data == null ? (

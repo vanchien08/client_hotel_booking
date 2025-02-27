@@ -6,6 +6,7 @@ import HomePages from "./HomePages";
 import HeaderPage from "./HeaderPage";
 import SearchButton from "../../../components/SearchButton";
 import { handleSearchRoom } from "../../../services/searchResultService";
+import { handleGetAmenitiesHotelApi } from "../../../services/hotelService";
 const filters = [
   { name: "Balcony", count: 1814 },
   { name: "Apartments", count: 1640 },
@@ -29,20 +30,33 @@ class SearchResult extends Component {
       isModalOpen: false,
       listHotel: null,
       listRoom: null,
+      listAmenitiesHotel: null,
+      checkBoxAmenities: null,
     };
   }
 
   async componentDidMount() {
+    let amenitiesHotel = await handleGetAmenitiesHotelApi();
     let listhotel = await handleGetAllHotelApi();
     this.setState({
       listHotel: listhotel,
+      listAmenitiesHotel: amenitiesHotel.dataAmenities,
     });
+
+    console.log("amenities", amenitiesHotel);
   }
   handleClickSearch = async (address, checkIn, checkOut) => {
     if (checkIn > checkOut) {
       this.setState({ isModalOpen: true });
     } else {
-      let searchRoom = await handleSearchRoom(address, checkIn, checkOut);
+      let checkBoxAmenities = this.state.checkBoxAmenities;
+      console.log("rthíi", checkBoxAmenities);
+      let searchRoom = await handleSearchRoom(
+        address,
+        checkIn,
+        checkOut,
+        checkBoxAmenities
+      );
       this.setState({ listRoom: searchRoom.dataroom });
       //  console.log("check list room", searchRoom);
     }
@@ -53,9 +67,39 @@ class SearchResult extends Component {
       state: { room },
     });
   };
+  handleCheckBox = (event, amenity) => {
+    this.setState(
+      (prevState) => {
+        const checkBoxAmenities = prevState.checkBoxAmenities || {}; // Nếu null thì tạo object mới
+        const prevCheck = checkBoxAmenities[amenity.id] || false; // Nếu undefined thì mặc định là false
+
+        return {
+          checkBoxAmenities: {
+            ...checkBoxAmenities, // Giữ lại dữ liệu cũ
+            [amenity.id]: !prevCheck, // Đảo trạng thái checkbox
+          },
+        };
+      },
+      () => {
+        let list = this.convertListCheckBox(this.state.checkBoxAmenities);
+        console.log("Check box:", list);
+      }
+    );
+  };
+  convertListCheckBox = (listcheckbox) => {
+    let listconvert = [];
+
+    for (const [id, check] of Object.entries(listcheckbox)) {
+      listconvert.push({ id, check });
+    }
+
+    return listconvert;
+  };
+
   render() {
     let listHotel = this.state.listHotel;
     let { address, checkIn, checkOut } = this.props.location.state || {};
+    let amenitiesHotel = this.state.listAmenitiesHotel;
     let listRoom =
       this.state.listRoom ||
       (this.props.location.state && this.props.location.state.listRoom);
@@ -71,16 +115,20 @@ class SearchResult extends Component {
         <div className="search-layout">
           {/* Filter Section */}
           <aside className="filter-section">
-            <h3>Popular filters</h3>
+            <h3>Các tiện ích</h3>
             <ul>
-              {filters.map((filter, index) => (
-                <li key={index} className="filter-item">
-                  <input type="checkbox" id={`filter-${index}`} />
-                  <label htmlFor={`filter-${index}`}>
-                    {filter.name} ({filter.count})
-                  </label>
-                </li>
-              ))}
+              {amenitiesHotel &&
+                Array.isArray(amenitiesHotel) &&
+                amenitiesHotel.map((amenity, index) => (
+                  <li key={index} className="filter-item">
+                    <input
+                      type="checkbox"
+                      id={`filter-${index}`}
+                      onChange={(event) => this.handleCheckBox(event, amenity)}
+                    />
+                    <label htmlFor={`filter-${index}`}>{amenity.name} </label>
+                  </li>
+                ))}
             </ul>
           </aside>
 
