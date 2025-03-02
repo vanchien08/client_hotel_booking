@@ -32,6 +32,7 @@ class SearchResult extends Component {
       listRoom: null,
       listAmenitiesHotel: null,
       checkBoxAmenities: null,
+      checkboxConvert: null,
     };
   }
 
@@ -49,8 +50,8 @@ class SearchResult extends Component {
     if (checkIn > checkOut) {
       this.setState({ isModalOpen: true });
     } else {
-      let checkBoxAmenities = this.state.checkBoxAmenities;
-      console.log("rthíi", checkBoxAmenities);
+      let checkBoxAmenities = this.state.checkboxConvert;
+      console.log("checkboxconvert ", checkBoxAmenities);
       let searchRoom = await handleSearchRoom(
         address,
         checkIn,
@@ -82,7 +83,10 @@ class SearchResult extends Component {
       },
       () => {
         let list = this.convertListCheckBox(this.state.checkBoxAmenities);
-        console.log("Check box:", list);
+        this.setState({
+          checkboxConvert: list,
+        });
+        //   console.log("Check box:", list);
       }
     );
   };

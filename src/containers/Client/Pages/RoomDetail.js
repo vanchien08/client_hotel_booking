@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./RoomDetail.scss";
 import { Search, Star, MapPin } from "lucide-react";
 import { handleGetAllHotelApi } from "../../../services/searchResultService";
-
+import { handleGetAmenitiesHotelApi } from "../../../services/hotelService";
 class RoomDetail extends Component {
   constructor(props) {
     super(props);
@@ -11,19 +11,23 @@ class RoomDetail extends Component {
       data: null,
       isModalOpen: false,
       listHotel: null,
+      amenities: null,
     };
   }
 
   async componentDidMount() {
     let listhotel = await handleGetAllHotelApi();
+    let amenities = await handleGetAmenitiesHotelApi();
     this.setState({
       listHotel: listhotel,
+      amenities: amenities.dataAmenities,
     });
-    console.log("list >> hotel :", listhotel);
+    console.log("list >>amenities :", amenities.dataAmenities);
   }
 
   render() {
     const { room } = this.props.location.state || {};
+    const amenitiesHotel = this.state.amenities;
     console.log("room >>", room);
     return (
       <div className="room-detail-container">
@@ -53,13 +57,15 @@ class RoomDetail extends Component {
         </div>
         <div className="room-facilities">
           <ul>
-            <li>
-              <i class="fas fa-check"></i>Free WiFi
-            </li>
-            <li>Air Conditioning</li>
-            <li>Private Bathroom</li>
-            <li>Airport Shuttle</li>
-            <li>Family Rooms</li>
+            {amenitiesHotel &&
+              Array.isArray(amenitiesHotel) &&
+              amenitiesHotel.map((amenity, index) => (
+                <li key={index}>
+                  {" "}
+                  <i class="fas fa-check"></i>
+                  {amenity.name}
+                </li>
+              ))}
           </ul>
         </div>
         <div className="reserve-room-description">
