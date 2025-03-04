@@ -122,3 +122,25 @@
   .fa-check{
     color:#008009;
   }
+
+  .room-facilities{
+    margin-bottom : 28px;
+  }
+  .amenity-item {
+    display: flex;
+    align-items: center; /* Căn giữa icon và text theo chiều dọc */
+    gap: 8px; /* Khoảng cách giữa icon và text */
+  }
+  
+  .icon-amenities-hotel {
+    display: flex; /* Đảm bảo icon không bị lỗi căn chỉnh */
+    align-items: center;
+    justify-content: center;
+    width: 24px; /* Đặt kích thước icon cố định nếu cần */
+  }
+  
+  .amenity-name {
+    font-size: 16px; /* Điều chỉnh kích thước chữ nếu cần */
+  }
+  
+  

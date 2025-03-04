@@ -54,13 +54,14 @@ class Login extends Component {
 
   handleSubmit = async () => {
     // this.redirectToSystemPage();
-    let res = await handleLoginApi(this.state.username, this.state.password);
+    // let res = await handleLoginApi(this.state.username, this.state.password);
     // console.log("resss", res.userInfo);
-    if (res.errCode === 1) {
-      this.props.fetchLoginSuccess(res.userInfo);
-      this.redirectToSystemPage();
-    }
-    console.log("get redux >>", this.props.isLoggedIn);
+    // if (res.errCode === 1) {
+    //   this.props.fetchLoginSuccess(res.userInfo);
+    //   this.redirectToSystemPage();
+    // }
+    // console.log("get redux >>", this.props.isLoggedIn);
+    console.log("infor", this.state);
   };
 
   render() {
