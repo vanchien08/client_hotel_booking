@@ -6,6 +6,7 @@ export const path = {
   SHOPVIET: "/shopviet",
   SEARCH: "/searchresult",
   ROOMDETAIL: "/roomdetail",
+  PROFILE: "/profile",
 };
 
 export const languages = {

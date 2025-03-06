@@ -158,7 +158,7 @@ class HomePage1 extends Component {
     let isModalOpen = this.state.isModalOpen;
     console.log("state login >>", isLoggedIn);
     return (
-      <div>
+      <div className="Hompage-container">
         <Modal
           title="Thông báo"
           open={isModalOpen}

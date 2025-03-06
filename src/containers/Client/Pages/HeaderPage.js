@@ -7,7 +7,68 @@ import BodyHomePage from "./BodyHomePage";
 import * as actions from "../../../store/actions";
 import HomePage1 from "./HomePage1.js";
 import Footer from "./Footer.js";
+import { Avatar, Space } from "antd";
+import { UserOutlined, SettingOutlined, DownOutlined } from "@ant-design/icons";
+import imguser from "../../../assets/images/user.png";
+import { Dropdown, message } from "antd";
+
 class HeaderPage extends Component {
+  handleNavigate = (path) => {
+    this.props.navigate(path);
+  };
+
+  handleLogOut = (path) => {
+    localStorage.removeItem("adminInfor");
+    localStorage.removeItem("userInfor");
+    this.props.navigate(path);
+  };
+  items = [
+    {
+      key: "1",
+      label: "My Account",
+      disabled: true,
+    },
+    {
+      type: "divider",
+    },
+    {
+      key: "2",
+      label: "Profile",
+      extra: "⌘P",
+      onClick: () => this.handleNavigate("/profile"),
+    },
+    {
+      key: "3",
+      label: "Billing",
+      extra: "⌘B",
+    },
+    {
+      key: "4",
+      label: (
+        <span className="sign-out-container">
+          <i className="fas fa-sign-out-alt"></i>
+          Đăng xuất
+        </span>
+      ),
+
+      extra: "⌘D",
+      onClick: () => this.handleLogOut("/login"),
+    },
+  ];
+  App = () => (
+    <Dropdown
+      menu={{
+        items: this.items,
+      }}
+    >
+      <a onClick={(e) => e.preventDefault()}>
+        <Space>
+          <img src={imguser} alt="" width="35" height="35" />
+          <DownOutlined />
+        </Space>
+      </a>
+    </Dropdown>
+  );
   render() {
     let isLoggedIn = this.props.isLoggedIn;
     console.log("state login >>", isLoggedIn);
@@ -222,6 +283,7 @@ class HeaderPage extends Component {
                     Contact
                   </a>
                 </li>
+                <div className="avatar-user">{this.App()}</div>
               </ul>
             </div>
           </nav>

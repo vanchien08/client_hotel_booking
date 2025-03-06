@@ -24,6 +24,7 @@ import ConfirmModal from "../components/ConfirmModal";
 import SearchResult from "./Client/Pages/SearchResult";
 import RoomDetail from "./Client/Pages/RoomDetail";
 import HomePage1 from "./Client/Pages/HomePage1";
+import ProfileUser from "./Client/Pages/ProfileUser";
 class App extends Component {
   handlePersistorState = () => {
     const { persistor } = this.props;
@@ -56,6 +57,7 @@ class App extends Component {
                 <Route path={path.HOME} exact component={HomePage1} />
 
                 <Route path={path.SEARCH} exact component={SearchResult} />
+                <Route path={path.PROFILE} exact component={ProfileUser} />
                 <Route path={path.ROOMDETAIL} exact component={RoomDetail} />
                 <Route
                   path={path.LOGIN}

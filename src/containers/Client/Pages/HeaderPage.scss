@@ -30,4 +30,20 @@
     background-color: #007bff;
     color: #ffffff;
   }
-  
+  .collapse{
+    margin-right:15px;
+  }
+  .avatar-user{
+    margin-left:10px;
+  }
+  .fa-sign-out-alt{
+    width:3px;
+    height:3px;
+    padding-top:3px;
+  }
+  .sign-out-container {
+    display: flex;
+
+    gap: 20px; /* Giảm khoảng cách nếu cần */
+    justify-content: center;
+  }

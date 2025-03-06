@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import "./login.scss";
 import * as actions from "../../store/actions";
-import { handleLoginApi } from "../../services/userService";
+import { handleLoginUserApi } from "../../services/userService";
 
 class Login extends Component {
   constructor(props) {
@@ -12,6 +12,7 @@ class Login extends Component {
       errCode: 0,
       username: "",
       password: "",
+      notify: "",
     };
   }
 
@@ -33,13 +34,9 @@ class Login extends Component {
     }
   }
 
-  redirectToSystemPage = () => {
-    const { navigate } = this.props;
-    //  const redirectPath = "/system/dashboard";
-    const redirectPath = "/shopviet/home";
-    navigate(`${redirectPath}`);
+  handleNavigate = (path) => {
+    this.props.navigate(path);
   };
-
   handleOnChangeUsername = (event) => {
     this.setState({
       username: event.target.value,
@@ -53,20 +50,37 @@ class Login extends Component {
   };
 
   handleSubmit = async () => {
-    // this.redirectToSystemPage();
-    // let res = await handleLoginApi(this.state.username, this.state.password);
-    // console.log("resss", res.userInfo);
-    // if (res.errCode === 1) {
-    //   this.props.fetchLoginSuccess(res.userInfo);
-    //   this.redirectToSystemPage();
-    // }
-    // console.log("get redux >>", this.props.isLoggedIn);
-    console.log("infor", this.state);
+    // localStorage.clear();
+    let { username, password } = this.state;
+    let respon = await handleLoginUserApi(username, password);
+    // let getlocal = localStorage.getItem("userInfor");
+    let roleinf = -1;
+    let isLogin = -1;
+    if (respon.errCode === 1) {
+      let role = respon.user.roles[0].role;
+      isLogin = 1;
+
+      if (role == 1) {
+        localStorage.setItem("adminInfor", JSON.stringify(respon.user));
+        roleinf = 1;
+      } else {
+        localStorage.setItem("userInfor", JSON.stringify(respon.user));
+        roleinf = 0;
+      }
+
+      this.handleNavigate("/");
+    } else {
+      this.setState({
+        notify: "Tài khoản hoặc mật khẩu không chính xác!",
+      });
+    }
+    localStorage.setItem("isLogin", isLogin);
+    localStorage.setItem("role", roleinf);
+    // console.log("infor", respon);
   };
 
   render() {
-    let username = this.state.username;
-
+    let { notify } = this.state;
     return (
       <div className="background-login">
         <div className="content-login">
@@ -98,7 +112,7 @@ class Login extends Component {
                   onChange={(event) => this.handleOnChangePw(event)}
                 />
               </div>
-
+              <div className="notify-login-user">{notify}</div>
               <div className="row social-login">
                 <div className="col-6 facebook text-center icon-login">
                   <i className="fab fa-facebook icon-fb-gg"></i>

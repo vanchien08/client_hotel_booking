@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
-import "./HomePage1.scss";
+import "./Footer.scss";
 import userimg from "../../../assets/images/user.png";
 import BodyHomePage from "./BodyHomePage";
 import * as actions from "../../../store/actions";
 
-class HomePage1 extends Component {
+class Footer extends Component {
   handleClickSeacrch = () => {};
   render() {
     let isLoggedIn = this.props.isLoggedIn;
@@ -121,5 +121,5 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage1);
-//export default HomePage1;
+export default connect(mapStateToProps, mapDispatchToProps)(Footer);
+//export default Footer;

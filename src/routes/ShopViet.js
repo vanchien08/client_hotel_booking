@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
-import HomePage from "../containers/Client/Pages/HomePages";
+
 import ShopCart from "../containers/Client/Pages/ShopCart";
 
 class System extends Component {
@@ -11,7 +11,6 @@ class System extends Component {
       <div className="shopviet-container">
         <div className="shopviet-list">
           <Switch>
-            <Route path="/shopviet/home" component={HomePage} />
             <Route path="/shopviet/shopcart" component={ShopCart} />
 
             <Route

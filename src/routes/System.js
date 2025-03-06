@@ -5,7 +5,7 @@ import UserManage from "../containers/Admin/Pages/userManage";
 import ProductManage from "../containers/System/ProductManage";
 import RegisterPackageGroupOrAcc from "../containers/System/RegisterPackageGroupOrAcc";
 import Dashboard from "../containers/Admin/Pages/Dashboard";
-import HomePage from "../containers/Client/Pages/HomePages";
+
 class System extends Component {
   render() {
     const { systemMenuPath } = this.props;
@@ -16,7 +16,7 @@ class System extends Component {
             <Route path="/system/user-manage" component={UserManage} />
             <Route path="/system/dashboard" component={Dashboard} />
             <Route path="/system/product-manage" component={ProductManage} />
-            <Route path="/HomePage" component={HomePage} />
+
             <Route
               path="/system/register-package-group-or-account"
               component={RegisterPackageGroupOrAcc}
