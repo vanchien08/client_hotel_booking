@@ -14,7 +14,7 @@ import "swiper/modules/navigation/navigation.min.css";
 
 import HeaderPage from "./HeaderPage";
 import Footer from "./Footer";
-import bannerImage from "../../../assets/images/bannerHotel.jpg";
+import bannerImage from "../../../assets/images/bannerHotel2.png";
 import imageroom1 from "../../../assets/images/imageroom1.jpg";
 import imageroom2 from "../../../assets/images/imageroom2.jpg";
 import imageroom3 from "../../../assets/images/imageroom3.jpg";

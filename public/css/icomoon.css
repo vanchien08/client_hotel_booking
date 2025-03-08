@@ -1146,9 +1146,9 @@
 .icon-log-out:before {
     content: "\e9d6";
 }
-.icon-login:before {
+/* .icon-login:before {
     content: "\e9d7";
-}
+} */
 .icon-loop:before {
     content: "\e9d8";
 }

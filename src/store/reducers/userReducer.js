@@ -1,9 +1,12 @@
 import actionTypes from "../actions/actionTypes";
+
 let Istate = {
   errCode: 0,
+  errMessage: "",
   userInfo: null,
   isLoggedIn: false,
 };
+
 const userReducer = (state = Istate, action) => {
   switch (action.type) {
     case actionTypes.USER_LOGIN_START:
@@ -12,32 +15,30 @@ const userReducer = (state = Istate, action) => {
       };
 
     case actionTypes.USER_LOGIN_SUCCESS:
-      let cpstate = { ...state };
-      cpstate.errCode = action.data.errCode;
-      cpstate.errMessage = action.data.errMessage;
-      cpstate.userInfo = action.data;
-      cpstate.isLoggedIn = true;
-      console.log("fire action success");
-      console.log("cpstate>>", action);
+      console.log("fire succes ", action.data);
       return {
-        ...cpstate,
+        ...state,
+        errCode: action.data?.errCode || 0,
+        errMessage: action.data?.errMessage || "",
+        userInfo: action.data || null,
         isLoggedIn: true,
-        // adminInfo: action.adminInfo,
       };
+
     case actionTypes.USER_LOGIN_FAIL:
       return {
         ...state,
         isLoggedIn: false,
-        errCode: action.data.errCode,
-        errMessage: action.data.errMessage,
+        errCode: action.data?.errCode || -1,
+        errMessage: action.data?.errMessage || "Đăng nhập thất bại",
       };
 
     case actionTypes.PROCESS_LOGOUT:
       return {
         ...state,
         isLoggedIn: false,
-        //  errCode: action.data.errCode,
-        //   errMessage: action.data.errMessage,
+        userInfo: null, // Reset thông tin user khi logout
+        errCode: 0,
+        errMessage: "",
       };
 
     default:

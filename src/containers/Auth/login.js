@@ -67,6 +67,7 @@ class Login extends Component {
         localStorage.setItem("userInfor", JSON.stringify(respon.user));
         roleinf = 0;
       }
+      this.props.fetchLoginSuccess(respon.user);
 
       this.handleNavigate("/");
     } else {
@@ -115,11 +116,11 @@ class Login extends Component {
               <div className="notify-login-user">{notify}</div>
               <div className="row social-login">
                 <div className="col-6 facebook text-center icon-login">
-                  <i className="fab fa-facebook icon-fb-gg"></i>
+                  <i className="fab fa-facebook "></i>
                 </div>
 
                 <div className="col-6 google text-center icon-login">
-                  <i className="fab fa-google icon-fb-gg"></i>
+                  <i className="fab fa-google"></i>
                 </div>
               </div>
 

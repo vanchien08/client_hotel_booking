@@ -17,6 +17,7 @@ class RoomDetail extends Component {
       isModalOpen: false,
       listHotel: null,
       amenities: null,
+      optionSelect: -1,
     };
   }
 
@@ -30,11 +31,17 @@ class RoomDetail extends Component {
     });
     console.log("list >> hotel id :", amenities);
   }
-
+  handleSelectQuantity = (event) => {
+    let option = parseInt(event.target.value);
+    this.setState({
+      optionSelect: option,
+    });
+    //  console.log("select option", event.target.value);
+  };
   render() {
     const { room } = this.props.location.state || {};
     const amenitiesHotel = this.state.amenities;
-    console.log("room >>", room);
+    console.log("this statte >>", this.state, room);
     return (
       <div>
         <HeaderPage />
@@ -91,16 +98,21 @@ class RoomDetail extends Component {
               <ul>
                 <li>Có bãi đậu xe riêng miễn phí ở khách sạn này</li>
               </ul>
-              {/* <div className="select-container">
-              <select class="form-select" aria-label="Default select example">
+              <select
+                class="form-select"
+                aria-label="Default select example"
+                defaultValue=""
+                onChange={(event) => this.handleSelectQuantity(event)}
+              >
                 <option disabled selected>
                   Chọn số lượng
                 </option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
               </select>
-            </div> */}
 
               <button className="reserve-button">Đặt ngay</button>
             </div>

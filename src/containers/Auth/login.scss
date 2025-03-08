@@ -1,58 +1,134 @@
 .background-login {
-    background-image: linear-gradient(to bottom right, #18A5A7, #B6C0C5);
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-image: url('../../assets/images/background1.png'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
+/* Khung chứa form login */
 .content-login {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 450px;
-    width: 400px;
-    background-color: #fff;
-    border-radius: 20px;
-}
-.input-login{
-    margin-top:10px;
-    background-color:#ebebeb;
+    width: 720px;
+    background: rgba(255, 255, 255, 0.9); /* Làm mờ nền */
+    border-radius: 15px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
 }
 
-.tittle-form-login{
-    margin-bottom:30px;
-    font-weight: 600;
-    font-size: 30px;
-}
-.login-button{
-    width:100%;
-    margin-top:20px;
-    background-image: linear-gradient(to bottom right, #18A5A7, #B6C0C5);
+/* Container form login */
+.container-login {
+    width: 100%;
+    padding: 40px 40px 60px 40px;
 }
 
-.icon-login{
-    font-size:30px;
-}
-
-.icon-fb-gg:hover{
-    cursor:pointer;
-}
-
-.social-login{
+/* Input username & password */
+.input-login {
     margin-top: 10px;
-
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    width: 100%;
+    transition: 0.3s;
 }
 
-
-
-.fa-facebook{
-    color:#0866ff;
+/* Hiệu ứng khi focus vào input */
+.input-login:focus {
+    border-color: #18A5A7;
+    box-shadow: 0 0 5px rgba(24, 165, 167, 0.5);
 }
+
+/* Tiêu đề đăng nhập */
+.tittle-form-login {
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 28px;
+    text-transform: uppercase;
+    text-align: center;
+    color: #333;
+}
+
+/* Nút đăng nhập */
+.login-button {
+    width: 100%;
+    margin-top: 20px;
+    background-image: linear-gradient(to right, #18A5A7, #58d6d8);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    height:50px;
+}
+
+/* Hiệu ứng hover cho nút đăng nhập */
+.login-button:hover {
+    background-image: linear-gradient(to right, #158b8c, #46c4c5);
+}
+
+/* Chỉnh icon Facebook và Google */
+.icon-login {
+    font-size: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Tùy chỉnh màu sắc icon */
+.fa-facebook {
+    color: #0866ff;
+}
+
 .fa-google {
-    color:#dc3545;
+    color: #dc3545;
 }
-.notify-login-user{
+
+/* Hiệu ứng hover icon */
+.icon-login:hover {
+    transform: scale(1.1);
+}
+
+/* Hiển thị lỗi */
+.notify-login-user {
     margin-top: 10px;
     color: red;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Căn chỉnh khối social login */
+.social-login {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.social-login .col-6 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Hiệu ứng hover */
+.facebook:hover {
+    background: rgba(8, 102, 255, 0.1);
+}
+.google:hover {
+    background: rgba(220, 53, 69, 0.1);
 }

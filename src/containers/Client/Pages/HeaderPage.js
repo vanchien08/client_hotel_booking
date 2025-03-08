@@ -13,13 +13,44 @@ import imguser from "../../../assets/images/user.png";
 import { Dropdown, message } from "antd";
 
 class HeaderPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: null,
+    };
+  }
+  async componentDidMount() {
+    let userInfo = this.props.userInfo || {}; // Nếu null, gán giá trị mặc định {}
+    let role = userInfo.roles?.[0]?.role || -1;
+    console.log("check redux", userInfo);
+    //   let useri4 = null;
+    let useri4 = this.props.userInfo;
+    // if (role == 1) {
+    //   useri4 = localStorage.getItem("adminInfor");
+    // } else {
+    //   useri4 = localStorage.getItem("userInfor");
+    // }
+
+    if (useri4 & (role == 1 || role == 0)) {
+      this.setState({
+        user: JSON.parse(useri4),
+      });
+    }
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.userInfo !== prevProps.userInfo) {
+      console.log("Cập nhật userInfo:", this.props.userInfo);
+      this.setState({ user: this.props.userInfo });
+    }
+  }
+
   handleNavigate = (path) => {
     this.props.navigate(path);
   };
 
   handleLogOut = (path) => {
-    localStorage.removeItem("adminInfor");
-    localStorage.removeItem("userInfor");
+    localStorage.removeItem("persist:admin");
+    localStorage.removeItem("persist:user");
     this.props.navigate(path);
   };
   items = [
@@ -63,15 +94,20 @@ class HeaderPage extends Component {
     >
       <a onClick={(e) => e.preventDefault()}>
         <Space>
-          <img src={imguser} alt="" width="35" height="35" />
+          <img
+            className="image-user-infor"
+            src={this.props.userInfo?.avatar || imguser}
+            alt=""
+            width="35"
+            height="35"
+          />
           <DownOutlined />
+          {this.props.userInfo?.name}
         </Space>
       </a>
     </Dropdown>
   );
   render() {
-    let isLoggedIn = this.props.isLoggedIn;
-    console.log("state login >>", isLoggedIn);
     return (
       <div id="fh5co-header-section" className="bg-light shadow-sm">
         <div className="container-fluid">
