@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
+import * as actions from "../../../store/actions";
 import "./HeaderPage.scss";
 import userimg from "../../../assets/images/user.png";
 import BodyHomePage from "./BodyHomePage";
-import * as actions from "../../../store/actions";
+
 import HomePage1 from "./HomePage1.js";
 import Footer from "./Footer.js";
 import { Avatar, Space } from "antd";

@@ -19,10 +19,29 @@ const handleGetReviewsApi = () => {
 const handleLoginUserApi = (username, password) => {
   return axios.post("/login", { username, password });
 };
+
+const handleBooking = (
+  user,
+  quantityRoom,
+  checkIn,
+  checkOut,
+  roomdata,
+  totalPrice
+) => {
+  return axios.post("/BookingHotel", {
+    user,
+    quantityRoom,
+    checkIn,
+    checkOut,
+    roomdata,
+    totalPrice,
+  });
+};
 export {
   handleLoginApi,
   handleGetUserApi,
   handleGetHotelApi,
   handleGetReviewsApi,
   handleLoginUserApi,
+  handleBooking,
 };

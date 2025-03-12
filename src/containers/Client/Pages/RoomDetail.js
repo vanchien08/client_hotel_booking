@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import "./RoomDetail.scss";
+import { connect } from "react-redux";
+import { push } from "connected-react-router";
+import * as actions from "../../../store/actions";
 import { Search, Star, MapPin } from "lucide-react";
 import { handleGetAllHotelApi } from "../../../services/searchResultService";
 import {
   handleGetAmenitiesHotelApi,
   handleGetAmenitiesHotel,
 } from "../../../services/hotelService";
+import { handleBooking } from "../../../services/userService";
 import HeaderPage from "./HeaderPage";
 import Footer from "./Footer";
 class RoomDetail extends Component {
@@ -31,12 +35,69 @@ class RoomDetail extends Component {
     });
     console.log("list >> hotel id :", amenities);
   }
+
+  handleNavigate = (path) => {
+    this.props.navigate(path);
+  };
+
+  handleLogOut = (path) => {
+    localStorage.removeItem("persist:admin");
+    localStorage.removeItem("persist:user");
+    this.props.navigate(path);
+  };
+
   handleSelectQuantity = (event) => {
     let option = parseInt(event.target.value);
     this.setState({
       optionSelect: option,
     });
     //  console.log("select option", event.target.value);
+  };
+  handleOnclickSubmit = async () => {
+    let quantity = parseInt(this.state.optionSelect);
+    let { address, checkIn, checkOut, room } = this.props.location.state || {};
+    let userInfo = this.props.userInfo || {}; // Nếu null, gán giá trị mặc định {}
+    let role = userInfo.roles?.[0]?.role || -1;
+    console.log("check redux", userInfo);
+    //   let useri4 = null;
+    let useri4 = this.props.userInfo;
+    // if (role == 1) {
+    //   useri4 = localStorage.getItem("adminInfor");
+    // } else {
+    //   useri4 = localStorage.getItem("userInfor");
+    // }
+    if (role == -1) {
+      this.handleLogOut("/login");
+    } else {
+      let totalPrice = room.price * quantity;
+      // let respon = await handleBooking(
+      //   userInfo,
+      //   quantity,
+      //   checkIn,
+      //   checkOut,
+      //   room,
+      //   totalPrice
+      // );
+      console.log(
+        "check",
+        userInfo,
+        quantity,
+        checkIn,
+        checkOut,
+        room,
+        totalPrice
+      );
+      //    console.log("response", respon);
+    }
+    // if (useri4 & (role == 1 || role == 0)) {
+    //   this.setState({
+    //     user: JSON.parse(useri4),
+    //   });
+    // } else {
+    //   this.handleLogOut("/login");
+    // }
+
+    //  let respon = await handleBooking(userInfo,this.state.optionSelect,)
   };
   render() {
     const { room } = this.props.location.state || {};
@@ -114,7 +175,12 @@ class RoomDetail extends Component {
                 <option value="5">5</option>
               </select>
 
-              <button className="reserve-button">Đặt ngay</button>
+              <button
+                className="reserve-button"
+                onClick={() => this.handleOnclickSubmit()}
+              >
+                Đặt ngay
+              </button>
             </div>
 
             <div className="most-popular-facilities">
@@ -139,5 +205,27 @@ class RoomDetail extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    // lang: state.app.language,
+    isLoggedIn: state.user.isLoggedIn,
+    errCode: state.user.errCode,
+    userInfo: state.user.userInfo,
+  };
+};
 
-export default RoomDetail;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    navigate: (path) => dispatch(push(path)),
+    // adminLoginSuccess: (adminInfo) =>
+    //   dispatch(actions.adminLoginSuccess(adminInfo)),
+    // adminLoginFail: () => dispatch(actions.adminLoginFail()),
+    // fetchLoginStart: (username, password) =>
+    //   dispatch(actions.fetchLoginStart(username, password)),
+    fetchLoginSuccess: (userInfo) =>
+      dispatch(actions.fetchLoginSuccess(userInfo)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RoomDetail);
+//export default HeaderPage;

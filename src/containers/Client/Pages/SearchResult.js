@@ -49,10 +49,10 @@ class SearchResult extends Component {
       //  console.log("check list room", searchRoom);
     }
   };
-  handleNavigate = (room) => {
+  handleNavigate = (room, checkIn, checkOut) => {
     this.props.history.push({
       pathname: "/roomdetail",
-      state: { room },
+      state: { room, checkIn, checkOut },
     });
   };
   handleCheckBox = (event, amenity) => {
@@ -174,7 +174,9 @@ class SearchResult extends Component {
                       </p>
                       <button
                         className="see-availability-button"
-                        onClick={() => this.handleNavigate(room)}
+                        onClick={() =>
+                          this.handleNavigate(room, checkIn, checkOut)
+                        }
                       >
                         See availability
                       </button>
