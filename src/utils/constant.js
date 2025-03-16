@@ -7,6 +7,7 @@ export const path = {
   SEARCH: "/searchresult",
   ROOMDETAIL: "/roomdetail",
   PROFILE: "/profile",
+  USERINFO: "/user-info",
 };
 
 export const languages = {

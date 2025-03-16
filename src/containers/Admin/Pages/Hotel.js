@@ -12,9 +12,11 @@ import {
 import { push } from "connected-react-router";
 import { FilterOutlined } from "@ant-design/icons";
 import "./Hotel.scss";
-import { Button, Modal, Popover } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { Button, Modal, Popover, Image, Upload } from "antd";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import FilterButton from "../../../components/FilterButton";
+// antd
+
 class Hotel extends Component {
   constructor(props) {
     super(props);
@@ -32,6 +34,9 @@ class Hotel extends Component {
       image: "",
       createAt: "",
       openFormFilter: false,
+      fileList: [],
+      uploading: false,
+      imageUrl: "",
     };
   }
 
@@ -168,6 +173,7 @@ class Hotel extends Component {
   };
 
   handleOk = async () => {
+    console.log("checkupdate", this.state.selectedReview);
     let responUpdate = await handleUpdateHotelApi(this.state.selectedReview);
     if (responUpdate.errCode === 1) {
       this.componentDidMount();
@@ -190,10 +196,72 @@ class Hotel extends Component {
     //  this.componentDidMount();
     console.log("respon?>>", respon);
   };
+  handleChange = (info) => {
+    let newFileList = [...info.fileList];
+
+    // 1. Limit the number of uploaded files
+    // Only to show two recent uploaded files, and old ones will be replaced by the new
+    newFileList = newFileList.slice(-2);
+
+    // 2. Read from response and show file link
+    newFileList = newFileList.map((file) => {
+      if (file.response) {
+        // Component will show file.url as link
+        file.url = file.response.url;
+      }
+      return file;
+    });
+    console.log("image", newFileList);
+    this.setState({
+      fileList: newFileList,
+    });
+  };
+  handleUpload = async (file) => {
+    this.setState({ uploading: true });
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "chienpreset"); // Đặt trong Cloudinary settings
+
+    try {
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dwkvrufbf/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      console.log("Upload thành công:", data.secure_url);
+      if (data.secure_url) {
+        console.log("Upload thành công:", data);
+        this.setState((prevState) => ({
+          selectedReview: {
+            ...prevState.selectedReview, // Giữ nguyên các thuộc tính cũ của selectedReview
+            image: data.secure_url, // Cập nhật giá trị image
+          },
+          imageUrl: data.secure_url,
+          uploading: false,
+          fileList: [{ url: data.secure_url, name: file.name }],
+        }));
+      }
+    } catch (error) {
+      console.error("Lỗi upload:", error);
+      this.setState({ uploading: false });
+    }
+  };
+
+  props = {
+    // action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
+    onChange: this.handleChange,
+    multiple: true,
+  };
   render() {
     const { isLoggedIn } = this.props;
     let isModalOpen = this.state.isModalOpen;
-    const { data, selectedReview } = this.state; // lấy dữ liệu từ state
+    const { data, selectedReview, previewOpen, previewImage, fileList } =
+      this.state; // lấy dữ liệu từ state
     console.log("state login >>", isLoggedIn);
     console.log("selected Review  >>", selectedReview);
 
@@ -309,20 +377,40 @@ class Hotel extends Component {
                   </div>
                   <div className="col-md-3">
                     <div className="mb-3">
-                      <label for="input7" className="form-label">
+                      <label htmlFor="input7" className="form-label">
                         Ảnh
                       </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="image"
-                        value={this.state.selectedReview.image}
-                        onChange={(event) =>
-                          this.handleonChangeInput(event.target.id, event)
-                        }
-                      />
+                      <div className="upload-container">
+                        <Upload
+                          showUploadList={false}
+                          beforeUpload={(file) => {
+                            this.handleUpload(file);
+                            return false; // Ngăn Upload mặc định của Ant Design
+                          }}
+                          maxCount={1}
+                        >
+                          <Button
+                            icon={<UploadOutlined />}
+                            loading={this.state.uploading}
+                          >
+                            {this.state.uploading ? "Uploading..." : "Upload"}
+                          </Button>
+                          <div className="uploaded-images">
+                            {this.state.fileList.length > 0 ? (
+                              this.state.fileList.map((file, index) => (
+                                <div key={index} className="image-preview">
+                                  <p>{file.name}</p>
+                                </div>
+                              ))
+                            ) : (
+                              <p></p>
+                            )}
+                          </div>
+                        </Upload>
+                      </div>
                     </div>
                   </div>
+
                   <div className="col-md-3">
                     <div className="mb-3">
                       <label for="input8" className="form-label">

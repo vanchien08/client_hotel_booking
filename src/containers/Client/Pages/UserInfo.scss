@@ -1,0 +1,80 @@
+/* Profile.css */
+.profile-container {
+    max-width: 100%;
+    width: 95%;
+    margin: auto;
+    
+  }
+  .avatar-user-info{
+    border-bottom: 1px solid #ccc;
+  }
+  .log-out-text{
+    border-bottom: 1px solid #ccc !important;
+  }
+  .profile-sidebar {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+    background-color: #ccc;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+  }
+  
+  .list-group-item {
+    cursor: pointer;
+    transition: background 0.3s ease;
+    border:none;
+  }
+  
+  .list-group-item:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .profile-form {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+  }
+  
+  .btn-success {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .UserInfo_container{
+    margin-top:100px;
+    margin-left: 40px;
+    margin-right:40px;
+  }
+
+  .ant-upload-list-item-container{
+    width: 250px !important; // Tăng kích thước khung upload
+    height: 250px !important;
+    transform: translate(50px,100px);
+
+  }
+  .avatar-upload {
+
+    align-items: center;
+  }
+  .ant-upload.ant-upload-select{
+    width: 250px !important; // Tăng kích thước khung upload
+    height: 250px !important;
+    transform: translate(50px,100px);
+
+  }
+  .avatar-user-setting{
+    //  background-color: #fff;
+     
+      background-color: black;
+      background-size: cover;
+  }
+  .btn-submit-info{
+    height:45px;
+    background-color:#0d6efd  ;
+    padding:10px;
+  }

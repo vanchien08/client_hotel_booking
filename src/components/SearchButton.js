@@ -30,6 +30,11 @@ class SearchButton extends Component {
       this.setState({ isModalOpen: true });
     } else if (this.props.onSearch) {
       this.props.onSearch(address, checkIn, checkOut);
+      // this.setState({
+      //   address: address,
+      //   checkIn: checkIn,
+      //   checkOut: checkOut,
+      // });
     }
   };
 

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import UserManage from "./userManage";
 import Hotel from "./Hotel";
+import Statistics from "./Statistics";
 import Reviews from "./Reviews";
 import "./Dashboard.scss";
 import {
@@ -25,7 +26,7 @@ const items2 = [
     icon: React.createElement(UserOutlined),
     label: "Quản lý người dùng",
     children: [
-      { key: "1", label: "Thêm người dùng" },
+      { key: "1", label: "Quản lý khách sạn" },
       { key: "2", label: "Xoá người dùng" },
     ],
   },
@@ -34,16 +35,16 @@ const items2 = [
     icon: React.createElement(LaptopOutlined),
     label: "Quản lý đánh giá",
     children: [
-      { key: "3", label: "Danh sách đánh giá" },
+      { key: "3", label: "Quản lý đánh giá" },
       { key: "4", label: "Thêm Laptop" },
     ],
   },
   {
     key: "sub3",
     icon: React.createElement(NotificationOutlined),
-    label: "Quản trị Thông báo",
+    label: "Thống kê",
     children: [
-      { key: "5", label: "Danh sách thông báo" },
+      { key: "5", label: "Thống kê" },
       { key: "6", label: "Thêm thông báo" },
     ],
   },
@@ -111,7 +112,9 @@ const Dashboard = ({ isLoggedIn, navigate }) => {
             )}
             {selectedContent === "AddLaptop" && <div>Thêm Laptop</div>}
             {selectedContent === "NotificationList" && (
-              <div>Danh sách thông báo</div>
+              <div>
+                <Statistics />
+              </div>
             )}
             {selectedContent === "AddNotification" && <div>Thêm thông báo</div>}
           </Content>

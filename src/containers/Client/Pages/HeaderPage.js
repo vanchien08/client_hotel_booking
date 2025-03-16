@@ -23,6 +23,7 @@ class HeaderPage extends Component {
   async componentDidMount() {
     let userInfo = this.props.userInfo || {}; // Nếu null, gán giá trị mặc định {}
     let role = userInfo.roles?.[0]?.role || -1;
+
     console.log("check redux", userInfo);
     //   let useri4 = null;
     let useri4 = this.props.userInfo;
@@ -48,6 +49,15 @@ class HeaderPage extends Component {
   handleNavigate = (path) => {
     this.props.navigate(path);
   };
+  handleNavigateProfile = () => {
+    const { userInfo } = this.props;
+
+    if (userInfo && userInfo.id) {
+      this.handleNavigate("/user-info"); // Chuyển đến trang profile
+    } else {
+      this.handleNavigate("/login"); // Nếu chưa đăng nhập, chuyển đến login
+    }
+  };
 
   handleLogOut = (path) => {
     localStorage.removeItem("persist:admin");
@@ -67,7 +77,7 @@ class HeaderPage extends Component {
       key: "2",
       label: "Profile",
       extra: "⌘P",
-      onClick: () => this.handleNavigate("/profile"),
+      onClick: () => this.handleNavigateProfile(),
     },
     {
       key: "3",

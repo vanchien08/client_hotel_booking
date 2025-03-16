@@ -54,7 +54,7 @@ class RoomDetail extends Component {
     //  console.log("select option", event.target.value);
   };
   handleOnclickSubmit = async () => {
-    let quantity = parseInt(this.state.optionSelect);
+    let quantity = Math.abs(parseInt(this.state.optionSelect));
     let { address, checkIn, checkOut, room } = this.props.location.state || {};
     let userInfo = this.props.userInfo || {}; // Nếu null, gán giá trị mặc định {}
     let role = userInfo.roles?.[0]?.role || -1;
@@ -70,24 +70,24 @@ class RoomDetail extends Component {
       this.handleLogOut("/login");
     } else {
       let totalPrice = room.price * quantity;
-      // let respon = await handleBooking(
-      //   userInfo,
-      //   quantity,
-      //   checkIn,
-      //   checkOut,
-      //   room,
-      //   totalPrice
-      // );
-      console.log(
-        "check",
-        userInfo,
+      let respon = await handleBooking(
+        userInfo.id,
         quantity,
         checkIn,
         checkOut,
-        room,
+        room.id,
         totalPrice
       );
-      //    console.log("response", respon);
+      console.log(
+        "check",
+        userInfo.id,
+        quantity,
+        checkIn,
+        checkOut,
+        room.id,
+        totalPrice
+      );
+      console.log("response", respon);
     }
     // if (useri4 & (role == 1 || role == 0)) {
     //   this.setState({

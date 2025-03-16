@@ -1,16 +1,15 @@
-
-.button-search-container{
+.button-search-container {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 117px;
-  
-    width:800px;
+    height: 150px; /* Tăng chiều cao để tránh bị bó hẹp */
+    width: 100%; /* Để nó co giãn phù hợp với màn hình */
     text-align: center;
-    margin:auto;
+    margin: auto;
 }
+
 .search-container {
     background: #003580;
     padding: 30px;
@@ -18,38 +17,39 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     color: white;
     text-align: center;
-    max-width: 1000px;  /* Tăng giới hạn tối đa */
-    width: 900px;       /* Tăng chiều rộng thực tế */
-   
-    height:auto;
-  
+    max-width: 900px; /* Giữ kích thước hợp lý */
+    width: 100%;
+    min-height: 120px; /* Đảm bảo nội dung không bị co lại quá nhỏ */
 }
-.search-container h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-}
+
 .input-group {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap; /* Cho phép xuống dòng nếu không đủ chỗ */
 }
-.search-container input, 
+
+.search-container input,
 .search-container button {
-    flex: 1;
     padding: 15px;
     border: none;
     border-radius: 5px;
     font-size: 18px;
 }
+
 .search-container input {
+    flex: 2; /* Input sẽ chiếm nhiều không gian hơn */
     color: #333;
 }
+
 .search-container button {
+    flex: 1; /* Button nhỏ hơn input */
     background-color: #febb02;
     color: #003580;
     font-weight: bold;
     cursor: pointer;
-    border: none;
+    transition: background-color 0.3s ease;
 }
+
 .search-container button:hover {
     background-color: #e09d00;
 }

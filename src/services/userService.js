@@ -21,19 +21,19 @@ const handleLoginUserApi = (username, password) => {
 };
 
 const handleBooking = (
-  user,
+  userid,
   quantityRoom,
   checkIn,
   checkOut,
-  roomdata,
+  roomid,
   totalPrice
 ) => {
   return axios.post("/BookingHotel", {
-    user,
+    userid,
     quantityRoom,
     checkIn,
     checkOut,
-    roomdata,
+    roomid,
     totalPrice,
   });
 };

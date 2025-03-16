@@ -25,6 +25,7 @@ import SearchResult from "./Client/Pages/SearchResult";
 import RoomDetail from "./Client/Pages/RoomDetail";
 import HomePage1 from "./Client/Pages/HomePage1";
 import ProfileUser from "./Client/Pages/ProfileUser";
+import UserInfo from "./Client/Pages/UserInfo";
 class App extends Component {
   handlePersistorState = () => {
     const { persistor } = this.props;
@@ -63,7 +64,7 @@ class App extends Component {
                   path={path.LOGIN}
                   component={userIsNotAuthenticated(Login)}
                 />
-
+                <Route path={path.USERINFO} exact component={UserInfo} />
                 <Route path={path.SYSTEM} component={System} />
                 {<Route path={path.SHOPVIET} component={ShopViet} />}
                 {/* <Route
