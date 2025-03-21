@@ -15,6 +15,7 @@ import "./Hotel.scss";
 import { Button, Modal, Popover, Image, Upload } from "antd";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import FilterButton from "../../../components/FilterButton";
+import { uploadImageToCloud } from "../../../config/UploadImageCloud";
 // antd
 
 class Hotel extends Component {
@@ -217,37 +218,56 @@ class Hotel extends Component {
     });
   };
   handleUpload = async (file) => {
+    // this.setState({ uploading: true });
+
+    // const formData = new FormData();
+    // formData.append("file", file);
+    // formData.append("upload_preset", "chienpreset"); // Đặt trong Cloudinary settings
+
+    // try {
+    //   const response = await fetch(
+    //     "https://api.cloudinary.com/v1_1/dwkvrufbf/image/upload",
+    //     {
+    //       method: "POST",
+    //       body: formData,
+    //     }
+    //   );
+
+    //   const data = await response.json();
+    //   console.log("Upload thành công:", data.secure_url);
+    //   if (data.secure_url) {
+    //     console.log("Upload thành công:", data);
+    //     this.setState((prevState) => ({
+    //       selectedReview: {
+    //         ...prevState.selectedReview, // Giữ nguyên các thuộc tính cũ của selectedReview
+    //         image: data.secure_url, // Cập nhật giá trị image
+    //       },
+    //       imageUrl: data.secure_url,
+    //       uploading: false,
+    //       fileList: [{ url: data.secure_url, name: file.name }],
+    //     }));
+    //   }
+    // } catch (error) {
+    //   console.error("Lỗi upload:", error);
+    //   this.setState({ uploading: false });
+    // }
+
+    //sdgsfg
+
     this.setState({ uploading: true });
-
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "chienpreset"); // Đặt trong Cloudinary settings
-
-    try {
-      const response = await fetch(
-        "https://api.cloudinary.com/v1_1/dwkvrufbf/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-
-      const data = await response.json();
-      console.log("Upload thành công:", data.secure_url);
-      if (data.secure_url) {
-        console.log("Upload thành công:", data);
-        this.setState((prevState) => ({
-          selectedReview: {
-            ...prevState.selectedReview, // Giữ nguyên các thuộc tính cũ của selectedReview
-            image: data.secure_url, // Cập nhật giá trị image
-          },
-          imageUrl: data.secure_url,
-          uploading: false,
-          fileList: [{ url: data.secure_url, name: file.name }],
-        }));
-      }
-    } catch (error) {
-      console.error("Lỗi upload:", error);
+    let data = await uploadImageToCloud(file);
+    if (data.secure_url) {
+      console.log("Upload thành công:", data);
+      this.setState((prevState) => ({
+        selectedReview: {
+          ...prevState.selectedReview, // Giữ nguyên các thuộc tính cũ của selectedReview
+          image: data.secure_url, // Cập nhật giá trị image
+        },
+        imageUrl: data.secure_url,
+        uploading: false,
+        fileList: [{ url: data.secure_url, name: file.name }],
+      }));
+    } else {
       this.setState({ uploading: false });
     }
   };

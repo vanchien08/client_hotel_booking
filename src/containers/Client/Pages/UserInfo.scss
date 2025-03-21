@@ -54,8 +54,8 @@
   .ant-upload-list-item-container{
     width: 250px !important; // Tăng kích thước khung upload
     height: 250px !important;
-    transform: translate(50px,100px);
-
+    transform: translate(50px,35px);
+   
   }
   .avatar-upload {
 
@@ -64,13 +64,14 @@
   .ant-upload.ant-upload-select{
     width: 250px !important; // Tăng kích thước khung upload
     height: 250px !important;
-    transform: translate(50px,100px);
+    transform: translate(50px,35px);
+    
 
   }
   .avatar-user-setting{
     //  background-color: #fff;
      
-      background-color: black;
+      background-color: #fff !important;
       background-size: cover;
   }
   .btn-submit-info{
@@ -78,3 +79,24 @@
     background-color:#0d6efd  ;
     padding:10px;
   }
+
+
+  .active-menu-select{
+      color:#000 !important;
+     
+  }
+  .container-changepassword{
+    width:600px;
+  }
+  #newpassword.form-control{
+    margin:15px 0px;
+  }
+  .button-change-password{
+    padding: 5px;
+    height: 40px;
+    background-color: #0d6efd !important;
+}
+
+.alert-notify{
+  color:red !important;
+}

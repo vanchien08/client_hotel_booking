@@ -1,6 +1,6 @@
 import React, { Component, useState } from "react";
 import { connect } from "react-redux";
-import { Table } from "antd";
+
 import { handleGetReviewsApi } from "../../../services/userService";
 import {
   handleDeleteReviewsApi,
@@ -9,7 +9,7 @@ import {
 import { push } from "connected-react-router";
 import "./Reviews.scss";
 
-import { Button, Modal } from "antd";
+import { Button, Modal, Table } from "antd";
 
 class Reviews extends Component {
   constructor(props) {

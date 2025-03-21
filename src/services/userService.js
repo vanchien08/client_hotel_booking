@@ -37,6 +37,27 @@ const handleBooking = (
     totalPrice,
   });
 };
+
+const handleUpdateProfile = (id, name, address, email, phone, avatar) => {
+  return axios.post("/update-user-info", {
+    id,
+    name,
+    address,
+    email,
+    phone,
+    avatar,
+  });
+};
+const handleGetBookingApi = (id) => {
+  return axios.get(`/get-booking-by-userid/${id}`);
+};
+const handleChangePassApi = (id, password, newpassword) => {
+  return axios.post("/change-password", { id, password, newpassword });
+};
+
+const handleGetPrice = () => {
+  return axios.get("/get-price-minmax");
+};
 export {
   handleLoginApi,
   handleGetUserApi,
@@ -44,4 +65,8 @@ export {
   handleGetReviewsApi,
   handleLoginUserApi,
   handleBooking,
+  handleUpdateProfile,
+  handleGetBookingApi,
+  handleChangePassApi,
+  handleGetPrice,
 };

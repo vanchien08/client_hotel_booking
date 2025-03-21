@@ -7,8 +7,10 @@ import HeaderPage from "./HeaderPage";
 import SearchButton from "../../../components/SearchButton";
 import { handleSearchRoom } from "../../../services/searchResultService";
 import { handleGetAmenitiesHotelApi } from "../../../services/hotelService";
+import { handleGetPrice } from "../../../services/userService";
 import Footer from "./Footer";
 import image from "../../../assets/images/banner_searchRS.png";
+import { Slider, Switch } from "antd";
 class SearchResult extends Component {
   constructor(props) {
     super(props);
@@ -21,37 +23,45 @@ class SearchResult extends Component {
       listAmenitiesHotel: null,
       checkBoxAmenities: null,
       checkboxConvert: null,
+      disabled: false,
+      priceRange: [100, 1000],
     };
   }
 
   async componentDidMount() {
     let amenitiesHotel = await handleGetAmenitiesHotelApi();
+    let responPrice = await handleGetPrice();
     let listhotel = await handleGetAllHotelApi();
     let { address, checkIn, checkOut } = this.props.location.state || {};
-    // if(!{ address, checkIn, checkOut } ){
+    let priceminmax = responPrice.priceminmax;
 
+    // if(!{ address, checkIn, checkOut } ){
+    let priceRange = [priceminmax.priceMin, priceminmax.priceMax];
     // }
     this.setState({
       listHotel: listhotel,
       listAmenitiesHotel: amenitiesHotel.dataAmenities,
+      priceRange: priceRange,
     });
 
-    console.log("amenities", amenitiesHotel);
+    console.log("responPrice", responPrice);
   }
   handleClickSearch = async (address, checkIn, checkOut) => {
+    let priceArr = this.state.priceRange;
     if (checkIn > checkOut) {
       this.setState({ isModalOpen: true });
     } else {
       let checkBoxAmenities = this.state.checkboxConvert;
-      console.log("checkboxconvert ", checkBoxAmenities);
+
       let searchRoom = await handleSearchRoom(
         address,
         checkIn,
         checkOut,
-        checkBoxAmenities
+        checkBoxAmenities,
+        priceArr[0],
+        priceArr[1]
       );
       this.setState({ listRoom: searchRoom.dataroom });
-      //  console.log("check list room", searchRoom);
     }
   };
   handleNavigate = (room, checkIn, checkOut) => {
@@ -91,6 +101,32 @@ class SearchResult extends Component {
 
     return listconvert;
   };
+  handlePriceChange = (value) => {
+    this.setState({ priceRange: value });
+  };
+  handleToggleSlider = (checked) => {
+    this.setState({ disabled: checked });
+  };
+
+  priceSlider() {
+    return (
+      <>
+        <Slider
+          range
+          min={0}
+          max={110000}
+          step={100}
+          value={this.state.priceRange}
+          onChange={this.handlePriceChange}
+          disabled={this.state.disabled}
+        />
+
+        <p>
+          Khoảng giá: {this.state.priceRange[0]} - {this.state.priceRange[1]}
+        </p>
+      </>
+    );
+  }
 
   render() {
     let listHotel = this.state.listHotel;
@@ -116,6 +152,8 @@ class SearchResult extends Component {
             <div className="search-layout">
               {/* Filter Section */}
               <aside className="filter-section">
+                <h3>Lọc theo giá (VND)</h3>
+                {this.priceSlider()}
                 <h3>Các tiện ích</h3>
                 <ul>
                   {amenitiesHotel &&
