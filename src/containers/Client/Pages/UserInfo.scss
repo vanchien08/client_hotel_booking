@@ -54,17 +54,22 @@
   .ant-upload-list-item-container{
     width: 250px !important; // Tăng kích thước khung upload
     height: 250px !important;
-    transform: translate(50px,35px);
+   
    
   }
+  
   .avatar-upload {
-
+    transform: translate(50px,35px);
     align-items: center;
+  }
+
+  .avatar-upload-display{
+    transform: translate(50px,35px);
   }
   .ant-upload.ant-upload-select{
     width: 250px !important; // Tăng kích thước khung upload
     height: 250px !important;
-    transform: translate(50px,35px);
+   
     
 
   }

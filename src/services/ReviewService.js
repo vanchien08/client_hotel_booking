@@ -7,4 +7,28 @@ const handleDeleteReviewsApi = (id) => {
 const handleUpdateReviewsApi = (id, rating, comment) => {
   return axios.put("/updateReview", { id, rating, comment });
 };
-export { handleDeleteReviewsApi, handleUpdateReviewsApi };
+
+const handleFilterReviewApi = (
+  id,
+  username,
+  rating,
+  comment,
+  hotelname,
+  dateFrom,
+  dateTo
+) => {
+  return axios.post("/filterReview", {
+    id,
+    username,
+    rating,
+    comment,
+    hotelname,
+    dateFrom,
+    dateTo,
+  });
+};
+export {
+  handleDeleteReviewsApi,
+  handleUpdateReviewsApi,
+  handleFilterReviewApi,
+};

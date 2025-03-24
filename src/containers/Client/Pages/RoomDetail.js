@@ -9,6 +9,8 @@ import {
   handleGetAmenitiesHotelApi,
   handleGetAmenitiesHotel,
 } from "../../../services/hotelService";
+
+import { Table } from "antd";
 import { handleBooking } from "../../../services/userService";
 import HeaderPage from "./HeaderPage";
 import Footer from "./Footer";
@@ -19,22 +21,72 @@ class RoomDetail extends Component {
       isLoggedIn: false,
       data: null,
       isModalOpen: false,
-      listHotel: null,
+      listHotel: this.props.location?.state?.hotel || {},
       amenities: null,
       optionSelect: -1,
+      totalPrice: 0,
+      selectedRooms: {},
     };
   }
 
   async componentDidMount() {
     const { room } = this.props.location.state || {};
     //    let listhotel = await handleGetAmenitiesHotel();
-    let amenities = await handleGetAmenitiesHotel(room.hotel.id);
+    let amenities = await handleGetAmenitiesHotel(this.state.listHotel.id);
     this.setState({
-      //   listHotel: listhotel,
       amenities: amenities.dataAmenities,
     });
-    console.log("list >> hotel id :", amenities);
+    //  console.log("list >> hotel id :", amenities);
   }
+
+  getColumns = () => [
+    {
+      title: "ID",
+      dataIndex: "id",
+      render: (text, record, index) => index + 1,
+    },
+    {
+      title: "Loại phòng",
+      dataIndex: "roomType",
+      key: "roomType",
+    },
+    {
+      title: "Sức chứa",
+      dataIndex: "capacity",
+      key: "capacity",
+    },
+    {
+      title: "Mô tả",
+      dataIndex: "description",
+      key: "description",
+    },
+    {
+      title: "Giá phòng",
+      dataIndex: "price",
+      key: "price",
+      render: (price) =>
+        price !== undefined ? `$${price.toLocaleString()}` : "N/A",
+    },
+
+    {
+      title: "Chọn số lượng",
+      key: "selectQuantity",
+      render: (_, record) => (
+        <select
+          onChange={(event) => this.handleSelectQuantity(event, record.id)}
+        >
+          <option value="">Select</option>
+          {[...Array(record.quantity - record.reservedRooms)].map(
+            (_, index) => (
+              <option key={index + 1} value={index + 1}>
+                {index + 1}
+              </option>
+            )
+          )}
+        </select>
+      ),
+    },
+  ];
 
   handleNavigate = (path) => {
     this.props.navigate(path);
@@ -45,72 +97,117 @@ class RoomDetail extends Component {
     localStorage.removeItem("persist:user");
     this.props.navigate(path);
   };
+  handleSelectQuantity = (event, roomId) => {
+    const quantity = parseInt(event.target.value);
+    this.setState(
+      (prevState) => ({
+        selectedRooms: { ...prevState.selectedRooms, [roomId]: quantity },
+      }),
+      () => {
+        this.setState({
+          totalPrice: this.handleTotalPrice(this.state.selectedRooms),
+        });
+        // console.log("room quantity", this.state.selectedRooms);
+      }
+    );
+  };
 
-  handleSelectQuantity = (event) => {
-    let option = parseInt(event.target.value);
-    this.setState({
-      optionSelect: option,
+  handleTotalPrice = (selectRooms) => {
+    const { checkIn, checkOut } = this.props.location.state || {};
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+    let rooms = this.state.listHotel?.rooms || [];
+    let totalPrice = 0;
+
+    Object.entries(selectRooms).forEach(([key, value]) => {
+      let selectedRoom = rooms.find((room) => room.id == key);
+      if (selectedRoom) {
+        totalPrice += selectedRoom.price * value;
+      }
     });
-    //  console.log("select option", event.target.value);
-  };
-  handleOnclickSubmit = async () => {
-    let quantity = Math.abs(parseInt(this.state.optionSelect));
-    let { address, checkIn, checkOut, room } = this.props.location.state || {};
-    let userInfo = this.props.userInfo || {}; // Nếu null, gán giá trị mặc định {}
-    let role = userInfo.roles?.[0]?.role || -1;
-    console.log("check redux", userInfo);
-    //   let useri4 = null;
-    let useri4 = this.props.userInfo;
-    // if (role == 1) {
-    //   useri4 = localStorage.getItem("adminInfor");
-    // } else {
-    //   useri4 = localStorage.getItem("userInfor");
-    // }
-    if (role == -1) {
-      this.handleLogOut("/login");
-    } else {
-      let totalPrice = room.price * quantity;
-      let respon = await handleBooking(
-        userInfo.id,
-        quantity,
-        checkIn,
-        checkOut,
-        room.id,
-        totalPrice
-      );
-      console.log(
-        "check",
-        userInfo.id,
-        quantity,
-        checkIn,
-        checkOut,
-        room.id,
-        totalPrice
-      );
-      console.log("response", respon);
-    }
-    // if (useri4 & (role == 1 || role == 0)) {
-    //   this.setState({
-    //     user: JSON.parse(useri4),
-    //   });
-    // } else {
-    //   this.handleLogOut("/login");
-    // }
 
-    //  let respon = await handleBooking(userInfo,this.state.optionSelect,)
+    return totalPrice * (checkOutDate.getDate() - checkInDate.getDate());
   };
+
+  // handleSelectQuantity = (event) => {
+  //   let option = parseInt(event.target.value);
+  //   this.setState({
+  //     optionSelect: option,
+  //   });
+  //   //  console.log("select option", event.target.value);
+  // };
+  handleOnclickSubmit = async () => {
+    const { checkIn, checkOut, hotel } = this.props.location.state || {};
+    if (!hotel || !hotel.rooms) {
+      console.error("Hotel or rooms data is missing!");
+      alert("Dữ liệu khách sạn không hợp lệ.");
+      return;
+    }
+
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+    const night = Math.ceil(
+      (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24)
+    );
+    let selectRooms = this.state.selectedRooms;
+    let userInfo = this.props.userInfo || {};
+    let role = userInfo.roles?.[0]?.role || -1;
+
+    if (role === -1) {
+      this.handleLogOut("/login");
+      return;
+    }
+
+    try {
+      // Tạo danh sách promise
+      const bookingPromises = Object.entries(selectRooms).map(
+        async ([roomId, quantity]) => {
+          let selectedRoom = hotel.rooms.find((room) => room.id == roomId);
+          if (!selectedRoom) {
+            console.error(`Room ID ${roomId} not found`);
+            return Promise.reject(`Room ID ${roomId} not found`);
+          }
+
+          let totalPrice = night * quantity * selectedRoom.price;
+
+          return handleBooking(
+            userInfo.id,
+            quantity,
+            checkIn,
+            checkOut,
+            roomId,
+            totalPrice
+          );
+        }
+      );
+
+      // Chạy tất cả request đồng thời
+      const responses = await Promise.all(bookingPromises);
+
+      console.log("All bookings completed:", responses);
+      alert("Đặt phòng thành công!");
+    } catch (error) {
+      console.error("Lỗi khi đặt phòng:", error);
+      alert("Có lỗi xảy ra khi đặt phòng. Vui lòng thử lại!");
+    }
+  };
+
   render() {
-    const { room } = this.props.location.state || {};
+    const { room, hotel, checkIn, checkOut } = this.props.location.state || {};
     const amenitiesHotel = this.state.amenities;
-    console.log("this statte >>", this.state, room);
+    let { totalPrice } = this.state;
+    const checkInDate = new Date(checkIn);
+    const checkOutDate = new Date(checkOut);
+
+    console.log("check in out", checkIn, checkOut);
     return (
       <div>
         <HeaderPage />
         <div className="room-detail-container">
           <div className="room-header">
-            <h1>{room.roomType}</h1>
+            <h1>{hotel.name}</h1>
             <p>
-              <MapPin size={16} /> {room.hotel.address}
+              <MapPin size={16} /> {hotel.address}
             </p>
             <div className="rating">
               <span>4.8</span>
@@ -120,7 +217,7 @@ class RoomDetail extends Component {
           </div>
           <div className="room-content">
             <div className="room-image">
-              <img src={room.image} alt="room" />
+              <img src={hotel.image} alt="room" />
             </div>
             <div className="room-map">
               <iframe
@@ -159,21 +256,23 @@ class RoomDetail extends Component {
               <ul>
                 <li>Có bãi đậu xe riêng miễn phí ở khách sạn này</li>
               </ul>
-              <select
-                class="form-select"
-                aria-label="Default select example"
-                defaultValue=""
-                onChange={(event) => this.handleSelectQuantity(event)}
-              >
-                <option disabled selected>
-                  Chọn số lượng
-                </option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-              </select>
+            </div>
+            <Table
+              className="table-room"
+              columns={this.getColumns()}
+              dataSource={hotel.rooms}
+              rowKey="id"
+            />
+            <div className="property-highlights price-reserve">
+              <h3>Giá {checkOutDate.getDate() - checkInDate.getDate()} đêm</h3>
+              <h2>{totalPrice}</h2>
+              <p>Bao gồm thuế và phí</p>
+              <p>
+                Địa điểm hàng đầu: Được khách gần đây đánh giá cao (9,0 điểm)
+              </p>
+              <ul>
+                <li>Có bãi đậu xe riêng miễn phí ở khách sạn này</li>
+              </ul>
 
               <button
                 className="reserve-button"
@@ -182,7 +281,6 @@ class RoomDetail extends Component {
                 Đặt ngay
               </button>
             </div>
-
             <div className="most-popular-facilities">
               <h3>Most popular facilities</h3>
               <ul>

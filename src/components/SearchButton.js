@@ -12,8 +12,8 @@ class SearchButton extends Component {
     super(props);
     this.state = {
       isModalOpen: false,
-      checkOut: this.getCurrentDate(),
-      checkIn: this.getCurrentDate(),
+      checkOut: this.props.checkOut || this.getCurrentDate(),
+      checkIn: this.props.checkIn || this.getCurrentDate(),
       address: "",
     };
   }

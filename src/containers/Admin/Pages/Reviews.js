@@ -5,11 +5,18 @@ import { handleGetReviewsApi } from "../../../services/userService";
 import {
   handleDeleteReviewsApi,
   handleUpdateReviewsApi,
+  handleFilterReviewApi,
 } from "../../../services/ReviewService";
 import { push } from "connected-react-router";
 import "./Reviews.scss";
-
-import { Button, Modal, Table } from "antd";
+import FilterReviews from "../../../components/FilterReviews";
+import {
+  PlusOutlined,
+  UploadOutlined,
+  FilterOutlined,
+} from "@ant-design/icons";
+import { toast } from "react-toastify";
+import { Modal, Table, Popover, Image, Upload, Button, Empty } from "antd";
 
 class Reviews extends Component {
   constructor(props) {
@@ -27,6 +34,9 @@ class Reviews extends Component {
       hoteladdress: "",
       createat: "",
       selectedReview: null,
+      openFormFilter: false,
+      isModalOpenDelete: false,
+      selectedReviewID: -1,
     };
   }
 
@@ -54,23 +64,10 @@ class Reviews extends Component {
   };
   // Xử lý xóa review
   handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this review?")) {
-      try {
-        const res = await handleDeleteReviewsApi(id);
-        if (res.errCode === 1) {
-          alert("Review deleted successfully!");
-          // Cập nhật lại dữ liệu sau khi xóa
-          this.componentDidMount();
-        } else {
-          alert(
-            res.errMessage || "Failed to delete the review. Please try again."
-          );
-        }
-      } catch (error) {
-        console.error("Error deleting review:", error);
-        alert("An unexpected error occurred while deleting the review.");
-      }
-    }
+    this.setState({
+      isModalOpenDelete: true,
+      selectedReviewID: id,
+    });
   };
   handleOk = async () => {
     try {
@@ -84,6 +81,11 @@ class Reviews extends Component {
       if (!this.state.selectedReview) {
         throw new Error("selectedReview is undefined or null");
       }
+      toast.success("Cập nhật thành công!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        toastId: "update-success", // Ẩn sau 3 giây
+      });
 
       // Gọi API cập nhật
       let respon = await handleUpdateReviewsApi(
@@ -140,76 +142,163 @@ class Reviews extends Component {
       key: "id",
     },
     {
-      title: "User",
+      title: "Tên người dùng",
       dataIndex: "user",
       key: "user",
       render: (user) => (user && user.name ? user.name : "N/A"), // Hiển thị tên người dùng
     },
+    // {
+    //   title: "User Email",
+    //   dataIndex: "user",
+    //   key: "user_email",
+    //   render: (user) => (user && user.email ? user.email : "N/A"), // Hiển thị email người dùng
+    // },
     {
-      title: "User Email",
-      dataIndex: "user",
-      key: "user_email",
-      render: (user) => (user && user.email ? user.email : "N/A"), // Hiển thị email người dùng
-    },
-    {
-      title: "Rating",
+      title: "Đánh giá",
       dataIndex: "rating",
       key: "rating",
       render: (rating) => (rating !== undefined ? rating : "N/A"), // Hiển thị rating hoặc N/A
     },
     {
-      title: "Comment",
+      title: "Bình luận",
       dataIndex: "comment",
       key: "comment",
       render: (comment) => (comment ? comment : "N/A"), // Hiển thị comment hoặc N/A
     },
     {
-      title: "Hotel Name",
+      title: "Khách sạn",
       dataIndex: "hotel",
       key: "hotel_name",
       render: (hotel) => (hotel && hotel.name ? hotel.name : "N/A"), // Hiển thị tên khách sạn
     },
+    // {
+    //   title: "Hotel Address",
+    //   dataIndex: "hotel",
+    //   key: "hotel_address",
+    //   render: (hotel) => (hotel && hotel.address ? hotel.address : "N/A"), // Hiển thị địa chỉ khách sạn
+    // },
     {
-      title: "Hotel Address",
-      dataIndex: "hotel",
-      key: "hotel_address",
-      render: (hotel) => (hotel && hotel.address ? hotel.address : "N/A"), // Hiển thị địa chỉ khách sạn
-    },
-    {
-      title: "Created At",
+      title: "Lúc",
       dataIndex: "createdAt",
       key: "createdAt",
-      render: (date) => (date ? new Date(date).toLocaleString() : "N/A"), // Xử lý ngày tạo
+      render: (createdAt) =>
+        createdAt ? new Date(createdAt).toLocaleString() : "N/A", // Xử lý ngày tạo
     },
     {
-      title: "Action",
+      title: "Hành động",
       key: "action",
       render: (record) => (
         <div>
-          <button
+          <Button
+            type="primary"
+            ghost
             onClick={() => this.handleUpdate(record)}
             style={{ marginRight: "10px" }}
           >
             Update
-          </button>
-          <button
+          </Button>
+          <Button
+            type="primary"
+            danger
+            ghost
             onClick={() => this.handleDelete(record.id)}
             style={{ color: "red" }}
           >
             Delete
-          </button>
+          </Button>
         </div>
       ),
     },
   ];
 
+  setOpenFormFilter = (open) => {
+    this.setState({
+      openFormFilter: open,
+    });
+  };
+  onSubmitPopover = async (data) => {
+    //console.log("respon?>>", respon);
+    let respon = await handleFilterReviewApi(
+      data.id,
+      data.username,
+      data.rating,
+      data.comment,
+      data.hotelname,
+      data.dateFrom,
+      data.dateTo
+    );
+    this.setState({
+      data: respon.dataReviews,
+    });
+  };
+  handleOkModalDelete = async () => {
+    let id = this.state.selectedReviewID;
+    try {
+      const res = await handleDeleteReviewsApi(id);
+      if (res.errCode === 1) {
+        toast.success("Xóa thành công!", {
+          position: "bottom-right",
+          autoClose: 3000,
+          toastId: "delete-success", // Ẩn sau 3 giây
+        });
+        this.componentDidMount();
+      } else {
+        toast.success("Xóa thất bại!", {
+          position: "bottom-right",
+          autoClose: 3000,
+          toastId: "delete-fail", // Ẩn sau 3 giây
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting review:", error);
+      alert("An unexpected error occurred while deleting the review.");
+    }
+
+    this.setState({
+      isModalOpenDelete: false,
+    });
+  };
+  handleCancelModalDelete = () => {
+    this.setState({
+      isModalOpenDelete: false,
+    });
+  };
+
   render() {
-    const { data, isModalOpen, selectedReview } = this.state;
+    const { data, isModalOpen, selectedReview, isModalOpenDelete } = this.state;
     return (
       <div classNameName="text-center">
+        <Modal
+          title="Thông báo"
+          open={isModalOpenDelete}
+          onOk={this.handleOkModalDelete}
+          onCancel={this.handleCancelModalDelete}
+        >
+          Xác nhận xóa!
+        </Modal>
+        <Popover
+          placement="bottomRight"
+          content={
+            <div style={{ width: 400 }}>
+              <FilterReviews
+                onClose={() => this.setOpenFormFilter(false)}
+                onSubmit={this.onSubmitPopover}
+              />
+            </div>
+          }
+          title="Lọc tìm kiếm"
+          trigger="click"
+          open={this.state.openFormFilter} // Sử dụng state để quản lý open
+          onOpenChange={(open) => this.setOpenFormFilter(open)} // Cập nhật state khi mở/đóng
+          destroyTooltipOnHide={false}
+        >
+          <Button className="filter-button">
+            Filter <FilterOutlined />
+          </Button>
+        </Popover>
         <h1>Reviews MANAGER</h1>
         {data == null ? (
-          <p>Loading data, please wait...</p> // Hiển thị thông báo khi dữ liệu chưa có
+          <Empty />
         ) : (
           <Table columns={this.getColumns()} dataSource={data} rowKey="id" />
         )}

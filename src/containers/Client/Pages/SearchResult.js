@@ -15,6 +15,9 @@ class SearchResult extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      address: this.props.location.state.address,
+      checkIn: this.props.location.state.checkIn,
+      checkOut: this.props.location.state.checkOut,
       isLoggedIn: false,
       data: null,
       isModalOpen: false,
@@ -25,6 +28,7 @@ class SearchResult extends Component {
       checkboxConvert: null,
       disabled: false,
       priceRange: [100, 1000],
+      listHotel: this.props.location?.state?.listHotel || {},
     };
   }
 
@@ -61,13 +65,20 @@ class SearchResult extends Component {
         priceArr[0],
         priceArr[1]
       );
-      this.setState({ listRoom: searchRoom.dataroom });
+      console.log("respon search room", searchRoom);
+      this.setState({
+        listRoom: searchRoom.dataroom,
+        listHotel: searchRoom.datahotel,
+        address: address,
+        checkIn: checkIn,
+        checkOut: checkOut,
+      });
     }
   };
-  handleNavigate = (room, checkIn, checkOut) => {
+  handleNavigate = (room, checkIn, checkOut, hotel) => {
     this.props.history.push({
       pathname: "/roomdetail",
-      state: { room, checkIn, checkOut },
+      state: { room, checkIn, checkOut, hotel },
     });
   };
   handleCheckBox = (event, amenity) => {
@@ -101,6 +112,16 @@ class SearchResult extends Component {
 
     return listconvert;
   };
+
+  getMinPrice = (listroom) => {
+    //   let listprice=[]
+    //   for(let i=0;i<listroom.length;i++){
+    //     listprice.push(listroom[i].price);
+    //   }
+    //  let min = min(listprice)
+    let listprice = listroom.map((room) => room.price);
+    return Math.min(...listprice);
+  };
   handlePriceChange = (value) => {
     this.setState({ priceRange: value });
   };
@@ -130,7 +151,7 @@ class SearchResult extends Component {
 
   render() {
     let listHotel = this.state.listHotel;
-    let { address, checkIn, checkOut } = this.props.location.state || {};
+    let { address, checkIn, checkOut } = this.state || {};
     let amenitiesHotel = this.state.listAmenitiesHotel;
     let listRoom =
       this.state.listRoom ||
@@ -145,6 +166,8 @@ class SearchResult extends Component {
             <SearchButton
               className="search-button-component"
               onSearch={this.handleClickSearch}
+              checkIn={checkIn}
+              checkOut={checkOut}
             />
           </div>
 
@@ -177,25 +200,23 @@ class SearchResult extends Component {
 
               {/* Hotel List Section */}
               <div className="hotel-list-section">
-                {listRoom &&
-                  Array.isArray(listRoom) &&
-                  listRoom.map((room, index) => (
+                {listHotel &&
+                  Array.isArray(listHotel) &&
+                  listHotel.map((hotel, index) => (
                     <div key={index} className="hotel-card">
                       <div className="hotel-image-container">
                         <img
-                          src={room.image}
-                          alt={room.hotel.name}
+                          src={hotel.image}
+                          alt={hotel.name}
                           className="hotel-image"
                         />
                       </div>
 
                       <div className="hotel-details">
-                        <h3 className="hotel-name">{room.hotel.name}</h3>
-                        <p className="hotel-location">{room.hotel.address}</p>
-                        <p className="hotel-description">
-                          {room.hotel.description}
-                        </p>
-                        <p className="hotel-bed">{room.roomType}</p>
+                        <h3 className="hotel-name">{hotel.name}</h3>
+                        <p className="hotel-location">{hotel.address}</p>
+                        <p className="hotel-description">{hotel.description}</p>
+                        <p className="hotel-bed">loai phong</p>
 
                         <p className="hotel-cancellation">
                           <i class="fa-solid fa-check"></i>{" "}
@@ -218,7 +239,7 @@ class SearchResult extends Component {
                         <p className="hotel-reviews">5 real reviews</p>
                         <p className="hotel-price">
                           <span className="hotel-old-price">VND 686,250</span>
-                          {room.price}{" "}
+                          {this.getMinPrice(hotel.rooms)}
                           <span className="hotel-tax">
                             Includes taxes and charges
                           </span>
@@ -226,7 +247,12 @@ class SearchResult extends Component {
                         <button
                           className="see-availability-button"
                           onClick={() =>
-                            this.handleNavigate(room, checkIn, checkOut)
+                            this.handleNavigate(
+                              hotel.rooms[0],
+                              checkIn,
+                              checkOut,
+                              hotel
+                            )
                           }
                         >
                           See availability

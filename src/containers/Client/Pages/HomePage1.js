@@ -72,13 +72,19 @@ class HomePage1 extends Component {
     super(props);
     this.state = {
       isModalOpen: false,
-      checkOut: this.getCurrentDate(),
+      checkOut: this.getCurrentDatePlus(),
       checkIn: this.getCurrentDate(),
       address: "",
+      listHotel: null,
     };
   }
   getCurrentDate() {
     const today = new Date();
+    return today.toISOString().split("T")[0]; // Format YYYY-MM-DD
+  }
+  getCurrentDatePlus() {
+    const today = new Date();
+    today.setDate(today.getDate() + 1);
     return today.toISOString().split("T")[0]; // Format YYYY-MM-DD
   }
   // Lấy dữ liệu khi component mount
@@ -93,7 +99,13 @@ class HomePage1 extends Component {
       });
     } else {
       let searchRoom = await handleSearchRoom(address, checkIn, checkOut);
-      this.handleNavigate(address, checkIn, checkOut, searchRoom.dataroom);
+      this.handleNavigate(
+        address,
+        checkIn,
+        checkOut,
+        searchRoom.dataroom,
+        searchRoom.datahotel
+      );
       console.log("data search room", searchRoom);
     }
   };
@@ -124,10 +136,10 @@ class HomePage1 extends Component {
     });
   };
 
-  handleNavigate = (address, checkIn, checkOut, listRoom) => {
+  handleNavigate = (address, checkIn, checkOut, listRoom, listHotel) => {
     this.props.history.push({
       pathname: "/searchResult",
-      state: { address, checkIn, checkOut, listRoom },
+      state: { address, checkIn, checkOut, listRoom, listHotel },
     });
   };
 

@@ -343,6 +343,7 @@ class UserInfo extends Component {
 
                             {this.state.previewImage && (
                               <Image
+                                className="avatar-upload-display"
                                 wrapperStyle={{ display: "none" }}
                                 preview={{
                                   visible: this.state.previewOpen,

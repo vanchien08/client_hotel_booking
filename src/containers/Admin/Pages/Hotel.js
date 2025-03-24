@@ -12,10 +12,11 @@ import {
 import { push } from "connected-react-router";
 import { FilterOutlined } from "@ant-design/icons";
 import "./Hotel.scss";
-import { Button, Modal, Popover, Image, Upload } from "antd";
+import { Button, Modal, Popover, Image, Upload, Empty } from "antd";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import FilterButton from "../../../components/FilterButton";
 import { uploadImageToCloud } from "../../../config/UploadImageCloud";
+import { toast } from "react-toastify";
 // antd
 
 class Hotel extends Component {
@@ -66,36 +67,36 @@ class Hotel extends Component {
       key: "id",
     },
     {
-      title: "Name",
+      title: "Tên",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Description",
+      title: "Mô tả",
       dataIndex: "description",
       key: "description",
     },
     {
-      title: "Address",
+      title: "Địa chỉ",
       dataIndex: "address",
       key: "address",
     },
     {
-      title: "City",
+      title: "Thành phố",
       dataIndex: "city",
       key: "city",
     },
     {
-      title: "Country",
+      title: "Quốc gia",
       dataIndex: "country",
       key: "country",
     },
     {
-      title: "Image",
+      title: "Ảnh",
       dataIndex: "image",
       key: "image",
       render: (image) => (
-        <img
+        <Image
           src={image}
           alt="Hotel"
           style={{ width: "50px", height: "50px" }}
@@ -103,28 +104,34 @@ class Hotel extends Component {
       ), // Hiển thị hình ảnh
     },
     {
-      title: "Created At",
+      title: "Lúc",
       dataIndex: "created_At",
       key: "created_At",
-      render: (date) => (date ? new Date(date).toLocaleDateString() : "N/A"), // Xử lý trường hợp null
+      render: (created_At) =>
+        created_At ? new Date(created_At).toLocaleDateString() : "N/A", // Xử lý trường hợp null
     },
     {
       title: "Action",
       key: "action",
       render: (record) => (
         <div>
-          <button
+          <Button
+            type="primary"
+            ghost
             onClick={() => this.handleUpdate(record)}
             style={{ marginRight: "10px" }}
           >
             Update
-          </button>
-          <button
+          </Button>
+          <Button
+            type="primary"
+            danger
+            ghost
             onClick={() => this.handleDelete(record.id)}
             style={{ color: "red" }}
           >
             Delete
-          </button>
+          </Button>
         </div>
       ),
     },
@@ -181,8 +188,19 @@ class Hotel extends Component {
       this.setState({
         isModalOpen: false,
       });
+      toast.success("Cập nhật thành công!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        toastId: "update-success", // Ẩn sau 3 giây
+      });
+    } else {
+      toast.error("Cập nhật thất bại!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        toastId: "update-fail", // Ẩn sau 3 giây
+      });
     }
-    console.log("update state>>>", responUpdate);
+    //  console.log("update state>>>", responUpdate);
   };
   setOpenFormFilter = (open) => {
     this.setState({
@@ -454,6 +472,7 @@ class Hotel extends Component {
             <p>Loading...</p>
           )}
         </Modal>
+
         <h1>HOTEl MANAGER</h1>
 
         <Popover
@@ -477,7 +496,7 @@ class Hotel extends Component {
           </Button>
         </Popover>
         {data == null ? (
-          <p>Loading data, please wait...</p> // Hiển thị thông báo hoặc loader khi dữ liệu chưa có
+          <Empty />
         ) : (
           <Table columns={this.getColumns2()} dataSource={data} rowKey="id" />
         )}
