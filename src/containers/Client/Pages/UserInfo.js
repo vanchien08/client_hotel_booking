@@ -4,12 +4,13 @@ import { push } from "connected-react-router";
 import "./UserInfo.scss";
 import HeaderPage from "./HeaderPage";
 import { PlusOutlined } from "@ant-design/icons";
-import { Image, Upload } from "antd";
+import { Image, Upload, Button } from "antd";
 import * as actions from "../../../store/actions";
 import { uploadImageToCloud } from "../../../config/UploadImageCloud";
 import { handleUpdateProfile } from "../../../services/userService";
 import BookingHistory from "../../../containers/menuProfileUser/BookingHistory";
 import ChangePassWord from "../../../containers/menuProfileUser/ChangePassword";
+import { toast } from "react-toastify";
 class UserInfo extends Component {
   constructor(props) {
     super(props);
@@ -117,7 +118,8 @@ class UserInfo extends Component {
       },
     });
   };
-  HandleSubmit = async () => {
+  HandleSubmit = async (event) => {
+    event.preventDefault();
     let { id, name, address, email, phone, avatar } = this.state.user;
     console.log("state submit", { id, name, address, email, phone, avatar });
     let respon = await handleUpdateProfile(
@@ -129,15 +131,22 @@ class UserInfo extends Component {
       avatar
     );
     if (respon && respon.errCode === 1) {
+      toast.success("Cập nhật thông tin thành công!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        toastId: "delete-success",
+      });
       // Cập nhật Redux state
       this.props.fetchLoginSuccess({
         ...this.state.user, // Dữ liệu mới đã nhập
         avatar, // Đảm bảo avatar cũng được cập nhật
       });
-
-      alert("Cập nhật thành công!");
     } else {
-      alert("Cập nhật thất bại!");
+      toast.error("Cập nhật thông tin thất bại!", {
+        position: "bottom-right",
+        autoClose: 3000,
+        toastId: "delete-success",
+      });
     }
   };
   handleOnClickMenu = (id) => {
@@ -315,13 +324,13 @@ class UserInfo extends Component {
                                 />
                               </div>
 
-                              <button
-                                type="button"
-                                className="btn btn-success btn-submit-info"
-                                onClick={() => this.HandleSubmit()}
+                              <Button
+                                type="primary"
+                                ghost
+                                onClick={(event) => this.HandleSubmit(event)}
                               >
                                 Cập nhật
-                              </button>
+                              </Button>
                             </form>
                           </div>
 

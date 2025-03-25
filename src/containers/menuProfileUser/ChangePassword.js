@@ -4,6 +4,9 @@ import { push } from "connected-react-router";
 import "./ChangePassword.scss";
 // import * as actions from "../../store/actions";
 import * as actions from "../../store/actions";
+import { toast } from "react-toastify";
+import { Button, Modal } from "antd";
+import { handleChangePassApi } from "../../services/userService";
 
 class ChangePassword extends Component {
   constructor(props) {
@@ -13,6 +16,10 @@ class ChangePassword extends Component {
       oldpassword: "",
       newpassword: "",
       confirmPassword: "",
+      notify: "",
+      errConfirm: 0,
+      isOpenModal: false,
+      textModal: "",
     };
   }
   handleLogin = () => {
@@ -40,22 +47,98 @@ class ChangePassword extends Component {
     navigate(`${redirectPath}`);
   };
   handleonChangePass = (event, id) => {
+    if (id === "confirmPassword") {
+      if (this.state.newpassword != event.target.value) {
+        this.setState({
+          notify: "Mật khẩu xác nhận không đúng !",
+          errConfirm: 0,
+        });
+      } else {
+        this.setState({
+          notify: "",
+          errConfirm: 1,
+        });
+      }
+    }
+
     this.setState({
       [id]: event.target.value,
     });
   };
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("submit state", this.state);
+  handleSubmit = async (event) => {
+    let { errConfirm, confirmPassword, oldpassword, newpassword } = this.state;
+    let text = "";
+    if (oldpassword === "" || newpassword === "" || confirmPassword === "") {
+      this.setState({
+        isModalOpen: true,
+        textModal: "Vui lòng điền đầy đủ thông tin!",
+      });
+
+      return;
+    }
+    if (errConfirm == 1) {
+      text = "Xác nhận đổi mật khẩu!";
+    } else {
+      text = "Xác nhận lại mật khẩu không đúng";
+    }
+
+    this.setState({
+      isModalOpen: true,
+      textModal: text,
+    });
+  };
+  handleOkModal = async () => {
+    let { errConfirm, user, oldpassword, newpassword } = this.state;
+    let respon = null;
+    if (errConfirm == 1) {
+      respon = await handleChangePassApi(user.id, oldpassword, newpassword);
+      if (respon.errCode == 0) {
+        this.setState({
+          notify: "Mật khẩu cũ không chính xác!",
+        });
+      } else {
+        toast.success("Cập nhật thành công!", {
+          position: "bottom-right",
+          autoClose: 3000,
+          toastId: "delete-success",
+        });
+      }
+    }
+
+    console.log("respon update password", respon);
+    this.setState({
+      isModalOpen: false,
+    });
+  };
+  handleCancelModal = () => {
+    this.setState({
+      isModalOpen: false,
+    });
   };
 
   render() {
-    let { user, oldpassword, newpassword, confirmPassword } = this.state;
+    let {
+      user,
+      oldpassword,
+      newpassword,
+      confirmPassword,
+      notify,
+      isModalOpen,
+      textModal,
+    } = this.state;
 
     return (
       <div className="col-md-8 ms-4 bg-white p-4 rounded container-changepassword">
         <h2 className="mb-4 title-menu-user">Đổi mật khẩu</h2>
+        <Modal
+          title="Thông báo"
+          open={isModalOpen}
+          onOk={this.handleOkModal}
+          onCancel={this.handleCancelModal}
+        >
+          {textModal}
+        </Modal>
         <form>
           {/* Email */}
           <div className="form-floating mb-2">
@@ -101,16 +184,17 @@ class ChangePassword extends Component {
             />
             <label htmlFor="confirm-password">Nhập lại mật khẩu mới</label>
             <small className="form-text text-muted alert-notify">
-              Mật khẩu cũ không chính xác !
+              {this.state.notify}
             </small>
           </div>
 
-          <button
-            className="btn btn-primary button-change-password"
+          <Button
+            type="primary"
+            ghost
             onClick={(event) => this.handleSubmit(event)}
           >
             Xác nhận
-          </button>
+          </Button>
         </form>
       </div>
     );

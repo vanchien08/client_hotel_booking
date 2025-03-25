@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import "./BookingHistory.scss";
 // import * as actions from "../../store/actions";
-import { Table } from "antd";
+import { Table, Image } from "antd";
 import { handleGetBookingApi } from "../../services/userService";
 class BookingHistory extends Component {
   constructor(props) {
@@ -66,7 +66,7 @@ class BookingHistory extends Component {
       key: "hotel_image",
       render: (room) =>
         room && room.hotel && room.hotel.image ? (
-          <img
+          <Image
             src={room.hotel.image}
             alt="Hotel"
             style={{ width: "80px", height: "60px", objectFit: "cover" }}
@@ -118,11 +118,16 @@ class BookingHistory extends Component {
     let { data } = this.state;
     return (
       <div className="col-md-8 ms-4 bg-white p-4 rounded">
-        LỊCH SỬ ĐẶT PHÒNG
+        <h2>LỊCH SỬ ĐẶT PHÒNG</h2>
         {data == null ? (
           <p>Loading data, please wait...</p> // Hiển thị thông báo hoặc loader khi dữ liệu chưa có
         ) : (
-          <Table columns={this.getColumns()} dataSource={data} rowKey="id" />
+          <Table
+            columns={this.getColumns()}
+            dataSource={data}
+            rowKey="id"
+            pagination={{ pageSize: 10 }}
+          />
         )}
       </div>
     );

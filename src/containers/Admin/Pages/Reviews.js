@@ -239,11 +239,11 @@ class Reviews extends Component {
         toast.success("Xóa thành công!", {
           position: "bottom-right",
           autoClose: 3000,
-          toastId: "delete-success", // Ẩn sau 3 giây
+          toastId: "delete-success",
         });
         this.componentDidMount();
       } else {
-        toast.success("Xóa thất bại!", {
+        toast.error("Xóa thất bại!", {
           position: "bottom-right",
           autoClose: 3000,
           toastId: "delete-fail", // Ẩn sau 3 giây
