@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { push } from "connected-react-router";
 
 import { PlusOutlined } from "@ant-design/icons";
-import * as actions from "../store/actions";
+import * as actions from "../../store/actions";
 
 import {
   Modal,

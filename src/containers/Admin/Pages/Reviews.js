@@ -9,14 +9,26 @@ import {
 } from "../../../services/ReviewService";
 import { push } from "connected-react-router";
 import "./Reviews.scss";
-import FilterReviews from "../../../components/FilterReviews";
+import FilterReviews from "../../../components/ReviewComponents/FilterReviews";
+import FormAddReview from "../../../components/ReviewComponents/FormAddReview";
 import {
   PlusOutlined,
   UploadOutlined,
   FilterOutlined,
+  PlusSquareOutlined,
 } from "@ant-design/icons";
 import { toast } from "react-toastify";
-import { Modal, Table, Popover, Image, Upload, Button, Empty } from "antd";
+import {
+  Modal,
+  Table,
+  Popover,
+  Image,
+  Upload,
+  Button,
+  Empty,
+  Form,
+  Input,
+} from "antd";
 
 class Reviews extends Component {
   constructor(props) {
@@ -266,6 +278,7 @@ class Reviews extends Component {
 
   render() {
     const { data, isModalOpen, selectedReview, isModalOpenDelete } = this.state;
+
     return (
       <div classNameName="text-center">
         <Modal
@@ -276,6 +289,7 @@ class Reviews extends Component {
         >
           Xác nhận xóa!
         </Modal>
+        <h1>Reviews MANAGER</h1>
         <Popover
           placement="bottomRight"
           content={
@@ -296,7 +310,7 @@ class Reviews extends Component {
             Filter <FilterOutlined />
           </Button>
         </Popover>
-        <h1>Reviews MANAGER</h1>
+
         {data == null ? (
           <Empty />
         ) : (

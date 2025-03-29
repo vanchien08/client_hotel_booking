@@ -8,12 +8,17 @@ import {
 import {
   handleUpdateHotelApi,
   handleFilterHotelApi,
+  handleAddHotelApi,
 } from "../../../services/hotelService";
 import { push } from "connected-react-router";
 import { FilterOutlined } from "@ant-design/icons";
 import "./Hotel.scss";
 import { Button, Modal, Popover, Image, Upload, Empty } from "antd";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  UploadOutlined,
+  PlusSquareOutlined,
+} from "@ant-design/icons";
 import FilterButton from "../../../components/FilterButton";
 import { uploadImageToCloud } from "../../../config/UploadImageCloud";
 import { toast } from "react-toastify";
@@ -39,6 +44,14 @@ class Hotel extends Component {
       fileList: [],
       uploading: false,
       imageUrl: "",
+      isModalOpenAdd: false,
+      dataAdd: {
+        nameAdd: "",
+        descriptionAdd: "",
+        addressAdd: "",
+        cityAdd: "",
+        countryAdd: "",
+      },
     };
   }
 
@@ -168,6 +181,11 @@ class Hotel extends Component {
       isModalOpen: false,
     });
   };
+  handleCancelAdd = () => {
+    this.setState({
+      isModalOpenAdd: false,
+    });
+  };
 
   handleonChangeInput = (id, event) => {
     console.log("id >>", id);
@@ -236,42 +254,6 @@ class Hotel extends Component {
     });
   };
   handleUpload = async (file) => {
-    // this.setState({ uploading: true });
-
-    // const formData = new FormData();
-    // formData.append("file", file);
-    // formData.append("upload_preset", "chienpreset"); // Đặt trong Cloudinary settings
-
-    // try {
-    //   const response = await fetch(
-    //     "https://api.cloudinary.com/v1_1/dwkvrufbf/image/upload",
-    //     {
-    //       method: "POST",
-    //       body: formData,
-    //     }
-    //   );
-
-    //   const data = await response.json();
-    //   console.log("Upload thành công:", data.secure_url);
-    //   if (data.secure_url) {
-    //     console.log("Upload thành công:", data);
-    //     this.setState((prevState) => ({
-    //       selectedReview: {
-    //         ...prevState.selectedReview, // Giữ nguyên các thuộc tính cũ của selectedReview
-    //         image: data.secure_url, // Cập nhật giá trị image
-    //       },
-    //       imageUrl: data.secure_url,
-    //       uploading: false,
-    //       fileList: [{ url: data.secure_url, name: file.name }],
-    //     }));
-    //   }
-    // } catch (error) {
-    //   console.error("Lỗi upload:", error);
-    //   this.setState({ uploading: false });
-    // }
-
-    //sdgsfg
-
     this.setState({ uploading: true });
     let data = await uploadImageToCloud(file);
     if (data.secure_url) {
@@ -289,23 +271,231 @@ class Hotel extends Component {
       this.setState({ uploading: false });
     }
   };
+  handleUploadAdd = async (file) => {
+    this.setState({ uploading: true });
+    let data = await uploadImageToCloud(file);
+    if (data.secure_url) {
+      console.log("Upload thành công:", data);
+      this.setState((prevState) => ({
+        dataAdd: {
+          ...prevState.dataAdd,
+          imageAdd: data.secure_url, // Cập nhật ảnh cho Add Modal
+        },
+        uploading: false,
+        fileList: [{ url: data.secure_url, name: file.name }],
+      }));
+    } else {
+      this.setState({ uploading: false });
+    }
+  };
 
-  props = {
-    // action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
-    onChange: this.handleChange,
-    multiple: true,
+  handleOkAdd = async () => {
+    let { nameAdd, descriptionAdd, addressAdd, cityAdd, countryAdd, imageAdd } =
+      this.state.dataAdd;
+    if (
+      !nameAdd?.trim() ||
+      !descriptionAdd?.trim() ||
+      !addressAdd?.trim() ||
+      !cityAdd?.trim() ||
+      !countryAdd?.trim()
+    ) {
+      toast.error("Vui lòng nhập đầy đủ thông tin!", {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      return;
+    } else {
+      let respon = await handleAddHotelApi(
+        nameAdd,
+        descriptionAdd,
+        addressAdd,
+        cityAdd,
+        countryAdd,
+        imageAdd
+      );
+
+      console.log("respon add`", respon);
+      let updatedHotels = await handleGetHotelApi();
+
+      this.setState({
+        data: updatedHotels,
+        isModalOpenAdd: false,
+      });
+
+      toast.success("Thêm khách sạn thành công!", {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+    }
+  };
+
+  handleonChangeInputAdd = (id, event) => {
+    this.setState({
+      dataAdd: {
+        ...this.state.dataAdd,
+        [id]: event.target.value,
+      },
+    });
+  };
+
+  handleClickAdd = () => {
+    this.setState({
+      isModalOpenAdd: true,
+    });
   };
   render() {
     const { isLoggedIn } = this.props;
     let isModalOpen = this.state.isModalOpen;
-    const { data, selectedReview, previewOpen, previewImage, fileList } =
-      this.state; // lấy dữ liệu từ state
+    const {
+      data,
+      selectedReview,
+      previewOpen,
+      previewImage,
+      fileList,
+      isModalOpenAdd,
+    } = this.state; // lấy dữ liệu từ state
     console.log("state login >>", isLoggedIn);
     console.log("selected Review  >>", selectedReview);
+
+    const AddModal = (
+      <form>
+        <div className="container">
+          <div className="row">
+            <div className="col-md-4">
+              <div className="mb-3">
+                <label for="input2" className="form-label">
+                  Tên
+                </label>
+                <input
+                  required
+                  type="text"
+                  className="form-control"
+                  id="nameAdd"
+                  value={this.state.dataAdd.nameAdd}
+                  onChange={(event) =>
+                    this.handleonChangeInputAdd(event.target.id, event)
+                  }
+                />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="mb-3">
+                <label for="input3" className="form-label">
+                  Mô tả
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="descriptionAdd"
+                  value={this.state.dataAdd.descriptionAdd}
+                  onChange={(event) =>
+                    this.handleonChangeInputAdd(event.target.id, event)
+                  }
+                />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="mb-3">
+                <label for="input4" className="form-label">
+                  Địa chỉ
+                </label>
+                <input
+                  className="form-control"
+                  id="addressAdd"
+                  value={this.state.dataAdd.addressAdd}
+                  onChange={(event) =>
+                    this.handleonChangeInputAdd(event.target.id, event)
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-4">
+              <div className="mb-3">
+                <label for="input5" className="form-label">
+                  Thành Phố
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="cityAdd"
+                  value={this.state.dataAdd.cityAdd}
+                  onChange={(event) =>
+                    this.handleonChangeInputAdd(event.target.id, event)
+                  }
+                />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="mb-3">
+                <label for="input6" className="form-label">
+                  Quốc gia
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="countryAdd"
+                  value={this.state.dataAdd.countryAdd}
+                  onChange={(event) =>
+                    this.handleonChangeInputAdd(event.target.id, event)
+                  }
+                />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="mb-3">
+                <label htmlFor="input7" className="form-label">
+                  Ảnh
+                </label>
+                <div className="upload-container">
+                  <Upload
+                    showUploadList={false}
+                    beforeUpload={(file) => {
+                      this.handleUploadAdd(file);
+                      return false; // Ngăn Upload mặc định của Ant Design
+                    }}
+                    maxCount={1}
+                  >
+                    <Button
+                      icon={<UploadOutlined />}
+                      loading={this.state.uploading}
+                    >
+                      {this.state.uploading ? "Uploading..." : "Upload"}
+                    </Button>
+                    <div className="uploaded-images">
+                      {this.state.fileList.length > 0 ? (
+                        this.state.fileList.map((file, index) => (
+                          <div key={index} className="image-preview">
+                            <p>{file.name}</p>
+                          </div>
+                        ))
+                      ) : (
+                        <p></p>
+                      )}
+                    </div>
+                  </Upload>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    );
 
     // Kiểm tra xem dữ liệu đã được tải chưa
     return (
       <div className="text-center">
+        <Modal
+          title="Thêm khách sạn"
+          open={isModalOpenAdd}
+          onOk={this.handleOkAdd}
+          onCancel={this.handleCancelAdd}
+          width={1000}
+        >
+          {AddModal}
+        </Modal>
         <Modal
           title="Update Hotel"
           open={isModalOpen}
@@ -474,7 +664,10 @@ class Hotel extends Component {
         </Modal>
 
         <h1>HOTEl MANAGER</h1>
-
+        <PlusSquareOutlined
+          className="button-add-review"
+          onClick={() => this.handleClickAdd()}
+        />
         <Popover
           placement="bottomRight"
           content={

@@ -14,9 +14,28 @@ const handleGetAmenitiesHotelApi = () => {
 const handleGetAmenitiesHotel = (id) => {
   return axios.get(`/getAmenitiesHotelById/${id}`);
 };
+
+const handleAddHotelApi = (
+  name,
+  description,
+  address,
+  city,
+  country,
+  image
+) => {
+  return axios.post("/add-hotel", {
+    name,
+    description,
+    address,
+    city,
+    country,
+    image,
+  });
+};
 export {
   handleUpdateHotelApi,
   handleFilterHotelApi,
   handleGetAmenitiesHotelApi,
   handleGetAmenitiesHotel,
+  handleAddHotelApi,
 };
