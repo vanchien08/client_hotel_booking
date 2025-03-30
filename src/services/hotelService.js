@@ -15,6 +15,10 @@ const handleGetAmenitiesHotel = (id) => {
   return axios.get(`/getAmenitiesHotelById/${id}`);
 };
 
+const handleDeleteHotelApi = (id) => {
+  return axios.delete(`/delete-hotel/${id}`);
+};
+
 const handleAddHotelApi = (
   name,
   description,
@@ -38,4 +42,5 @@ export {
   handleGetAmenitiesHotelApi,
   handleGetAmenitiesHotel,
   handleAddHotelApi,
+  handleDeleteHotelApi,
 };

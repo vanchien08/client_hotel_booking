@@ -27,7 +27,7 @@ const items2 = [
     label: "Quản lý người dùng",
     children: [
       { key: "1", label: "Quản lý khách sạn" },
-      { key: "2", label: "Xoá người dùng" },
+      { key: "2", label: "Tiện ích khách sạn" },
     ],
   },
   {
@@ -51,7 +51,7 @@ const items2 = [
 ];
 
 const Dashboard = ({ isLoggedIn, navigate }) => {
-  const [selectedContent, setSelectedContent] = useState(null);
+  const [selectedContent, setSelectedContent] = useState("HotelManage");
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken(); // Dùng hooks trong function component
@@ -61,8 +61,8 @@ const Dashboard = ({ isLoggedIn, navigate }) => {
     const { key } = e;
     let selectedContent = null;
 
-    if (key === "1") selectedContent = "UserManage";
-    else if (key === "2") selectedContent = "DeleteUser";
+    if (key === "1") selectedContent = "HotelManage";
+    else if (key === "2") selectedContent = "AmenitiesHotel";
     else if (key === "3") selectedContent = "LaptopList";
     else if (key === "4") selectedContent = "AddLaptop";
     else if (key === "5") selectedContent = "NotificationList";
@@ -103,8 +103,8 @@ const Dashboard = ({ isLoggedIn, navigate }) => {
           </Sider>
 
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
-            {selectedContent === "UserManage" && <Hotel />}
-            {selectedContent === "DeleteUser" && <div> thêm</div>}
+            {selectedContent === "HotelManage" && <Hotel />}
+            {selectedContent === "AmenitiesHotel" && <div> thêm</div>}
             {selectedContent === "LaptopList" && (
               <div>
                 <Reviews />

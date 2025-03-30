@@ -9,6 +9,7 @@ import {
   handleUpdateHotelApi,
   handleFilterHotelApi,
   handleAddHotelApi,
+  handleDeleteHotelApi,
 } from "../../../services/hotelService";
 import { push } from "connected-react-router";
 import { FilterOutlined } from "@ant-design/icons";
@@ -22,6 +23,7 @@ import {
 import FilterButton from "../../../components/FilterButton";
 import { uploadImageToCloud } from "../../../config/UploadImageCloud";
 import { toast } from "react-toastify";
+import { add } from "lodash";
 // antd
 
 class Hotel extends Component {
@@ -31,7 +33,7 @@ class Hotel extends Component {
       isLoggedIn: false,
       data: null,
       selectedReview: null,
-      isModalOpen: false,
+
       id: null,
       name: "",
       description: "",
@@ -44,13 +46,19 @@ class Hotel extends Component {
       fileList: [],
       uploading: false,
       imageUrl: "",
-      isModalOpenAdd: false,
+
       dataAdd: {
         nameAdd: "",
         descriptionAdd: "",
         addressAdd: "",
         cityAdd: "",
         countryAdd: "",
+      },
+
+      modals: {
+        update: false,
+        add: false,
+        delete: false,
       },
     };
   }
@@ -150,46 +158,29 @@ class Hotel extends Component {
     },
   ];
   handleUpdate = (record) => {
+    this.toggleModal("update", true);
     this.setState({
-      isModalOpen: true,
       selectedReview: record, // Lưu thông tin review cần chỉnh sửa
     });
   };
   // Xử lý xóa review
   handleDelete = async (id) => {
-    // if (window.confirm("Are you sure you want to delete this review?")) {
-    //   try {
-    //     const res = await handleDeleteReviewsApi(id);
-    //     if (res.errCode === 1) {
-    //       alert("Review deleted successfully!");
-    //       // Cập nhật lại dữ liệu sau khi xóa
-    //       this.componentDidMount();
-    //     } else {
-    //       alert(
-    //         res.errMessage || "Failed to delete the review. Please try again."
-    //       );
-    //     }
-    //   } catch (error) {
-    //     console.error("Error deleting review:", error);
-    //     alert("An unexpected error occurred while deleting the review.");
-    //   }
-    // }
+    this.toggleModal("delete", true);
+    this.setState({
+      idDelete: id,
+    });
   };
 
-  handleCancel = () => {
-    this.setState({
-      isModalOpen: false,
-    });
-  };
-  handleCancelAdd = () => {
-    this.setState({
-      isModalOpenAdd: false,
-    });
+  toggleModal = (type, value) => {
+    this.setState((prevState) => ({
+      modals: {
+        ...prevState.Modal,
+        [type]: value,
+      },
+    }));
   };
 
   handleonChangeInput = (id, event) => {
-    console.log("id >>", id);
-    console.log("event >>", event.target.value);
     this.setState({
       selectedReview: {
         ...this.state.selectedReview,
@@ -198,27 +189,18 @@ class Hotel extends Component {
     });
   };
 
-  handleOk = async () => {
-    console.log("checkupdate", this.state.selectedReview);
-    let responUpdate = await handleUpdateHotelApi(this.state.selectedReview);
-    if (responUpdate.errCode === 1) {
-      this.componentDidMount();
-      this.setState({
-        isModalOpen: false,
-      });
-      toast.success("Cập nhật thành công!", {
+  Toast = (text, type) => {
+    if (type === "success") {
+      toast.success(text, {
         position: "bottom-right",
         autoClose: 3000,
-        toastId: "update-success", // Ẩn sau 3 giây
       });
     } else {
-      toast.error("Cập nhật thất bại!", {
+      toast.error(text, {
         position: "bottom-right",
         autoClose: 3000,
-        toastId: "update-fail", // Ẩn sau 3 giây
       });
     }
-    //  console.log("update state>>>", responUpdate);
   };
   setOpenFormFilter = (open) => {
     this.setState({
@@ -289,6 +271,16 @@ class Hotel extends Component {
     }
   };
 
+  handleOkUpdate = async () => {
+    let responUpdate = await handleUpdateHotelApi(this.state.selectedReview);
+    if (responUpdate.errCode === 1) {
+      this.fetchHotels();
+      this.toggleModal("update", false);
+      this.Toast("Cập nhật thành công!", "success");
+    } else {
+      this.Toast("Cập nhật thất bại!", "error");
+    }
+  };
   handleOkAdd = async () => {
     let { nameAdd, descriptionAdd, addressAdd, cityAdd, countryAdd, imageAdd } =
       this.state.dataAdd;
@@ -299,10 +291,7 @@ class Hotel extends Component {
       !cityAdd?.trim() ||
       !countryAdd?.trim()
     ) {
-      toast.error("Vui lòng nhập đầy đủ thông tin!", {
-        position: "bottom-right",
-        autoClose: 3000,
-      });
+      this.Toast("Vui lòng nhập đầy đủ thông tin!", "error");
       return;
     } else {
       let respon = await handleAddHotelApi(
@@ -313,20 +302,22 @@ class Hotel extends Component {
         countryAdd,
         imageAdd
       );
-
-      console.log("respon add`", respon);
-      let updatedHotels = await handleGetHotelApi();
-
-      this.setState({
-        data: updatedHotels,
-        isModalOpenAdd: false,
-      });
-
-      toast.success("Thêm khách sạn thành công!", {
-        position: "bottom-right",
-        autoClose: 3000,
-      });
+      this.fetchHotels();
+      this.toggleModal("add", false);
+      this.Toast("Thêm khách sạn thành công", "success");
     }
+  };
+
+  handleOkDelete = async () => {
+    let { idDelete } = this.state;
+    let respon = await handleDeleteHotelApi(idDelete);
+    if (respon.errCode == 1) {
+      this.Toast("Xóa khách sạn thành công !", "success");
+    } else {
+      this.Toast("Xóa khách sạn thất bại !", "error");
+    }
+    this.fetchHotels();
+    this.toggleModal("delete", false);
   };
 
   handleonChangeInputAdd = (id, event) => {
@@ -338,10 +329,24 @@ class Hotel extends Component {
     });
   };
 
-  handleClickAdd = () => {
+  // handleClick = (type) => {
+  //   this.setState((prevState) => ({
+  //     modals: {
+  //       ...prevState.Modal,
+  //       [type]: true,
+  //     },
+  //   }));
+  // };
+
+  handleClickDelete = () => {
     this.setState({
-      isModalOpenAdd: true,
+      isModalOpenDelete: true,
     });
+  };
+
+  fetchHotels = async () => {
+    const updatedHotels = await handleGetHotelApi();
+    this.setState({ data: updatedHotels });
   };
   render() {
     const { isLoggedIn } = this.props;
@@ -353,6 +358,8 @@ class Hotel extends Component {
       previewImage,
       fileList,
       isModalOpenAdd,
+      isModalOpenDelete,
+      modals,
     } = this.state; // lấy dữ liệu từ state
     console.log("state login >>", isLoggedIn);
     console.log("selected Review  >>", selectedReview);
@@ -489,18 +496,27 @@ class Hotel extends Component {
       <div className="text-center">
         <Modal
           title="Thêm khách sạn"
-          open={isModalOpenAdd}
+          open={modals.add}
           onOk={this.handleOkAdd}
-          onCancel={this.handleCancelAdd}
+          onCancel={() => this.toggleModal("add", false)}
           width={1000}
         >
           {AddModal}
         </Modal>
+
+        <Modal
+          title="Xác nhận"
+          open={modals.delete}
+          onOk={this.handleOkDelete}
+          onCancel={() => this.toggleModal("delete", false)}
+        >
+          Xác nhận xóa khách sạn !
+        </Modal>
         <Modal
           title="Update Hotel"
-          open={isModalOpen}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
+          open={modals.update}
+          onOk={this.handleOkUpdate}
+          onCancel={() => this.toggleModal("update", false)}
           width={1000}
         >
           {selectedReview ? (
@@ -666,7 +682,7 @@ class Hotel extends Component {
         <h1>HOTEl MANAGER</h1>
         <PlusSquareOutlined
           className="button-add-review"
-          onClick={() => this.handleClickAdd()}
+          onClick={() => this.toggleModal("add", true)}
         />
         <Popover
           placement="bottomRight"
