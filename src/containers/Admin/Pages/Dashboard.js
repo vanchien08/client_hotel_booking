@@ -5,6 +5,8 @@ import UserManage from "./userManage";
 import Hotel from "./Hotel";
 import Statistics from "./Statistics";
 import Reviews from "./Reviews";
+import AmenitiesHotel from "./AmenitiesHotel";
+import StatisticsV2 from "./StatisticsV2";
 import "./Dashboard.scss";
 import {
   LaptopOutlined,
@@ -104,12 +106,8 @@ const Dashboard = ({ isLoggedIn, navigate }) => {
 
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
             {selectedContent === "HotelManage" && <Hotel />}
-            {selectedContent === "AmenitiesHotel" && <div> thêm</div>}
-            {selectedContent === "LaptopList" && (
-              <div>
-                <Reviews />
-              </div>
-            )}
+            {selectedContent === "AmenitiesHotel" && <AmenitiesHotel />}
+            {selectedContent === "LaptopList" && <StatisticsV2 />}
             {selectedContent === "AddLaptop" && <div>Thêm Laptop</div>}
             {selectedContent === "NotificationList" && (
               <div>
