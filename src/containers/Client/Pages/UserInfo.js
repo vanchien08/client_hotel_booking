@@ -11,6 +11,7 @@ import { handleUpdateProfile } from "../../../services/userService";
 import BookingHistory from "../../../containers/menuProfileUser/BookingHistory";
 import ChangePassWord from "../../../containers/menuProfileUser/ChangePassword";
 import { toast } from "react-toastify";
+import FooterV2 from "../../Footer/FooterV2";
 class UserInfo extends Component {
   constructor(props) {
     super(props);
@@ -383,6 +384,7 @@ class UserInfo extends Component {
             </div>
           </div>
         </div>
+        <FooterV2 />
       </div>
     );
   }

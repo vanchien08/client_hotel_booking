@@ -123,8 +123,8 @@ class HeaderPage extends Component {
       <div id="fh5co-header-section" className="bg-light shadow-sm">
         <div className="container-fluid">
           <nav className="navbar navbar-expand-lg navbar-light">
-            <a href="index.html" className="navbar-brand">
-              Listing
+            <a href="/" className="navbar-brand">
+              PTITB
             </a>
             <button
               className="navbar-toggler"
@@ -141,20 +141,20 @@ class HeaderPage extends Component {
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav">
                 <li className="nav-item">
-                  <a href="index.html" className="nav-link active">
+                  <a href="/" className="nav-link active">
                     Home
                   </a>
                 </li>
                 <li className="nav-item dropdown">
                   <a
-                    href="#"
+                    href="/"
                     className="nav-link dropdown-toggle"
                     id="listingDropdown"
                     role="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    Listing
+                    Info
                   </a>
                   <ul
                     className="dropdown-menu"

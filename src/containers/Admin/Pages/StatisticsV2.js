@@ -1,28 +1,46 @@
-// Dashboard.js
-import React, { Component } from "react";
+// StatisticsV2.js
+import React, { Component, createRef } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import Chart from "chart.js/auto";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faWallet, faUsers, faEye, faDollarSign } from '@fortawesome/free-solid-svg-icons';
-import "./Dashboard.scss";
-
-class Dashboard extends Component {
+import "./StatisticsV2.scss";
+import {
+  PlusOutlined,
+  ArrowDownOutlined,
+  ArrowUpOutlined,
+} from "@ant-design/icons";
+import { Table, Button, Tag, Modal, Card, Col, Row, Statistic } from "antd";
+import { handleStatisticApi } from "../../../services/statisticsService";
+class StatisticsV2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoggedIn: false,
       data: null,
+      dataRevenue: null,
     };
+    this.dailySalesRef = createRef();
   }
 
   async componentDidMount() {
     // Initialize charts when component mounts
+    let respon = await handleStatisticApi();
+    if (respon && respon.dataStatistic) {
+      let data = this.processChartData(respon.dataStatistic, 2025);
+      this.setState({
+        dataRevenue: data, // Đúng định dạng mà LineChart cần
+      });
+      // console.log("show respon", this.getRevenue(dat));
+    }
+
     this.initializeCharts();
   }
 
   initializeCharts = () => {
     // Website Views Chart
+    const dataRevenue = this.state.dataRevenue;
     const websiteViewsCtx = document
       .getElementById("websiteViewsChart")
       ?.getContext("2d");
@@ -50,21 +68,30 @@ class Dashboard extends Component {
     }
 
     // Daily Sales Chart
-    const dailySalesCtx = document
-      .getElementById("dailySalesChart")
-      ?.getContext("2d");
-    if (dailySalesCtx) {
-      new Chart(dailySalesCtx, {
+    if (this.dailySalesRef.current) {
+      new Chart(this.dailySalesRef.current, {
         type: "line",
         data: {
-          labels: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
+          labels: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ],
           datasets: [
             {
-              label: "Daily Sales",
-              data: [
-                200, 300, 400, 500, 400, 300, 200, 300, 400, 500, 400, 300,
-              ],
-              borderColor: "#22c55e",
+              label: "Doanh thu theo tháng",
+              data: this.getRevenue(dataRevenue.revenue),
+              borderColor: "rgb(75, 192, 192)",
+              tension: 0.1,
               fill: false,
             },
           ],
@@ -72,9 +99,7 @@ class Dashboard extends Component {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          scales: {
-            y: { beginAtZero: true },
-          },
+          scales: { y: { beginAtZero: true } },
         },
       });
     }
@@ -107,7 +132,27 @@ class Dashboard extends Component {
       });
     }
   };
+  getRevenue = () => {
+    const dataRevenue = this.state.dataRevenue;
+    return dataRevenue.map((item) => item.revenue);
+  };
+  processChartData = (data, year) => {
+    const fullYearData = Array.from({ length: 12 }, (_, i) => ({
+      month: i + 1,
+      revenue: 0,
+      quantity: 0,
+      year: year,
+    }));
 
+    data.forEach((item) => {
+      if (item.year === year) {
+        const index = item.month - 1;
+        fullYearData[index] = { ...fullYearData[index], ...item };
+      }
+    });
+
+    return fullYearData;
+  };
   redirectToSystemPage = (url) => {
     const { navigate } = this.props;
     const redirectPath = url;
@@ -120,97 +165,55 @@ class Dashboard extends Component {
 
     console.log("state login >>", isLoggedIn);
     console.log("data >>", data);
+    const cardstatictis = (
+      <Row gutter={16}>
+        <Col span={12}>
+          <Card variant="borderless">
+            <Statistic
+              title="Số đơn hàng"
+              value={11.28}
+              precision={2}
+              valueStyle={{ color: "#3f8600" }}
+              prefix={<ArrowUpOutlined />}
+              suffix="%"
+            />
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card variant="borderless">
+            <Statistic
+              title="Doanh thu"
+              value={9.3}
+              precision={2}
+              valueStyle={{ color: "#cf1322" }}
+              prefix={<ArrowDownOutlined />}
+              suffix="%"
+            />
+          </Card>
+        </Col>
+      </Row>
+    );
 
     return (
-      <div className="dashboard-container">
+      <div className="StatisticsV2-container">
         <div className="container">
-          <h1 className="header">Dashboard</h1>
+          <h1 className="header">Thống kê</h1>
           <p className="subheader">
             Check the sales, value and bounce rate by country.
           </p>
+          {cardstatictis}
 
-          <div className="grid grid-4">
-            <div className="card">
-              <div className="card-header">
-                <div>
-                  <p className="text-gray">Today's Money</p>
-                  <p className="header">$53k</p>
-                  <p className="text-green">+55% than last week</p>
-                </div>
-                <div className="icon">
-                  {/* <FontAwesomeIcon icon={faWallet} /> */}
-                </div>
-              </div>
-            </div>
+          <div className="grid grid-11">
+            <div className="card graph-container">
+              <p className="text-gray">Doanh thu</p>
 
-            <div className="card">
-              <div className="card-header">
-                <div>
-                  <p className="text-gray">Today's Users</p>
-                  <p className="header">2300</p>
-                  <p className="text-green">+3% than last month</p>
-                </div>
-                <div className="icon">
-                  {/* <FontAwesomeIcon icon={faUsers} /> */}
-                </div>
-              </div>
-            </div>
-
-            <div className="card">
-              <div className="card-header">
-                <div>
-                  <p className="text-gray">Ads Views</p>
-                  <p className="header">3,462</p>
-                  <p className="text-red">-2% than yesterday</p>
-                </div>
-                <div className="icon">
-                  {/* <FontAwesomeIcon icon={faEye} /> */}
-                </div>
-              </div>
-            </div>
-
-            <div className="card">
-              <div className="card-header">
-                <div>
-                  <p className="text-gray">Sales</p>
-                  <p className="header">$103,430</p>
-                  <p className="text-green">+5% than yesterday</p>
-                </div>
-                <div className="icon">
-                  {/* <FontAwesomeIcon icon={faDollarSign} /> */}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-3">
-            <div className="card">
-              <p className="text-gray">Website Views</p>
-              <p className="text-sm text-gray">Last Campaign Performance</p>
               <div className="chart">
-                <canvas id="websiteViewsChart"></canvas>
-              </div>
-              <p className="text-sm text-gray">campaign sent 2 days ago</p>
-            </div>
-
-            <div className="card">
-              <p className="text-gray">Daily Sales</p>
-              <p className="text-sm text-gray">
-                (+15%) increase in today sales.
-              </p>
-              <div className="chart">
-                <canvas id="dailySalesChart"></canvas>
+                <canvas
+                  className="canvas-graph"
+                  ref={this.dailySalesRef}
+                ></canvas>
               </div>
               <p className="text-sm text-gray">updated 4 min ago</p>
-            </div>
-
-            <div className="card">
-              <p className="text-gray">Completed Tasks</p>
-              <p className="text-sm text-gray">Last Campaign Performance</p>
-              <div className="chart">
-                <canvas id="completedTasksChart"></canvas>
-              </div>
-              <p className="text-sm text-gray">just updated</p>
             </div>
           </div>
         </div>
@@ -231,4 +234,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(StatisticsV2);

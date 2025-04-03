@@ -11,6 +11,7 @@ import { handleGetPrice } from "../../../services/userService";
 import Footer from "./Footer";
 import image from "../../../assets/images/banner_searchRS.png";
 import { Slider, Switch } from "antd";
+import FooterV2 from "../../Footer/FooterV2";
 class SearchResult extends Component {
   constructor(props) {
     super(props);
@@ -264,7 +265,7 @@ class SearchResult extends Component {
             </div>
           </div>
         </div>
-        <Footer />
+        <FooterV2 />
       </div>
     );
   }

@@ -107,14 +107,14 @@ const Dashboard = ({ isLoggedIn, navigate }) => {
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
             {selectedContent === "HotelManage" && <Hotel />}
             {selectedContent === "AmenitiesHotel" && <AmenitiesHotel />}
-            {selectedContent === "LaptopList" && <StatisticsV2 />}
+            {selectedContent === "LaptopList" && <Reviews />}
             {selectedContent === "AddLaptop" && <div>Thêm Laptop</div>}
             {selectedContent === "NotificationList" && (
               <div>
                 <Statistics />
               </div>
             )}
-            {selectedContent === "AddNotification" && <div>Thêm thông báo</div>}
+            {selectedContent === "AddNotification" && <StatisticsV2 />}
           </Content>
         </Layout>
       </Content>

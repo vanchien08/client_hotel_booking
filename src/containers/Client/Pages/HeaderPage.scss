@@ -1,52 +1,323 @@
-.navbar-nav {
-    margin-left: auto;
-  }
-  
-  /* Hover effect for nav links */
-  .nav-link {
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  .nav-link:hover {
-    background-color: #007bff; /* Blue background on hover */
-    color: #ffffff; /* White text on hover */
-    border-radius: 5px; /* Optional: rounded corners */
-  }
-  
-  /* Specific styles for active link */
-  .nav-link.active {
-    background-color: #007bff;
-    color: #ffffff;
-    border-radius: 5px;
-  }
-  
-  /* Dropdown menu styles */
-  .dropdown-menu {
-    border-radius: 5px;
-    overflow: hidden;
-  }
-  
-  .dropdown-item:hover {
-    background-color: #007bff;
-    color: #ffffff;
-  }
-  .collapse{
-    margin-right:30px;
-  }
-  .avatar-user{
-    margin-left:10px;
-  }
-  .fa-sign-out-alt{
-    width:3px;
-    height:3px;
-    padding-top:3px;
-  }
-  .sign-out-container {
-    display: flex;
+// HeaderPage.scss
+// Main variables for consistent styling
+$primary-color: #1890ff;
+$primary-hover: #0d6efd;
+$secondary-color: #f5f5f5;
+$text-color: #333333;
+$light-text: #6c757d;
+$border-radius: 8px;
+$transition-speed: 0.3s;
+$box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+$hover-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
-    gap: 20px; /* Giảm khoảng cách nếu cần */
-    justify-content: center;
+// Header section styling
+#fh5co-header-section {
+  padding: 12px 0;
+  background-color: #ffffff !important;
+  box-shadow: $box-shadow;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  
+  .container-fluid {
+    padding: 0 20px;
   }
-  .image-user-infor{
-    border-radius: 18px;
+  
+  .navbar {
+    padding: 0;
   }
+  
+  .navbar-brand {
+    font-weight: 700;
+    font-size: 26px;
+    color: $primary-color;
+    letter-spacing: -0.5px;
+    transition: all $transition-speed ease;
+    
+    &:hover {
+      color: $primary-hover;
+      transform: scale(1.05);
+      text-decoration: none;
+    }
+  }
+  
+  .navbar-toggler {
+    border: none;
+    padding: 8px;
+    
+    &:focus {
+      box-shadow: none;
+      outline: none;
+    }
+    
+    .navbar-toggler-icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+// Navigation styling
+.navbar-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  
+  .nav-item {
+    margin: 0 4px;
+    position: relative;
+    
+    .nav-link {
+      color: $text-color;
+      font-weight: 500;
+      padding: 10px 16px;
+      border-radius: $border-radius;
+      transition: all $transition-speed ease;
+      
+      &:hover {
+        color: #ffffff;
+        background-color: $primary-color;
+        transform: translateY(-2px);
+      }
+      
+      &.active {
+        color: #ffffff;
+        background-color: $primary-color;
+        box-shadow: 0 4px 10px rgba(24, 144, 255, 0.2);
+      }
+      
+      &.dropdown-toggle::after {
+        margin-left: 8px;
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+// Dropdown menus
+.dropdown-menu {
+  padding: 8px 0;
+  margin-top: 10px;
+  border: none;
+  border-radius: $border-radius;
+  box-shadow: $hover-shadow;
+  animation: fadeIn 0.2s ease-in-out;
+  
+  .dropdown-item {
+    padding: 8px 20px;
+    color: $text-color;
+    font-weight: 500;
+    transition: all $transition-speed ease;
+    
+    &:hover, &:focus {
+      color: #ffffff;
+      background-color: $primary-color;
+      transform: translateX(5px);
+    }
+    
+    &:active {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+  
+  .dropdown-divider {
+    margin: 8px 0;
+    border-top-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Nested dropdowns
+.dropdown-submenu {
+  position: relative;
+  
+  .dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -8px;
+    margin-left: 1px;
+  }
+}
+
+// User avatar section
+.avatar-user {
+  margin-left: 15px;
+  
+  a {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 24px;
+    transition: all $transition-speed ease;
+    color: $text-color;
+    
+    &:hover {
+      background-color: rgba(24, 144, 255, 0.1);
+      color: #1890ff;
+      text-decoration: none;
+    }
+    
+    .image-user-infor {
+      width: 36px;
+      height: 36px;
+      border-radius: 50% !important;
+      object-fit: cover;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all $transition-speed ease;
+      
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+    }
+    
+    .ant-space {
+      align-items: center;
+    }
+    
+    .anticon {
+      font-size: 12px;
+      margin-left: 5px;
+    }
+  }
+}
+
+// Sign out container
+.sign-out-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ff4d4f;
+  
+  .fa-sign-out-alt, .anticon-logout {
+    font-size: 14px;
+  }
+}
+
+// Custom styles for Ant Design dropdown
+.ant-dropdown {
+  .ant-dropdown-menu {
+    border-radius: $border-radius;
+    box-shadow: $hover-shadow;
+    
+    .ant-dropdown-menu-item {
+      padding: 8px 16px;
+      
+      &:hover {
+        background-color: rgba(24, 144, 255, 0.1);
+        color: #1890ff;
+      }
+      
+      &-disabled {
+        color: $light-text;
+        cursor: not-allowed;
+        
+        &:hover {
+          background-color: transparent;
+          color: $light-text;
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 992px) {
+  #fh5co-header-section {
+    .navbar-collapse {
+      margin-top: 15px;
+      padding: 15px;
+      background-color: #ffffff;
+      border-radius: $border-radius;
+      box-shadow: $box-shadow;
+    }
+    
+    .navbar-nav {
+      flex-direction: column;
+      align-items: flex-start;
+      
+      .nav-item {
+        width: 100%;
+        margin: 5px 0;
+        
+        .nav-link {
+          width: 100%;
+          display: block;
+        }
+      }
+      
+      .dropdown-menu {
+        width: 100%;
+        margin-top: 0;
+        background-color: #1890ff;
+        box-shadow: none;
+      }
+      
+      .dropdown-submenu .dropdown-menu {
+        left: 0;
+        margin-left: 20px;
+      }
+      
+      .avatar-user {
+        margin: 10px 0;
+        width: 100%;
+        
+        a {
+          width: 100%;
+          justify-content: flex-start;
+        }
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Additional styling for user dropdown
+.user-dropdown-header {
+  padding: 10px 16px;
+  color: $light-text;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.dropdown-item-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  
+  .dropdown-icon {
+    font-size: 16px;
+    color: $primary-color;
+  }
+}
+
+// Fix for hover dropdown on desktop
+@media (min-width: 992px) {
+  .dropdown:hover .dropdown-menu {
+    display: block;
+  }
+  
+  .dropdown-submenu:hover > .dropdown-menu {
+    display: block;
+  }
+}

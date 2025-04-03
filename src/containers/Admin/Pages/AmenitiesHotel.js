@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Table, Button, Tag, Modal } from "antd";
+import { Table, Button, Tag, Modal, Card, Col, Row, Statistic } from "antd";
 import {
   handleGetHotelAmenities,
   handleDeleteHAmenities,
@@ -12,7 +12,11 @@ import "./AmenitiesHotel.scss";
 import { handleGetHotelApi } from "../../../services/userService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as solidIcons from "@fortawesome/free-solid-svg-icons";
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  PlusOutlined,
+  ArrowDownOutlined,
+  ArrowUpOutlined,
+} from "@ant-design/icons";
 import { toast } from "react-toastify";
 class AmenitiesHotel extends Component {
   constructor(props) {
@@ -196,68 +200,6 @@ class AmenitiesHotel extends Component {
       .filter((name) => name.toLowerCase().includes(searchTerm)) // Lọc theo tìm kiếm
       .map((name) => ({ name, icon: solidIcons[name] })); // Tạo mảng icon
 
-    const FindIcon = () => {
-      <div style={{ padding: "20px" }}>
-        <h2>Chọn Icon</h2>
-
-        {/* Ô tìm kiếm */}
-        <input
-          type="text"
-          placeholder="Tìm kiếm icon..."
-          value={searchTerm}
-          onChange={this.handleSearch}
-          style={{
-            width: "100%",
-            padding: "8px",
-            marginBottom: "10px",
-            borderRadius: "5px",
-            border: "1px solid gray",
-          }}
-        />
-
-        {/* Hiển thị danh sách icon */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(60px, 1fr))",
-            gap: "10px",
-            maxHeight: "300px",
-            overflowY: "auto",
-            border: "1px solid gray",
-            padding: "10px",
-            borderRadius: "5px",
-          }}
-        >
-          {iconList.map(({ name, icon }) => (
-            <div
-              key={name}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                border:
-                  selectedIcon === name ? "2px solid blue" : "1px solid gray",
-                padding: "10px",
-                cursor: "pointer",
-                borderRadius: "5px",
-              }}
-              onClick={() => this.handleIconClick(name)}
-            >
-              <FontAwesomeIcon icon={icon} size="2x" />
-            </div>
-          ))}
-        </div>
-
-        {/* Hiển thị icon đã chọn */}
-        {selectedIcon && (
-          <div style={{ marginTop: "20px", textAlign: "center" }}>
-            <h3>Icon đã chọn:</h3>
-            <FontAwesomeIcon icon={solidIcons[selectedIcon]} size="4x" />
-            <p>{selectedIcon}</p>
-          </div>
-        )}
-      </div>;
-    };
     return (
       <div className="text-center">
         <Modal

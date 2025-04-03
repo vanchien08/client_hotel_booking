@@ -14,6 +14,7 @@ import { Table } from "antd";
 import { handleBooking } from "../../../services/userService";
 import HeaderPage from "./HeaderPage";
 import Footer from "./Footer";
+import FooterV2 from "../../Footer/FooterV2";
 class RoomDetail extends Component {
   constructor(props) {
     super(props);
@@ -298,7 +299,7 @@ class RoomDetail extends Component {
             </div>
           </div>
         </div>
-        <Footer />
+        <FooterV2 />
       </div>
     );
   }

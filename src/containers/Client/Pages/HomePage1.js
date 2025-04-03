@@ -14,15 +14,9 @@ import "swiper/modules/navigation/navigation.min.css";
 
 import HeaderPage from "./HeaderPage";
 import Footer from "./Footer";
+import FooterV2 from "../../Footer/FooterV2";
 import bannerImage from "../../../assets/images/bannerHotel2.png";
-import imageroom1 from "../../../assets/images/imageroom1.jpg";
-import imageroom2 from "../../../assets/images/imageroom2.jpg";
-import imageroom3 from "../../../assets/images/imageroom3.jpg";
-import imageroom4 from "../../../assets/images/imageroom4.jpg";
-import imageroom5 from "../../../assets/images/imageroom5.jpg";
-import imageroom6 from "../../../assets/images/imageroom6.jpg";
-import travel1 from "../../../assets/images/travel1.jpg";
-import travel2 from "../../../assets/images/travel2.jpg";
+import BodyHomePage from "./BodyHomePage";
 const destinations = [
   {
     name: "Hà Tiên",
@@ -262,130 +256,8 @@ class HomePage1 extends Component {
             ))}
           </Swiper>
         </div>
-
-        <div className="fh5co-listing">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-4 col-sm-6 mb-4">
-                <a className="fh5co-listing-item">
-                  <img src={imageroom1} alt="Paris" className="img-fluid" />
-                  <div className="fh5co-listing-copy">
-                    <h2>Paris</h2>
-                    <span className="icon">
-                      <i className="bi bi-chevron-right"></i>
-                    </span>
-                  </div>
-                </a>
-              </div>
-              <div className="col-md-4 col-sm-6 mb-4">
-                <a className="fh5co-listing-item">
-                  <img src={imageroom2} alt="New York" className="img-fluid" />
-                  <div className="fh5co-listing-copy">
-                    <h2>New York</h2>
-                    <span className="icon">
-                      <i className="bi bi-chevron-right"></i>
-                    </span>
-                  </div>
-                </a>
-              </div>
-              <div className="col-md-4 col-sm-6 mb-4">
-                <a className="fh5co-listing-item">
-                  <img src={imageroom3} alt="London" className="img-fluid" />
-                  <div className="fh5co-listing-copy">
-                    <h2>London</h2>
-                    <span className="icon">
-                      <i className="bi bi-chevron-right"></i>
-                    </span>
-                  </div>
-                </a>
-              </div>
-
-              <div className="col-md-4 col-sm-6 mb-4">
-                <a className="fh5co-listing-item">
-                  <img src={imageroom4} alt="Amsterdam" className="img-fluid" />
-                  <div className="fh5co-listing-copy">
-                    <h2>Amsterdam</h2>
-                    <span className="icon">
-                      <i className="bi bi-chevron-right"></i>
-                    </span>
-                  </div>
-                </a>
-              </div>
-              <div className="col-md-4 col-sm-6 mb-4">
-                <a className="fh5co-listing-item">
-                  <img src={imageroom5} alt="Australia" className="img-fluid" />
-                  <div className="fh5co-listing-copy">
-                    <h2>Australia</h2>
-                    <span className="icon">
-                      <i className="bi bi-chevron-right"></i>
-                    </span>
-                  </div>
-                </a>
-              </div>
-              <div className="col-md-4 col-sm-6 mb-4">
-                <a className="fh5co-listing-item">
-                  <img src={imageroom6} alt="Japan" className="img-fluid" />
-                  <div className="fh5co-listing-copy">
-                    <h2>Japan</h2>
-                    <span className="icon">
-                      <i className="bi bi-chevron-right"></i>
-                    </span>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="fh5co-section">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-6">
-                <h3>News</h3>
-                <ul className="list-unstyled">
-                  <li className="mb-3">
-                    <a href="#">
-                      <span className="text-muted">Sep. 10, 2016</span>
-                      <h3 className="mb-1">Newly done Bridge of London</h3>
-                      <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Accusamus reprehenderit!
-                      </p>
-                    </a>
-                  </li>
-                  <li className="mb-3">
-                    <a href="#">
-                      <span className="text-muted">Sep. 10, 2016</span>
-                      <h3 className="mb-1">Newly done Bridge of London</h3>
-                      <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Accusamus reprehenderit!
-                      </p>
-                    </a>
-                  </li>
-                  <li className="mb-3">
-                    <a href="#">
-                      <span className="text-muted">Sep. 10, 2016</span>
-                      <h3 className="mb-1">Newly done Bridge of London</h3>
-                      <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Accusamus reprehenderit!
-                      </p>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-              <div className="col-md-6">
-                <img
-                  src={travel1}
-                  alt="News Image"
-                  className="img-fluid mb-4"
-                />
-                <img src={travel2} alt="News Image" className="img-fluid" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <Footer />
+        <BodyHomePage />
+        <FooterV2 />
       </div>
     );
   }
