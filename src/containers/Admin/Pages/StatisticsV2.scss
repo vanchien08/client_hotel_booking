@@ -147,3 +147,9 @@ body {
     padding: 40px 20px;
     height: 375px;
   }
+
+  .segmented-container {
+    display: flex;
+    justify-content: flex-end; 
+    margin-bottom: 16px;
+  }

@@ -11,7 +11,17 @@ import {
   ArrowDownOutlined,
   ArrowUpOutlined,
 } from "@ant-design/icons";
-import { Table, Button, Tag, Modal, Card, Col, Row, Statistic } from "antd";
+import {
+  Table,
+  Button,
+  Tag,
+  Modal,
+  Card,
+  Col,
+  Row,
+  Statistic,
+  Segmented,
+} from "antd";
 import { handleStatisticApi } from "../../../services/statisticsService";
 class StatisticsV2 extends Component {
   constructor(props) {
@@ -20,6 +30,7 @@ class StatisticsV2 extends Component {
       isLoggedIn: false,
       data: null,
       dataRevenue: null,
+      alignValue: "Hôm nay",
     };
     this.dailySalesRef = createRef();
   }
@@ -89,7 +100,7 @@ class StatisticsV2 extends Component {
           datasets: [
             {
               label: "Doanh thu theo tháng",
-              data: this.getRevenue(dataRevenue.revenue),
+              data: this.getRevenue(),
               borderColor: "rgb(75, 192, 192)",
               tension: 0.1,
               fill: false,
@@ -158,10 +169,13 @@ class StatisticsV2 extends Component {
     const redirectPath = url;
     navigate(`${redirectPath}`);
   };
+  onChangeAlign = (val) => {
+    this.setState({ alignValue: val });
+  };
 
   render() {
     const { isLoggedIn } = this.props;
-    const { data } = this.state;
+    const { data, alignValue } = this.state;
 
     console.log("state login >>", isLoggedIn);
     console.log("data >>", data);
@@ -201,6 +215,15 @@ class StatisticsV2 extends Component {
           <p className="subheader">
             Check the sales, value and bounce rate by country.
           </p>
+
+          <div className="segmented-container">
+            <Segmented
+              value={alignValue}
+              onChange={this.onChangeAlign}
+              options={["Hôm nay", "Tháng này", "Năm này"]}
+            />
+          </div>
+
           {cardstatictis}
 
           <div className="grid grid-11">
