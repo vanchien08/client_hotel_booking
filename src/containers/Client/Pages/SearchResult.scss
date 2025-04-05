@@ -39,114 +39,6 @@
   margin-right: 8px;
 }
 
-/* Danh sách khách sạn */
-.hotel-list-section {
-  flex-grow: 1;
-}
-
-.hotel-card {
-  display: flex;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  padding: 15px;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 900px;
-}
-
-/* Hình ảnh khách sạn */
-.hotel-image-container {
-  flex: 0 0 250px; /* Định kích thước cố định */
-}
-
-.hotel-image {
-  width: 250px;
-  height: 170px;
-  object-fit: cover;
-  border-radius: 10px;
-}
-
-/* Phần thông tin khách sạn */
-.hotel-details {
-  flex-grow: 1;
-  padding: 0 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.hotel-name {
-  font-size: 18px;
-  font-weight: bold;
-  color: #0071c2;
-}
-
-.hotel-location {
-  font-size: 14px;
-  color: #666;
-}
-
-.hotel-description {
-  font-size: 14px;
-  color: #444;
-}
-
-.hotel-bed {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.hotel-cancellation,
-.hotel-prepayment {
-  font-size: 14px;
-  color: #008000;
-}
-
-.hotel-limited {
-  color: red;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-/* Phần giá & nút đặt phòng */
-.hotel-action {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
-}
-
-.hotel-score {
-  font-size: 14px;
-  font-weight: bold;
-  color: #333;
-}
-
-.hotel-reviews {
-  font-size: 12px;
-  color: #666;
-}
-
-.hotel-price {
-  font-size: 20px;
-  font-weight: bold;
-  color: #d32f2f;
-}
-
-.hotel-old-price {
-  text-decoration: line-through;
-  color: #777;
-  font-size: 14px;
-}
-
-.hotel-tax {
-  font-size: 12px;
-  color: #777;
-}
-
 .see-availability-button {
   background-color: #0071c2;
   color: white;
@@ -193,4 +85,244 @@
 
 .fa-check{
   color:#008234;
+}
+
+/* Danh sách khách sạn */
+/* Modern Hotel List Styling */
+.hotel-list-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px 0;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.hotel-card {
+  display: flex;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.hotel-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Hotel image section */
+.hotel-image-container {
+  position: relative;
+  flex: 0 0 300px;
+  height: 220px;
+}
+
+.hotel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hotel-badge {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  background: linear-gradient(90deg, #ff4d4d, #ff7a7a);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 0 6px 6px 0;
+  box-shadow: 0 2px 8px rgba(255, 77, 77, 0.3);
+}
+
+/* Hotel content layout */
+.hotel-content {
+  flex: 1;
+  display: flex;
+  padding: 20px;
+}
+
+.hotel-details {
+  flex: 1;
+  padding-right: 24px;
+}
+
+/* Hotel header with name and rating */
+.hotel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.hotel-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0;
+}
+
+.hotel-rating {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rating-score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4299e1;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+
+.rating-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.hotel-reviews {
+  font-size: 12px;
+  color: #718096;
+}
+
+/* Hotel details */
+.hotel-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4a5568;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.hotel-description {
+  color: #4a5568;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.hotel-room-type {
+  font-size: 15px;
+  font-weight: 500;
+  color: #2d3748;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hotel-features {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #38a169;
+}
+
+/* Pricing and action section */
+.hotel-action {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  min-width: 180px;
+}
+
+.price-container {
+  text-align: right;
+}
+
+.price-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.hotel-old-price {
+  text-decoration: line-through;
+  color: #a0aec0;
+  font-size: 14px;
+}
+
+.hotel-current-price {
+  font-size: 24px;
+  font-weight: 700;
+  color: #e53e3e;
+  line-height: 1.2;
+}
+
+.hotel-tax {
+  font-size: 12px;
+  color: #718096;
+  margin-top: 4px;
+}
+
+.see-availability-button {
+  background: linear-gradient(to right, #3182ce, #4299e1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 16px;
+  box-shadow: 0 4px 12px rgba(66, 153, 225, 0.25);
+}
+
+.see-availability-button:hover {
+  background: linear-gradient(to right, #2b6cb0, #3182ce);
+  box-shadow: 0 6px 16px rgba(66, 153, 225, 0.35);
+}
+
+/* Responsive design */
+@media (max-width: 900px) {
+  .hotel-card {
+    flex-direction: column;
+  }
+  
+  .hotel-image-container {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+  
+  .hotel-content {
+    flex-direction: column;
+  }
+  
+  .hotel-details {
+    padding-right: 0;
+    margin-bottom: 24px;
+  }
+  
+  .hotel-action {
+    width: 100%;
+    align-items: stretch;
+  }
+  
+  .hotel-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .hotel-rating {
+    align-self: flex-start;
+  }
 }

@@ -15,6 +15,7 @@ import { handleBooking } from "../../../services/userService";
 import HeaderPage from "./HeaderPage";
 import Footer from "./Footer";
 import FooterV2 from "../../Footer/FooterV2";
+import { toast } from "react-toastify";
 class RoomDetail extends Component {
   constructor(props) {
     super(props);
@@ -186,7 +187,10 @@ class RoomDetail extends Component {
       const responses = await Promise.all(bookingPromises);
 
       console.log("All bookings completed:", responses);
-      alert("Đặt phòng thành công!");
+      toast.success("Đặt phòng thành công!", {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
     } catch (error) {
       console.error("Lỗi khi đặt phòng:", error);
       alert("Có lỗi xảy ra khi đặt phòng. Vui lòng thử lại!");

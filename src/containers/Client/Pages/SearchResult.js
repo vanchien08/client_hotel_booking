@@ -211,53 +211,78 @@ class SearchResult extends Component {
                           alt={hotel.name}
                           className="hotel-image"
                         />
+                        {hotel.limited && (
+                          <div className="hotel-badge">
+                            <span>🔥 Only 4 left!</span>
+                          </div>
+                        )}
                       </div>
 
-                      <div className="hotel-details">
-                        <h3 className="hotel-name">{hotel.name}</h3>
-                        <p className="hotel-location">{hotel.address}</p>
-                        <p className="hotel-description">{hotel.description}</p>
-                        <p className="hotel-bed">loai phong</p>
+                      <div className="hotel-content">
+                        <div className="hotel-details">
+                          <div className="hotel-header">
+                            <h3 className="hotel-name">{hotel.name}</h3>
+                            <div className="hotel-rating">
+                              <span className="rating-score">9.2</span>
+                              <div className="rating-info">
+                                <strong>Superb</strong>
+                                <span className="hotel-reviews">5 reviews</span>
+                              </div>
+                            </div>
+                          </div>
 
-                        <p className="hotel-cancellation">
-                          <i class="fa-solid fa-check"></i>{" "}
-                          <span>Cho phép hủy</span>
-                        </p>
-                        <p className="hotel-prepayment">
-                          <i class="fa-solid fa-check"></i>{" "}
-                          <span>Thanh toán</span>
-                        </p>
+                          <p className="hotel-location">
+                            <i className="fas fa-map-marker-alt"></i>{" "}
+                            {hotel.address}
+                          </p>
 
-                        <p className="hotel-limited">
-                          🔥 Only 4 left at this price!
-                        </p>
-                      </div>
+                          <p className="hotel-description">
+                            {hotel.description}
+                          </p>
 
-                      <div className="hotel-action">
-                        <p className="hotel-score">
-                          <strong>Superb</strong> rating ⭐
-                        </p>
-                        <p className="hotel-reviews">5 real reviews</p>
-                        <p className="hotel-price">
-                          <span className="hotel-old-price">VND 686,250</span>
-                          {this.getMinPrice(hotel.rooms)}
-                          <span className="hotel-tax">
-                            Includes taxes and charges
-                          </span>
-                        </p>
-                        <button
-                          className="see-availability-button"
-                          onClick={() =>
-                            this.handleNavigate(
-                              hotel.rooms[0],
-                              checkIn,
-                              checkOut,
-                              hotel
-                            )
-                          }
-                        >
-                          See availability
-                        </button>
+                          <div className="hotel-room-type">
+                            <i className="fas fa-bed"></i>{" "}
+                            {hotel.bedType || "Standard Room"}
+                          </div>
+
+                          <div className="hotel-features">
+                            <div className="feature">
+                              <i className="fas fa-check-circle"></i> Free
+                              cancellation
+                            </div>
+                            <div className="feature">
+                              <i className="fas fa-credit-card"></i> Pay at the
+                              property
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="hotel-action">
+                          <div className="price-container">
+                            <div className="price-details">
+                              <span className="hotel-old-price">
+                                VND 686,250
+                              </span>
+                              {this.getMinPrice(hotel.rooms)}
+                              <span className="hotel-tax">
+                                Includes taxes and fees
+                              </span>
+                            </div>
+                          </div>
+                          <button
+                            className="see-availability-button"
+                            onClick={() =>
+                              this.handleNavigate(
+                                hotel.rooms[0],
+                                checkIn,
+                                checkOut,
+                                hotel
+                              )
+                            }
+                          >
+                            See availability
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}
