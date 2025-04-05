@@ -6,6 +6,7 @@ import Chart from "chart.js/auto";
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faWallet, faUsers, faEye, faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import "./StatisticsV2.scss";
+import { handleStatOvTimeApi } from "../../../services/statisticsService";
 import {
   PlusOutlined,
   ArrowDownOutlined,
@@ -31,12 +32,19 @@ class StatisticsV2 extends Component {
       data: null,
       dataRevenue: null,
       alignValue: "Hôm nay",
+      valueOrder: 0,
+      valuePrice: 0,
     };
     this.dailySalesRef = createRef();
   }
 
   async componentDidMount() {
     // Initialize charts when component mounts
+    let getStatOverTime = await handleStatOvTimeApi("today");
+    this.setState({
+      valuePrice: getStatOverTime.orderNRevenue.revenue,
+      valueOrder: getStatOverTime.orderNRevenue.orders,
+    });
     let respon = await handleStatisticApi();
     if (respon && respon.dataStatistic) {
       let data = this.processChartData(respon.dataStatistic, 2025);
@@ -115,7 +123,6 @@ class StatisticsV2 extends Component {
       });
     }
 
-    // Completed Tasks Chart
     const completedTasksCtx = document
       .getElementById("completedTasksChart")
       ?.getContext("2d");
@@ -169,13 +176,31 @@ class StatisticsV2 extends Component {
     const redirectPath = url;
     navigate(`${redirectPath}`);
   };
-  onChangeAlign = (val) => {
+  onChangeAlign = async (val) => {
     this.setState({ alignValue: val });
+    let respon = null;
+    switch (val) {
+      case "Hôm nay":
+        respon = await handleStatOvTimeApi("today");
+        break;
+      case "Tháng này":
+        respon = await handleStatOvTimeApi("thismonth");
+        break;
+      case "Năm này":
+        respon = await handleStatOvTimeApi("thisyear");
+        break;
+    }
+    if (respon != null) {
+      this.setState({
+        valuePrice: respon.orderNRevenue.revenue,
+        valueOrder: respon.orderNRevenue.orders,
+      });
+    }
   };
 
   render() {
     const { isLoggedIn } = this.props;
-    const { data, alignValue } = this.state;
+    const { data, alignValue, valueOrder, valuePrice } = this.state;
 
     console.log("state login >>", isLoggedIn);
     console.log("data >>", data);
@@ -185,11 +210,9 @@ class StatisticsV2 extends Component {
           <Card variant="borderless">
             <Statistic
               title="Số đơn hàng"
-              value={11.28}
-              precision={2}
+              value={valueOrder}
               valueStyle={{ color: "#3f8600" }}
               prefix={<ArrowUpOutlined />}
-              suffix="%"
             />
           </Card>
         </Col>
@@ -197,11 +220,9 @@ class StatisticsV2 extends Component {
           <Card variant="borderless">
             <Statistic
               title="Doanh thu"
-              value={9.3}
-              precision={2}
+              value={valuePrice}
               valueStyle={{ color: "#cf1322" }}
               prefix={<ArrowDownOutlined />}
-              suffix="%"
             />
           </Card>
         </Col>
