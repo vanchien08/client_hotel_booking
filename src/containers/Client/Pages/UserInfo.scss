@@ -1,114 +1,198 @@
-/* Profile.css */
-.profile-container {
-    max-width: 100%;
-    width: 95%;
-    margin: auto;
-    
-  }
-  .avatar-user-info{
-    border-bottom: 1px solid #ccc;
-  }
-  .log-out-text{
-    border-bottom: 1px solid #ccc !important;
-  }
-  .profile-sidebar {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .profile-avatar {
-    width: 100px;
-    height: 100px;
-    background-color: #ccc;
-    border-radius: 50%;
-    margin: 0 auto 10px;
-  }
-  
-  .list-group-item {
-    cursor: pointer;
-    transition: background 0.3s ease;
-    border:none;
-  }
-  
-  .list-group-item:hover {
-    background-color: #f8f9fa;
-  }
-  
-  .profile-form {
-    background: #fff;
-    padding: 30px;
-    border-radius: 8px;
-  }
-  
-  .btn-success {
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  .UserInfo_container{
-    margin-top:100px;
-    margin-left: 40px;
-    margin-right:40px;
-  }
-
-  .ant-upload-list-item-container{
-    width: 250px !important; // Tăng kích thước khung upload
-    height: 250px !important;
-   
-   
-  }
-  
-  .avatar-upload {
-    transform: translate(50px,35px);
-    align-items: center;
-  }
-
-  .avatar-upload-display{
-    transform: translate(50px,35px);
-  }
-  .ant-upload.ant-upload-select{
-    width: 250px !important; // Tăng kích thước khung upload
-    height: 250px !important;
-   
-    
-
-  }
-  .avatar-user-setting{
-    //  background-color: #fff;
-     
-      background-color: #fff !important;
-      background-size: cover;
-  }
-  .btn-submit-info{
-    height:45px;
-    background-color:#0d6efd  ;
-    padding:10px;
-  }
-
-
-  .active-menu-select{
-      color:#000 !important;
-     
-  }
-  .container-changepassword{
-    width:600px;
-  }
-  #newpassword.form-control{
-    margin:15px 0px;
-  }
-  .button-change-password{
-    padding: 5px;
-    height: 40px;
-    background-color: #0d6efd !important;
+/* UserInfo.scss - Modern redesign */
+.UserInfo_container {
+  margin: 120px 40px 150px;
+  font-family: 'Poppins', sans-serif;
 }
 
-.alert-notify{
-  color:red !important;
+/* Profile sidebar styling */
+.profile-sidebar {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 30px 15px;
+  height: 100%;
 }
-.button-update-info{
-  
-}
-.UserInfo_container{
-  margin-bottom:150px;
 
+.avatar-user-info {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.avatar-user-setting {
+  width: 100px !important;
+  height: 100px !important;
+  margin: 0 auto 15px;
+  background-position: center;
+  background-size: cover;
+  border: 3px solid #f0f0f0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.avatar-user-info h4 {
+  font-weight: 600;
+  margin-top: 15px;
+  color: #333;
+}
+
+.list-group {
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.list-group-item {
+  border: none;
+  padding: 14px 20px;
+  font-weight: 500;
+  color: #555;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+  transform: translateX(5px);
+}
+
+.list-group-item.active-menu-select {
+  color: #0d6efd !important;
+  background-color: rgba(13, 110, 253, 0.08);
+  font-weight: 600;
+  border-left: 4px solid #0d6efd;
+}
+
+.list-group-item.text-danger {
+  color: #dc3545 !important;
+  margin-top: 10px;
+}
+
+.list-group-item.log-out-text {
+  border-bottom: 1px solid #f0f0f0 !important;
+  margin-bottom: 10px;
+}
+
+/* Main content area styling */
+.col-md-8 {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.title-menu-user {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 30px;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.title-menu-user::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: #0d6efd;
+  border-radius: 3px;
+}
+
+/* Form styling */
+.form-label {
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.form-control {
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid #e1e1e1;
+  padding: 10px 15px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+}
+
+/* Button styling */
+.ant-btn-primary {
+  height: 48px;
+  padding: 0 25px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.ant-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+}
+
+/* Avatar upload styling */
+.avatar-upload {
+  margin-top: 30px;
+}
+
+.ant-upload-list-item-container,
+.ant-upload.ant-upload-select {
+  width: 180px !important;
+  height: 180px !important;
+  margin: 0 auto;
+}
+
+.ant-upload-list-item-image,
+.ant-upload-list-item-thumbnail {
+  border-radius: 50%;
+}
+
+.avatar-upload-display {
+  margin-top: 15px;
+  max-width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .col-md-8 {
+    margin-top: 30px;
+    margin-left: 0 !important;
+  }
+  
+  .UserInfo_container {
+    margin: 100px 20px 100px;
+  }
+}
+
+/* Password change section */
+.container-changepassword {
+  width: 100%;
+  max-width: 600px;
+}
+
+#newpassword.form-control {
+  margin: 15px 0;
+}
+
+.button-change-password {
+  height: 48px;
+  background-color: #0d6efd !important;
+  padding: 0 20px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.alert-notify {
+  color: #dc3545 !important;
+  font-size: 14px;
+  margin-top: 5px;
 }

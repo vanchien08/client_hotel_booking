@@ -11,13 +11,15 @@ import Footer from "./Footer.js";
 import { Avatar, Space } from "antd";
 import { UserOutlined, SettingOutlined, DownOutlined } from "@ant-design/icons";
 import imguser from "../../../assets/images/user.png";
+import dashboardicon from "../../../assets/images/dashboardIcon.png";
 import { Dropdown, message } from "antd";
+import { round } from "lodash";
 
 class HeaderPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null,
+      user: this.props.userInfo || {},
     };
   }
   async componentDidMount() {
@@ -58,7 +60,9 @@ class HeaderPage extends Component {
       this.handleNavigate("/login"); // Nếu chưa đăng nhập, chuyển đến login
     }
   };
-
+  handleClickDashB = () => {
+    this.handleNavigate("/system/dashboard");
+  };
   handleLogOut = (path) => {
     localStorage.removeItem("persist:admin");
     localStorage.removeItem("persist:user");
@@ -119,6 +123,8 @@ class HeaderPage extends Component {
     </Dropdown>
   );
   render() {
+    const { user } = this.state;
+    console.log("check user", user);
     return (
       <div id="fh5co-header-section" className="bg-light shadow-sm">
         <div className="container-fluid">
@@ -330,6 +336,15 @@ class HeaderPage extends Component {
                     Contact
                   </a>
                 </li>
+                {user.roles?.[0]?.role == 1 ? (
+                  <img
+                    className="dashboard-icon"
+                    src={dashboardicon}
+                    alt="Dashboard"
+                    onClick={() => this.handleClickDashB()}
+                  />
+                ) : null}
+
                 <div className="avatar-user">{this.App()}</div>
               </ul>
             </div>
@@ -357,8 +372,8 @@ const mapDispatchToProps = (dispatch) => {
     // adminLoginSuccess: (adminInfo) =>
     //   dispatch(actions.adminLoginSuccess(adminInfo)),
     // adminLoginFail: () => dispatch(actions.adminLoginFail()),
-    // fetchLoginStart: (username, password) =>
-    //   dispatch(actions.fetchLoginStart(username, password)),
+    fetchLoginStart: (username, password) =>
+      dispatch(actions.fetchLoginStart(username, password)),
     fetchLoginSuccess: (userInfo) =>
       dispatch(actions.fetchLoginSuccess(userInfo)),
   };
