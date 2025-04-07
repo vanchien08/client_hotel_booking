@@ -66,7 +66,9 @@ class HeaderPage extends Component {
   handleLogOut = (path) => {
     localStorage.removeItem("persist:admin");
     localStorage.removeItem("persist:user");
-    this.props.navigate(path);
+    this.setState({ user: null });
+    this.props.fetchLoginSuccess(null);
+    this.handleNavigate(path);
   };
   items = [
     {

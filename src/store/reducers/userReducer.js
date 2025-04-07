@@ -15,13 +15,18 @@ const userReducer = (state = Istate, action) => {
       };
 
     case actionTypes.USER_LOGIN_SUCCESS:
-      console.log("fire succes ", action.data);
+      console.log(
+        "fire succes ",
+        action.data,
+        action.data?.roles?.[0]?.role || 0
+      );
       return {
         ...state,
         errCode: action.data?.errCode || 0,
         errMessage: action.data?.errMessage || "",
         userInfo: action.data || null,
         isLoggedIn: true,
+        role: action.data?.roles?.[0]?.role || 0,
       };
 
     case actionTypes.USER_LOGIN_FAIL:
