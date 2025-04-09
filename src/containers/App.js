@@ -69,7 +69,7 @@ class App extends Component {
                   path={path.SYSTEM}
                   component={userIsAuthenticated(System)}
                 />
-                {<Route path={path.SHOPVIET} component={ShopViet} />}
+                <Route path={path.SHOPVIET} component={ShopViet} />
                 {/* <Route
                   path={path.SYSTEM}
                   component={userIsAuthenticated(System)}

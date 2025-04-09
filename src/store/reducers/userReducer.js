@@ -5,6 +5,7 @@ let Istate = {
   errMessage: "",
   userInfo: null,
   isLoggedIn: false,
+  role: 0,
 };
 
 const userReducer = (state = Istate, action) => {

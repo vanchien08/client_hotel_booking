@@ -23,7 +23,7 @@ const adminPersistConfig = {
 const userPersistConfig = {
   ...persistCommonConfig,
   key: "user",
-  whitelist: ["isLoggedIn", "userInfo"],
+  whitelist: ["isLoggedIn", "userInfo", "role"],
 };
 
 export default (history) =>
