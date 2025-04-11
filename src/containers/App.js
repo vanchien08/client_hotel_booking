@@ -26,6 +26,7 @@ import RoomDetail from "./Client/Pages/RoomDetail";
 import HomePage1 from "./Client/Pages/HomePage1";
 import ProfileUser from "./Client/Pages/ProfileUser";
 import UserInfo from "./Client/Pages/UserInfo";
+import Register from "../containers/Register/Register";
 class App extends Component {
   handlePersistorState = () => {
     const { persistor } = this.props;
@@ -56,6 +57,7 @@ class App extends Component {
             <span className="content-container">
               <Switch>
                 <Route path={path.HOME} exact component={HomePage1} />
+                <Route path={path.REGISTER} exact component={Register} />
 
                 <Route path={path.SEARCH} exact component={SearchResult} />
                 <Route path={path.PROFILE} exact component={ProfileUser} />

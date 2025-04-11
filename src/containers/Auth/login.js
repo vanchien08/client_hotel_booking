@@ -101,7 +101,6 @@ class Login extends Component {
                   onChange={(event) => this.handleOnChangeUsername(event)}
                 />
               </div>
-
               <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
                 <input
@@ -123,7 +122,6 @@ class Login extends Component {
                   <i className="fab fa-google"></i>
                 </div>
               </div>
-
               <button
                 type="submit"
                 class="btn btn-primary login-button"
@@ -131,6 +129,16 @@ class Login extends Component {
               >
                 Đăng nhập
               </button>
+              {/* Thay dòng "Nếu chưa có tài khoản hãy đăng ký" bằng: */}
+              <div className="register-section-login">
+                <span>Nếu chưa có tài khoản hãy </span>
+                <button
+                  className="register-button-login"
+                  onClick={() => this.handleNavigate("/register")}
+                >
+                  Đăng ký tài khoản
+                </button>
+              </div>
             </div>
           </div>
         </div>

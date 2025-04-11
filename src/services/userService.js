@@ -55,6 +55,24 @@ const handleChangePassApi = (id, password, newpassword) => {
   return axios.post("/change-password", { id, password, newpassword });
 };
 
+const handleRegisterApi = (
+  username,
+  name,
+  password,
+  phoneNumber,
+  email,
+  address
+) => {
+  return axios.post("/register", {
+    username,
+    name,
+    password,
+    phoneNumber,
+    email,
+    address,
+  });
+};
+
 const handleGetPrice = () => {
   return axios.get("/get-price-minmax");
 };
@@ -69,4 +87,5 @@ export {
   handleGetBookingApi,
   handleChangePassApi,
   handleGetPrice,
+  handleRegisterApi,
 };

@@ -8,6 +8,7 @@ export const path = {
   ROOMDETAIL: "/roomdetail",
   PROFILE: "/profile",
   USERINFO: "/user-info",
+  REGISTER: "/register",
 };
 
 export const languages = {
