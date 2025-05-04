@@ -54,11 +54,26 @@ const items2 = [
 
 const Dashboard = ({ isLoggedIn, navigate }) => {
   const [selectedContent, setSelectedContent] = useState("HotelManage");
+  const [openKeys, setOpenKeys] = useState(["sub1"]); // Default open submenu
+
   const {
     token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken(); // Dùng hooks trong function component
+  } = theme.useToken();
 
-  // Hàm xử lý khi người dùng click vào menu
+  // Handle submenu opening/closing
+  const onOpenChange = (keys) => {
+    const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
+
+    if (latestOpenKey) {
+      // Replace all open keys with just the latest one
+      setOpenKeys([latestOpenKey]);
+    } else {
+      // If collapsing, allow all submenus to be closed
+      setOpenKeys([]);
+    }
+  };
+
+  // Handle menu item click
   const handleMenuClick = (e) => {
     const { key } = e;
     let selectedContent = null;
@@ -97,10 +112,11 @@ const Dashboard = ({ isLoggedIn, navigate }) => {
             <Menu
               mode="inline"
               defaultSelectedKeys={["1"]}
-              defaultOpenKeys={["sub1"]}
+              openKeys={openKeys}
+              onOpenChange={onOpenChange}
               style={{ height: "100%" }}
               items={items2}
-              onClick={handleMenuClick} // Gọi hàm xử lý khi click menu
+              onClick={handleMenuClick}
             />
           </Sider>
 
