@@ -36,6 +36,15 @@ const handleAddHotelApi = (
     image,
   });
 };
+
+const handleReviewHotel = (userid, hotelid, rating, comment) => {
+  return axios.post("/user-reviews", {
+    userid,
+    hotelid,
+    rating,
+    comment,
+  });
+};
 export {
   handleUpdateHotelApi,
   handleFilterHotelApi,
@@ -43,4 +52,5 @@ export {
   handleGetAmenitiesHotel,
   handleAddHotelApi,
   handleDeleteHotelApi,
+  handleReviewHotel,
 };

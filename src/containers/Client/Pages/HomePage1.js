@@ -3,7 +3,10 @@ import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import "./HomePage1.scss";
 import * as actions from "../../../store/actions";
-import { handleSearchRoom } from "../../../services/searchResultService";
+import {
+  handleGetAllHotelApi,
+  handleSearchRoom,
+} from "../../../services/searchResultService";
 import { Button, Modal } from "antd";
 import { Pagination, Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react/swiper-react";
@@ -70,6 +73,7 @@ class HomePage1 extends Component {
       checkIn: this.getCurrentDate(),
       address: "",
       listHotel: null,
+      allHotel: null,
     };
   }
   getCurrentDate() {
@@ -82,7 +86,13 @@ class HomePage1 extends Component {
     return today.toISOString().split("T")[0]; // Format YYYY-MM-DD
   }
   // Lấy dữ liệu khi component mount
-  async componentDidMount() {}
+  async componentDidMount() {
+    let respon = await handleGetAllHotelApi();
+    this.setState({
+      allHotel: respon,
+    });
+    console.log("check list hotel", respon);
+  }
   handleClickSeacrch = async () => {
     let { address, checkIn, checkOut } = this.state;
     console.log("event vbvb>>", this.state);
@@ -162,6 +172,7 @@ class HomePage1 extends Component {
   render() {
     let isLoggedIn = this.props.isLoggedIn;
     let isModalOpen = this.state.isModalOpen;
+    let listhotel = this.state.allHotel;
     console.log("state login >>", isLoggedIn);
     return (
       <div className="Hompage-container">
@@ -239,17 +250,22 @@ class HomePage1 extends Component {
             onSwiper={(swiper) => console.log(swiper)}
             onSlideChange={() => console.log("slide change")}
           >
-            {destinations.map((place, index) => (
+            {listhotel?.map((place, index) => (
               <SwiperSlide key={index}>
                 <div className="rounded-lg overflow-hidden">
                   <img
                     src={place.image}
                     alt={place.name}
                     className="image-slider w-100 h-40 object-cover"
+                    style={{
+                      width: "100%",
+                      height: "200px", // hoặc bất kỳ chiều cao cố định nào bạn muốn
+                      objectFit: "cover", // giúp hình ảnh lấp đầy khung mà không méo
+                    }}
                   />
                   <div className="description-address-slider">
                     <h3 className="province-address">{place.name}</h3>
-                    <p className="distance-adress">Cách đây {place.distance}</p>
+                    <p className="distance-adress">Cách đây 100km</p>
                   </div>
                 </div>
               </SwiperSlide>

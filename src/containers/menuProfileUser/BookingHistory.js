@@ -3,12 +3,21 @@ import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import "./BookingHistory.scss";
 // import * as actions from "../../store/actions";
-import { Table, Image } from "antd";
+import { Table, Image, Button, Modal, Rate, Input } from "antd";
+import { handleReviewHotel } from "../../services/hotelService";
 import { handleGetBookingApi } from "../../services/userService";
+import * as actions from "../../store/actions";
 class BookingHistory extends Component {
   constructor(props) {
     super(props);
-    this.state = { data: null };
+    this.state = {
+      user: props.userInfo,
+      data: null,
+      isReviewModalVisible: false,
+      currentBooking: null,
+      reviewText: "",
+      reviewRating: 0,
+    };
   }
   handleLogin = () => {
     console.log("login");
@@ -17,7 +26,8 @@ class BookingHistory extends Component {
   handlerKeyDown = (event) => {};
 
   async componentDidMount() {
-    let respon = await handleGetBookingApi(2);
+    console.log("check user", this.state.user);
+    let respon = await handleGetBookingApi(this.state.user.id);
     this.setState({
       data: respon.dataBookings,
     });
@@ -42,6 +52,43 @@ class BookingHistory extends Component {
   handleNavigate = (path) => {
     this.props.navigate(path);
   };
+  handleReview = (record) => {
+    this.setState({
+      isReviewModalVisible: true,
+      currentBooking: record,
+      reviewText: "",
+      reviewRating: 0,
+    });
+  };
+
+  handleSubmitReview = async () => {
+    const { reviewText, reviewRating, currentBooking, user } = this.state;
+    console.log("Review submitted:", {
+      bookingId: currentBooking.id,
+      reviewText,
+      reviewRating,
+    });
+
+    let respon = await handleReviewHotel(
+      user.id,
+      currentBooking.room.hotel.id,
+      reviewRating,
+      reviewText
+    );
+    this.setState({
+      isReviewModalVisible: false,
+      currentBooking: null,
+      reviewText: "",
+      reviewRating: 0,
+    });
+
+    console.log("respon review", respon);
+  };
+
+  handleCancelReview = () => {
+    this.setState({ isReviewModalVisible: false });
+  };
+
   getColumns = () => [
     {
       title: "ID",
@@ -112,10 +159,25 @@ class BookingHistory extends Component {
       key: "createdAt",
       render: (date) => (date ? new Date(date).toLocaleString() : "N/A"),
     },
+    {
+      title: "Reviews",
+      key: "Review",
+      render: (_, record) => (
+        <Button
+          type="primary"
+          ghost
+          onClick={() => this.handleReview(record)}
+          style={{ marginRight: "10px" }}
+        >
+          Review
+        </Button>
+      ),
+    },
   ];
 
   render() {
     let { data } = this.state;
+
     return (
       <div className="col-md-8 ms-4 bg-white p-4 rounded">
         <h2>LỊCH SỬ ĐẶT PHÒNG</h2>
@@ -129,6 +191,29 @@ class BookingHistory extends Component {
             pagination={{ pageSize: 10 }}
           />
         )}
+
+        <Modal
+          title="Đánh giá khách sạn"
+          open={this.state.isReviewModalVisible}
+          onOk={this.handleSubmitReview}
+          onCancel={this.handleCancelReview}
+          okText="Gửi"
+          cancelText="Hủy"
+        >
+          <p>Nhập đánh giá của bạn:</p>
+          <Input.TextArea
+            rows={4}
+            value={this.state.reviewText}
+            onChange={(e) => this.setState({ reviewText: e.target.value })}
+          />
+          <div style={{ marginTop: 16 }}>
+            <span>Đánh giá: </span>
+            <Rate
+              value={this.state.reviewRating}
+              onChange={(value) => this.setState({ reviewRating: value })}
+            />
+          </div>
+        </Modal>
       </div>
     );
   }
@@ -138,6 +223,7 @@ const mapStateToProps = (state) => {
   return {
     // lang: state.app.language,
     // isLoggedIn: state.user.isLoggedIn,
+    userInfo: state.user.userInfo,
   };
 };
 
@@ -151,6 +237,8 @@ const mapDispatchToProps = (dispatch) => {
     //   dispatch(actions.fetchLoginStart(username, password)),
     // fetchLoginSuccess: (userInfo) =>
     //   dispatch(actions.fetchLoginSuccess(userInfo)),
+    fetchLoginSuccess: (userInfo) =>
+      dispatch(actions.fetchLoginSuccess(userInfo)),
   };
 };
 
