@@ -76,6 +76,68 @@ const handleRegisterApi = (
 const handleGetPrice = () => {
   return axios.get("/get-price-minmax");
 };
+
+const handleGetAllUsers = () => {
+  return axios.get("/get-all-user");
+};
+
+const handleFilterUsersApi = ({
+  id,
+  username,
+  name,
+  email,
+  gender,
+  status,
+  birthdayFrom,
+  birthdayTo,
+  createdAtFrom,
+  createdAtTo,
+  updatedAtFrom,
+  updatedAtTo,
+}) => {
+  return axios.get("/filter-users", {
+    params: {
+      id,
+      username,
+      name,
+      email,
+      gender,
+      status,
+      birthdayFrom,
+      birthdayTo,
+      createdAtFrom,
+      createdAtTo,
+      updatedAtFrom,
+      updatedAtTo,
+    },
+  });
+};
+
+const handleSetStatusUser = (id, check) => {
+  return axios.put("/set-status-user", null, {
+    params: { id, check },
+  });
+};
+const handleUpdateUserApi = (
+  id,
+  name,
+  username,
+  email,
+  address,
+  phonenum,
+  avatar
+) => {
+  return axios.put("/update-user", {
+    id,
+    name,
+    username,
+    email,
+    address,
+    phonenum,
+    avatar,
+  });
+};
+
 export {
   handleLoginApi,
   handleGetUserApi,
@@ -88,4 +150,8 @@ export {
   handleChangePassApi,
   handleGetPrice,
   handleRegisterApi,
+  handleGetAllUsers,
+  handleFilterUsersApi,
+  handleSetStatusUser,
+  handleUpdateUserApi,
 };

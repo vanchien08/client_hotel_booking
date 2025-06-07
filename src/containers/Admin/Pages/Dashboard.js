@@ -7,6 +7,7 @@ import Statistics from "./Statistics";
 import Reviews from "./Reviews";
 import AmenitiesHotel from "./AmenitiesHotel";
 import StatisticsV2 from "./StatisticsV2";
+import BookingManage from "./BookingManage";
 import "./Dashboard.scss";
 import {
   LaptopOutlined,
@@ -50,6 +51,24 @@ const items2 = [
       { key: "6", label: "Thêm thông báo" },
     ],
   },
+  {
+    key: "sub4",
+    icon: React.createElement(NotificationOutlined),
+    label: "Quản lý đặt phòng",
+    children: [
+      { key: "7", label: "Quản lý đặt phòng" },
+      { key: "8", label: "Quản lý voucher" },
+    ],
+  },
+  {
+    key: "sub5",
+    icon: React.createElement(NotificationOutlined),
+    label: "Quản lý người dùng",
+    children: [
+      { key: "9", label: "Quản lý người dùng" },
+      { key: "10", label: "Quản lý voucher" },
+    ],
+  },
 ];
 
 const Dashboard = ({ isLoggedIn, navigate }) => {
@@ -84,7 +103,8 @@ const Dashboard = ({ isLoggedIn, navigate }) => {
     else if (key === "4") selectedContent = "AddLaptop";
     else if (key === "5") selectedContent = "NotificationList";
     else if (key === "6") selectedContent = "AddNotification";
-
+    else if (key === "7") selectedContent = "BookingManage";
+    else if (key === "9") selectedContent = "userManage";
     setSelectedContent(selectedContent);
   };
 
@@ -131,6 +151,8 @@ const Dashboard = ({ isLoggedIn, navigate }) => {
               </div>
             )}
             {selectedContent === "AddNotification" && <StatisticsV2 />}
+            {selectedContent === "BookingManage" && <BookingManage />}
+            {selectedContent === "userManage" && <UserManage />}
           </Content>
         </Layout>
       </Content>

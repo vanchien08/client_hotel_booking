@@ -45,6 +45,13 @@ const handleReviewHotel = (userid, hotelid, rating, comment) => {
     comment,
   });
 };
+
+const handleGetReviewByHotel = (id) => {
+  return axios.get(`/get-review-hotel`, {
+    params: { id },
+  });
+};
+
 export {
   handleUpdateHotelApi,
   handleFilterHotelApi,
@@ -53,4 +60,5 @@ export {
   handleAddHotelApi,
   handleDeleteHotelApi,
   handleReviewHotel,
+  handleGetReviewByHotel,
 };

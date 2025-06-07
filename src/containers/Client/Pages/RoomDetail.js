@@ -9,7 +9,7 @@ import {
   handleGetAmenitiesHotelApi,
   handleGetAmenitiesHotel,
 } from "../../../services/hotelService";
-
+import UserReview from "../../../components/UserReview";
 import { Table } from "antd";
 import { handleBooking } from "../../../services/userService";
 import HeaderPage from "./HeaderPage";
@@ -204,7 +204,7 @@ class RoomDetail extends Component {
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
 
-    console.log("check in out", checkIn, checkOut);
+    console.log("check in out", hotel, checkOut);
     return (
       <div>
         <HeaderPage />
@@ -302,6 +302,7 @@ class RoomDetail extends Component {
               </ul>
             </div>
           </div>
+          <UserReview hotelId={hotel.id} />
         </div>
         <FooterV2 />
       </div>
