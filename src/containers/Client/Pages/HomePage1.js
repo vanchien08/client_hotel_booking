@@ -103,6 +103,7 @@ class HomePage1 extends Component {
       });
     } else {
       let searchRoom = await handleSearchRoom(address, checkIn, checkOut);
+      console.log("searhchchc", address, checkIn, checkOut, searchRoom);
       this.handleNavigate(
         address,
         checkIn,

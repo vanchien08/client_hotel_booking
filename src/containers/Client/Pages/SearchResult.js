@@ -36,7 +36,7 @@ class SearchResult extends Component {
   async componentDidMount() {
     let amenitiesHotel = await handleGetAmenitiesHotelApi();
     let responPrice = await handleGetPrice();
-    let listhotel = await handleGetAllHotelApi();
+    //  let listhotel = await handleGetAllHotelApi();
     let { address, checkIn, checkOut } = this.props.location.state || {};
     let priceminmax = responPrice.priceminmax;
 
@@ -44,12 +44,12 @@ class SearchResult extends Component {
     let priceRange = [priceminmax.priceMin, priceminmax.priceMax];
     // }
     this.setState({
-      listHotel: listhotel,
+      //  listHotel: listhotel,
       listAmenitiesHotel: amenitiesHotel.dataAmenities,
       priceRange: priceRange,
     });
 
-    console.log("responPrice", responPrice);
+    console.log("responPrice", this.state.listHotel);
   }
   handleClickSearch = async (address, checkIn, checkOut) => {
     let priceArr = this.state.priceRange;

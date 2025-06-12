@@ -10,12 +10,13 @@ import {
   handleGetAmenitiesHotel,
 } from "../../../services/hotelService";
 import UserReview from "../../../components/UserReview";
-import { Table } from "antd";
+import { Table, Modal, Button } from "antd";
 import { handleBooking } from "../../../services/userService";
 import HeaderPage from "./HeaderPage";
 import Footer from "./Footer";
 import FooterV2 from "../../Footer/FooterV2";
 import { toast } from "react-toastify";
+
 class RoomDetail extends Component {
   constructor(props) {
     super(props);
@@ -28,17 +29,16 @@ class RoomDetail extends Component {
       optionSelect: -1,
       totalPrice: 0,
       selectedRooms: {},
+      isConfirmModalVisible: false,
     };
   }
 
   async componentDidMount() {
     const { room } = this.props.location.state || {};
-    //    let listhotel = await handleGetAmenitiesHotel();
     let amenities = await handleGetAmenitiesHotel(this.state.listHotel.id);
     this.setState({
       amenities: amenities.dataAmenities,
     });
-    //  console.log("list >> hotel id :", amenities);
   }
 
   getColumns = () => [
@@ -69,7 +69,6 @@ class RoomDetail extends Component {
       render: (price) =>
         price !== undefined ? `$${price.toLocaleString()}` : "N/A",
     },
-
     {
       title: "Chọn số lượng",
       key: "selectQuantity",
@@ -99,6 +98,7 @@ class RoomDetail extends Component {
     localStorage.removeItem("persist:user");
     this.props.navigate(path);
   };
+
   handleSelectQuantity = (event, roomId) => {
     const quantity = parseInt(event.target.value);
     this.setState(
@@ -109,7 +109,6 @@ class RoomDetail extends Component {
         this.setState({
           totalPrice: this.handleTotalPrice(this.state.selectedRooms),
         });
-        // console.log("room quantity", this.state.selectedRooms);
       }
     );
   };
@@ -128,21 +127,32 @@ class RoomDetail extends Component {
       }
     });
 
-    return totalPrice * (checkOutDate.getDate() - checkInDate.getDate());
+    return (
+      totalPrice * Math.max(1, checkOutDate.getDate() - checkInDate.getDate())
+    );
   };
 
-  // handleSelectQuantity = (event) => {
-  //   let option = parseInt(event.target.value);
-  //   this.setState({
-  //     optionSelect: option,
-  //   });
-  //   //  console.log("select option", event.target.value);
-  // };
-  handleOnclickSubmit = async () => {
+  showConfirmModal = () => {
+    const { selectedRooms } = this.state;
+    if (Object.keys(selectedRooms).length === 0) {
+      toast.error("Vui lòng chọn ít nhất một phòng!", {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+    this.setState({ isConfirmModalVisible: true });
+  };
+
+  handleConfirmBooking = async () => {
     const { checkIn, checkOut, hotel } = this.props.location.state || {};
     if (!hotel || !hotel.rooms) {
       console.error("Hotel or rooms data is missing!");
-      alert("Dữ liệu khách sạn không hợp lệ.");
+      toast.error("Dữ liệu khách sạn không hợp lệ!", {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      this.setState({ isConfirmModalVisible: false });
       return;
     }
 
@@ -151,28 +161,36 @@ class RoomDetail extends Component {
     const night = Math.ceil(
       (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24)
     );
+    if (night <= 0) {
+      toast.error("Ngày check-out phải sau ngày check-in!", {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      this.setState({ isConfirmModalVisible: false });
+      return;
+    }
+
     let selectRooms = this.state.selectedRooms;
     let userInfo = this.props.userInfo || {};
     let role = userInfo.roles?.[0]?.role || -1;
 
     if (role === -1) {
       this.handleLogOut("/login");
+      this.setState({ isConfirmModalVisible: false });
       return;
     }
 
     try {
-      // Tạo danh sách promise
       const bookingPromises = Object.entries(selectRooms).map(
         async ([roomId, quantity]) => {
           let selectedRoom = hotel.rooms.find((room) => room.id == roomId);
           if (!selectedRoom) {
-            console.error(`Room ID ${roomId} not found`);
-            return Promise.reject(`Room ID ${roomId} not found`);
+            throw new Error(`Room ID ${roomId} not found`);
           }
 
           let totalPrice = night * quantity * selectedRoom.price;
 
-          return handleBooking(
+          let respon = await handleBooking(
             userInfo.id,
             quantity,
             checkIn,
@@ -180,31 +198,89 @@ class RoomDetail extends Component {
             roomId,
             totalPrice
           );
+
+          if (respon.errCode !== 1) {
+            throw new Error(`Booking failed for room ID ${roomId}`);
+          }
+          return respon;
         }
       );
 
-      // Chạy tất cả request đồng thời
       const responses = await Promise.all(bookingPromises);
-
       console.log("All bookings completed:", responses);
       toast.success("Đặt phòng thành công!", {
         position: "bottom-right",
         autoClose: 3000,
       });
+      this.setState({ isConfirmModalVisible: false });
     } catch (error) {
       console.error("Lỗi khi đặt phòng:", error);
-      alert("Có lỗi xảy ra khi đặt phòng. Vui lòng thử lại!");
+      toast.error(`Đặt phòng thất bại: ${error.message}`, {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+      this.setState({ isConfirmModalVisible: false });
     }
+  };
+
+  handleCancelBooking = () => {
+    this.setState({ isConfirmModalVisible: false });
+  };
+
+  renderConfirmModalContent = () => {
+    const { selectedRooms, listHotel, totalPrice } = this.state;
+    const { checkIn, checkOut } = this.props.location.state || {};
+    const checkInDate = checkIn ? new Date(checkIn) : null;
+    const checkOutDate = checkOut ? new Date(checkOut) : null;
+
+    return (
+      <div>
+        <p>
+          <strong>Khách sạn:</strong> {listHotel.name}
+        </p>
+        <p>
+          <strong>Địa chỉ:</strong> {listHotel.address}
+        </p>
+        {checkInDate && checkOutDate && (
+          <>
+            <p>
+              <strong>Check-in:</strong> {checkInDate.toLocaleDateString()}
+            </p>
+            <p>
+              <strong>Check-out:</strong> {checkOutDate.toLocaleDateString()}
+            </p>
+            <p>
+              <strong>Số đêm:</strong>{" "}
+              {Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24))}
+            </p>
+          </>
+        )}
+        <h4>Phòng đã chọn:</h4>
+        <ul>
+          {Object.entries(selectedRooms).map(([roomId, quantity]) => {
+            const room = listHotel.rooms?.find((r) => r.id == roomId);
+            return room ? (
+              <li key={roomId}>
+                {room.roomType} - Số lượng: {quantity} - Giá: $
+                {room.price.toLocaleString()} / phòng
+              </li>
+            ) : null;
+          })}
+        </ul>
+        <p>
+          <strong>Tổng giá:</strong> ${totalPrice.toLocaleString()}
+        </p>
+      </div>
+    );
   };
 
   render() {
     const { room, hotel, checkIn, checkOut } = this.props.location.state || {};
     const amenitiesHotel = this.state.amenities;
-    let { totalPrice } = this.state;
+    let { totalPrice, isConfirmModalVisible } = this.state;
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
 
-    console.log("check in out", hotel, checkOut);
     return (
       <div>
         <HeaderPage />
@@ -251,7 +327,6 @@ class RoomDetail extends Component {
             <div className="room-description">
               <p>{room.description}</p>
             </div>
-
             <div className="property-highlights">
               <h3>Điểm nổi bật của chỗ nghỉ</h3>
               <p>Hoàn hảo cho kỳ nghỉ một đêm</p>
@@ -270,7 +345,7 @@ class RoomDetail extends Component {
             />
             <div className="property-highlights price-reserve">
               <h3>Giá {checkOutDate.getDate() - checkInDate.getDate()} đêm</h3>
-              <h2>{totalPrice}</h2>
+              <h2>${totalPrice.toLocaleString()}</h2>
               <p>Bao gồm thuế và phí</p>
               <p>
                 Địa điểm hàng đầu: Được khách gần đây đánh giá cao (9,0 điểm)
@@ -278,10 +353,9 @@ class RoomDetail extends Component {
               <ul>
                 <li>Có bãi đậu xe riêng miễn phí ở khách sạn này</li>
               </ul>
-
               <button
                 className="reserve-button"
-                onClick={() => this.handleOnclickSubmit()}
+                onClick={this.showConfirmModal}
               >
                 Đặt ngay
               </button>
@@ -304,14 +378,24 @@ class RoomDetail extends Component {
           </div>
           <UserReview hotelId={hotel.id} />
         </div>
+        <Modal
+          title={<h1>Xác nhận đặt phòng</h1>}
+          visible={isConfirmModalVisible}
+          onOk={this.handleConfirmBooking}
+          onCancel={this.handleCancelBooking}
+          okText="Xác nhận"
+          cancelText="Hủy"
+        >
+          {this.renderConfirmModalContent()}
+        </Modal>
         <FooterV2 />
       </div>
     );
   }
 }
+
 const mapStateToProps = (state) => {
   return {
-    // lang: state.app.language,
     isLoggedIn: state.user.isLoggedIn,
     errCode: state.user.errCode,
     userInfo: state.user.userInfo,
@@ -321,15 +405,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     navigate: (path) => dispatch(push(path)),
-    // adminLoginSuccess: (adminInfo) =>
-    //   dispatch(actions.adminLoginSuccess(adminInfo)),
-    // adminLoginFail: () => dispatch(actions.adminLoginFail()),
-    // fetchLoginStart: (username, password) =>
-    //   dispatch(actions.fetchLoginStart(username, password)),
     fetchLoginSuccess: (userInfo) =>
       dispatch(actions.fetchLoginSuccess(userInfo)),
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RoomDetail);
-//export default HeaderPage;

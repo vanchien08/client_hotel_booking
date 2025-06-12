@@ -219,7 +219,7 @@ const Dashboard = ({ navigate, userInfo, processLogout }) => {
       </Content>
 
       <Footer style={{ textAlign: "center" }}>
-        Chien Design {new Date().getFullYear()} Created by DevChien
+        {/* PTIT Design {new Date().getFullYear()} Created by @PTITB2025 */}
       </Footer>
     </Layout>
   );
