@@ -1,5 +1,9 @@
 import axios from "../axios";
 
+const handleGetHotelApi = () => {
+  return axios.get("/getAllHotel");
+};
+
 const handleUpdateHotelApi = (body) => {
   return axios.post("/updateHotel", body);
 };
@@ -53,6 +57,7 @@ const handleGetReviewByHotel = (id) => {
 };
 
 export {
+  handleGetHotelApi,
   handleUpdateHotelApi,
   handleFilterHotelApi,
   handleGetAmenitiesHotelApi,

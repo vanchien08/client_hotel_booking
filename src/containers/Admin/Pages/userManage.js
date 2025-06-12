@@ -20,6 +20,7 @@ import {
   handleFilterUsersApi,
   handleSetStatusUser,
   handleUpdateUserApi,
+  handleSetUserRoleApi,
 } from "../../../services/userService";
 import { push } from "connected-react-router";
 import FilterButton from "../../../components/FilterUser";
@@ -233,7 +234,7 @@ class User extends Component {
         selectedUser.username,
         selectedUser.email,
         selectedUser.address,
-        selectedUser.phonenum,
+        selectedUser.phone,
         selectedUser.avatar
       );
       if (response.errCode === 1 || response.status === 200) {
@@ -337,14 +338,35 @@ class User extends Component {
   };
 
   handleChangeRole = async (userId, newRole) => {
-    // try {
-    //   await handleSetRoleUserApi(userId, newRole); // gọi API để set role
-    //   toast.success("Đổi vai trò thành công");
-    //   handleGetAllUser(); // reload lại danh sách
-    // } catch (error) {
-    //   console.error(error);
-    //   toast.error("Lỗi khi đổi vai trò");
-    // }
+    this.setState({ loading: true, error: null });
+    try {
+      const response = await handleSetUserRoleApi(userId, newRole);
+      console.log("responsessss", response);
+      if (response && response.errCode === 1) {
+        toast.success("Đổi vai trò thành công!", {
+          position: "bottom-right",
+          autoClose: 3000,
+        });
+        await this.fetchUsers(); // Reload the user list
+      } else {
+        const errorMessage = response?.errMessage || "Đổi vai trò thất bại";
+        this.setState({ error: errorMessage });
+        toast.error(errorMessage, {
+          position: "bottom-right",
+          autoClose: 3000,
+        });
+      }
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.errMessage || "Lỗi khi đổi vai trò";
+      this.setState({ error: errorMessage });
+      toast.error(errorMessage, {
+        position: "bottom-right",
+        autoClose: 3000,
+      });
+    } finally {
+      this.setState({ loading: false });
+    }
   };
 
   getColumns = () => [
@@ -368,11 +390,7 @@ class User extends Component {
       dataIndex: "email",
       key: "email",
     },
-    {
-      title: "Địa chỉ",
-      dataIndex: "address",
-      key: "address",
-    },
+
     {
       title: "Số điện thoại",
       dataIndex: "phone",
@@ -393,7 +411,6 @@ class User extends Component {
         const roleMap = {
           0: "Người dùng",
           1: "Nhân viên",
-          2: "Admin",
         };
 
         const currentRole = roles && roles.length > 0 ? roles[0].role : null;
@@ -413,12 +430,7 @@ class User extends Component {
         );
       },
     },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      render: (status) => (status ? "Hoạt động" : "Không hoạt động"),
-    },
+
     {
       title: "Ảnh",
       dataIndex: "avatar",
@@ -462,7 +474,7 @@ class User extends Component {
       ),
     },
     {
-      title: "Hành động",
+      title: "Cập nhật",
       key: "action",
       render: (record) => (
         <div>

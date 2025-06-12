@@ -1,124 +1,162 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
+import { Switch, Route, Redirect } from "react-router-dom";
+
 import UserManage from "./userManage";
 import Hotel from "./Hotel";
-import Statistics from "./Statistics";
+import Statistics from "./StatisticsV2";
 import Reviews from "./Reviews";
 import AmenitiesHotel from "./AmenitiesHotel";
-import StatisticsV2 from "./StatisticsV2";
 import BookingManage from "./BookingManage";
-import "./Dashboard.scss";
+import RoomManage from "./RoomManage";
+import AmenitiesRoom from "./AmenitiesRoom";
+
+import * as actions from "../../../store/actions";
 import {
-  LaptopOutlined,
-  NotificationOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
+  userIsAuthenticated,
+  userIsAuthenticatedAdmin,
+  userIsAuthenticatedStaff,
+} from "../../../hoc/authentication";
+import "./Dashboard.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSignOutAlt,
+  faHome,
+  faHotel,
+  faComment,
+  faChartSimple,
+  faCreditCard,
+  faHouseUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { UserOutlined } from "@ant-design/icons";
+import { Breadcrumb, Layout, Menu, theme, Button, Space } from "antd";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-const items1 = ["1", "2", "3"].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}));
+const getMenuItems = (role) => {
+  const allItems = [
+    {
+      key: "sub1",
+      icon: <FontAwesomeIcon icon={faHotel} />,
+      label: "Quản lý khách sạn",
+      children: [
+        { key: "1", label: "Khách sạn" },
+        { key: "2", label: "Tiện ích khách sạn" },
+      ],
+    },
+    {
+      key: "sub2",
+      icon: <FontAwesomeIcon icon={faHouseUser} />,
+      label: "Quản lý phòng",
+      children: [
+        { key: "3", label: "Phòng" },
+        { key: "4", label: "Tiện ích phòng" },
+      ],
+    },
+    {
+      key: "sub3",
+      icon: <FontAwesomeIcon icon={faCreditCard} />,
+      label: "Quản lý đặt phòng",
+      children: [{ key: "5", label: "Đặt phòng" }],
+    },
+    {
+      key: "sub4",
+      icon: <UserOutlined />,
+      label: "Quản lý người dùng",
+      children: [{ key: "6", label: "Người dùng" }],
+    },
+    {
+      key: "sub5",
+      icon: <FontAwesomeIcon icon={faComment} />,
+      label: "Quản lý đánh giá",
+      children: [{ key: "7", label: "Đánh giá" }],
+    },
+    {
+      key: "sub6",
+      icon: <FontAwesomeIcon icon={faChartSimple} />,
+      label: "Thống kê",
+      children: [{ key: "8", label: "Thống kê" }],
+    },
+  ];
 
-const items2 = [
-  {
-    key: "sub1",
-    icon: React.createElement(UserOutlined),
-    label: "Quản lý người dùng",
-    children: [
-      { key: "1", label: "Quản lý khách sạn" },
-      { key: "2", label: "Tiện ích khách sạn" },
-    ],
-  },
-  {
-    key: "sub2",
-    icon: React.createElement(LaptopOutlined),
-    label: "Quản lý đánh giá",
-    children: [
-      { key: "3", label: "Quản lý đánh giá" },
-      { key: "4", label: "Thêm Laptop" },
-    ],
-  },
-  {
-    key: "sub3",
-    icon: React.createElement(NotificationOutlined),
-    label: "Thống kê",
-    children: [
-      { key: "5", label: "Thống kê" },
-      { key: "6", label: "Thêm thông báo" },
-    ],
-  },
-  {
-    key: "sub4",
-    icon: React.createElement(NotificationOutlined),
-    label: "Quản lý đặt phòng",
-    children: [
-      { key: "7", label: "Quản lý đặt phòng" },
-      { key: "8", label: "Quản lý voucher" },
-    ],
-  },
-  {
-    key: "sub5",
-    icon: React.createElement(NotificationOutlined),
-    label: "Quản lý người dùng",
-    children: [
-      { key: "9", label: "Quản lý người dùng" },
-      { key: "10", label: "Quản lý voucher" },
-    ],
-  },
-];
+  if (role == 1) {
+    return allItems.filter(
+      (item) =>
+        item.key === "sub1" ||
+        item.key === "sub2" ||
+        item.key === "sub3" ||
+        item.key === "sub5"
+    ); // Chỉ hiển thị sub1, sub2, sub3, sub5
+  }
+  return allItems;
+};
 
-const Dashboard = ({ isLoggedIn, navigate }) => {
-  const [selectedContent, setSelectedContent] = useState("HotelManage");
-  const [openKeys, setOpenKeys] = useState(["sub1"]); // Default open submenu
+const Dashboard = ({ navigate, userInfo, processLogout }) => {
+  const [openKeys, setOpenKeys] = useState(["sub1"]);
+  const role = userInfo.roles?.[0]?.role || -1; // Mặc định STAFF nếu không có role
 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  // Handle submenu opening/closing
   const onOpenChange = (keys) => {
     const latestOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
-
     if (latestOpenKey) {
-      // Replace all open keys with just the latest one
       setOpenKeys([latestOpenKey]);
     } else {
-      // If collapsing, allow all submenus to be closed
       setOpenKeys([]);
     }
   };
 
-  // Handle menu item click
+  const handleGoHome = () => {
+    navigate("/"); // Điều hướng về trang chủ
+  };
+
+  const handleLogout = () => {
+    navigate("/login");
+    processLogout();
+  };
+
   const handleMenuClick = (e) => {
     const { key } = e;
-    let selectedContent = null;
-
-    if (key === "1") selectedContent = "HotelManage";
-    else if (key === "2") selectedContent = "AmenitiesHotel";
-    else if (key === "3") selectedContent = "LaptopList";
-    else if (key === "4") selectedContent = "AddLaptop";
-    else if (key === "5") selectedContent = "NotificationList";
-    else if (key === "6") selectedContent = "AddNotification";
-    else if (key === "7") selectedContent = "BookingManage";
-    else if (key === "9") selectedContent = "userManage";
-    setSelectedContent(selectedContent);
+    if (key === "1") navigate("/system/dashboard/hotels");
+    else if (key === "2") navigate("/system/dashboard/amenities-hotel");
+    else if (key === "3") navigate("/system/dashboard/rooms");
+    else if (key === "4") navigate("/system/dashboard/amenities-room");
+    else if (key === "5") navigate("/system/dashboard/booking");
+    else if (key === "6") navigate("/system/dashboard/users");
+    else if (key === "7") navigate("/system/dashboard/reviews");
+    else if (key === "8") navigate("/system/dashboard/statistics");
   };
 
   return (
     <Layout>
       <Header style={{ display: "flex", alignItems: "center" }}>
         <div className="demo-logo" />
+        <div className="demo-logo" />
+        <div className="button-container">
+          <Button
+            type="primary"
+            icon={<FontAwesomeIcon icon={faHome} />}
+            onClick={handleGoHome}
+          >
+            Trang chủ
+          </Button>
+          <Button
+            type="default"
+            icon={<FontAwesomeIcon icon={faSignOutAlt} />}
+            onClick={handleLogout}
+          >
+            Đăng xuất
+          </Button>
+        </div>
       </Header>
 
       <Content style={{ padding: "0 48px" }}>
         <Breadcrumb style={{ margin: "16px 0" }}>
           <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
+          <Breadcrumb.Item>Dashboard</Breadcrumb.Item>
         </Breadcrumb>
 
         <Layout
@@ -135,24 +173,47 @@ const Dashboard = ({ isLoggedIn, navigate }) => {
               openKeys={openKeys}
               onOpenChange={onOpenChange}
               style={{ height: "100%" }}
-              items={items2}
+              items={getMenuItems(role)}
               onClick={handleMenuClick}
             />
           </Sider>
 
           <Content style={{ padding: "0 24px", minHeight: 280 }}>
-            {selectedContent === "HotelManage" && <Hotel />}
-            {selectedContent === "AmenitiesHotel" && <AmenitiesHotel />}
-            {selectedContent === "LaptopList" && <Reviews />}
-            {selectedContent === "AddLaptop" && <div>Thêm Laptop</div>}
-            {selectedContent === "NotificationList" && (
-              <div>
-                <Statistics />
-              </div>
-            )}
-            {selectedContent === "AddNotification" && <StatisticsV2 />}
-            {selectedContent === "BookingManage" && <BookingManage />}
-            {selectedContent === "userManage" && <UserManage />}
+            <Switch>
+              <Route
+                path="/system/dashboard/hotels"
+                component={userIsAuthenticated(Hotel)}
+              />
+              <Route
+                path="/system/dashboard/amenities-hotel"
+                component={userIsAuthenticated(AmenitiesHotel)}
+              />
+              <Route
+                path="/system/dashboard/rooms"
+                component={userIsAuthenticated(RoomManage)}
+              />
+              <Route
+                path="/system/dashboard/amenities-room"
+                component={userIsAuthenticated(AmenitiesRoom)}
+              />
+              <Route
+                path="/system/dashboard/booking"
+                component={userIsAuthenticated(BookingManage)}
+              />
+              <Route
+                path="/system/dashboard/users"
+                component={userIsAuthenticatedAdmin(UserManage)}
+              />
+              <Route
+                path="/system/dashboard/reviews"
+                component={userIsAuthenticated(Reviews)}
+              />
+              <Route
+                path="/system/dashboard/statistics"
+                component={userIsAuthenticatedAdmin(Statistics)}
+              />
+              <Redirect to="/system/dashboard/hotels" />
+            </Switch>
           </Content>
         </Layout>
       </Content>
@@ -164,18 +225,17 @@ const Dashboard = ({ isLoggedIn, navigate }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    isLoggedIn: state.user.isLoggedIn,
-    errCode: state.user.errCode,
-    userInfo: state.user.userInfo,
-  };
-};
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.user.isLoggedIn,
+  errCode: state.user.errCode,
+  userInfo: state.user.userInfo,
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    navigate: (path) => dispatch(push(path)),
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  navigate: (path) => dispatch(push(path)),
+  fetchLoginSuccess: (userInfo) =>
+    dispatch(actions.fetchLoginSuccess(userInfo)),
+  processLogout: () => dispatch(actions.processLogout()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

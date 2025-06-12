@@ -60,9 +60,9 @@ class Login extends Component {
       let role = respon.user.roles[0].role;
       isLogin = 1;
 
-      if (role == 1) {
+      if (role == 2) {
         localStorage.setItem("adminInfor", JSON.stringify(respon.user));
-        roleinf = 1;
+        roleinf = 2;
       } else {
         localStorage.setItem("userInfor", JSON.stringify(respon.user));
         roleinf = 0;

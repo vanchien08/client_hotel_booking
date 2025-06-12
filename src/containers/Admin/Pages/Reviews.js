@@ -289,7 +289,7 @@ class Reviews extends Component {
         >
           Xác nhận xóa!
         </Modal>
-        <h1>Reviews MANAGER</h1>
+        <h1>Quản lý đánh giá</h1>
         <Popover
           placement="bottomRight"
           content={
@@ -307,7 +307,7 @@ class Reviews extends Component {
           destroyTooltipOnHide={false}
         >
           <Button className="filter-button">
-            Filter <FilterOutlined />
+            Lọc <FilterOutlined />
           </Button>
         </Popover>
 

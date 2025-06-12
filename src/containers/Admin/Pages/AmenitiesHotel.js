@@ -18,10 +18,12 @@ import {
   ArrowUpOutlined,
 } from "@ant-design/icons";
 import { toast } from "react-toastify";
+import * as actions from "../../../store/actions";
 class AmenitiesHotel extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      user: this.props.userInfo || {},
       isLoggedIn: false,
       data: null,
       searchTerm: "",
@@ -35,6 +37,12 @@ class AmenitiesHotel extends Component {
       selectTags: [],
       selectHotel: null,
     };
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.userInfo !== prevProps.userInfo) {
+      console.log("Cập nhật userInfo:", this.props.userInfo);
+      this.setState({ user: this.props.userInfo });
+    }
   }
 
   async componentDidMount() {
@@ -173,12 +181,14 @@ class AmenitiesHotel extends Component {
           )}
 
           {/* Nút "New Tag" luôn hiển thị */}
+
           <Tag
             color="blue"
             onClick={() => this.handleAdd(record)}
             style={{ marginLeft: "8px" }}
           >
-            <PlusOutlined /> New Tag
+            <PlusOutlined />
+            Thêm
           </Tag>
         </>
       ),
@@ -251,12 +261,15 @@ class AmenitiesHotel extends Component {
 const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.user.isLoggedIn,
+    userInfo: state.user.userInfo,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     navigate: (path) => dispatch(push(path)),
+    fetchLoginSuccess: (userInfo) =>
+      dispatch(actions.fetchLoginSuccess(userInfo)),
   };
 };
 

@@ -326,6 +326,7 @@ class UserInfo extends Component {
                               </div>
 
                               <Button
+                                className="button-update-userinfo"
                                 type="primary"
                                 ghost
                                 onClick={(event) => this.HandleSubmit(event)}

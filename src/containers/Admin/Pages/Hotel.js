@@ -26,10 +26,13 @@ import { toast } from "react-toastify";
 import { add } from "lodash";
 // antd
 
+import * as actions from "../../../store/actions";
+
 class Hotel extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      user: this.props.userInfo || {},
       isLoggedIn: false,
       data: null,
       selectedReview: null,
@@ -65,7 +68,7 @@ class Hotel extends Component {
 
   async componentDidMount() {
     let user = await handleGetHotelApi();
-
+    let role = this.state.user.roles?.[0]?.role || -1;
     console.log("data get from api ", user);
     //  user = user.user.user;
     this.setState({
@@ -75,88 +78,106 @@ class Hotel extends Component {
     console.log("is login ?", this.props.isLoggedIn);
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.userInfo !== prevProps.userInfo) {
+      console.log("Cập nhật userInfo:", this.props.userInfo);
+      this.setState({ user: this.props.userInfo });
+    }
+  }
+
   redirectToSystemPage = (url) => {
     const { navigate } = this.props;
     const redirectPath = url;
     navigate(`${redirectPath}`);
   };
 
-  getColumns2 = () => [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
-      title: "Tên",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Mô tả",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
-      title: "Địa chỉ",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Thành phố",
-      dataIndex: "city",
-      key: "city",
-    },
-    {
-      title: "Quốc gia",
-      dataIndex: "country",
-      key: "country",
-    },
-    {
-      title: "Ảnh",
-      dataIndex: "image",
-      key: "image",
-      render: (image) => (
-        <Image
-          src={image}
-          alt="Hotel"
-          style={{ width: "50px", height: "50px" }}
-        />
-      ), // Hiển thị hình ảnh
-    },
-    {
-      title: "Lúc",
-      dataIndex: "created_At",
-      key: "created_At",
-      render: (created_At) =>
-        created_At ? new Date(created_At).toLocaleDateString() : "N/A", // Xử lý trường hợp null
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (record) => (
-        <div>
-          <Button
-            type="primary"
-            ghost
-            onClick={() => this.handleUpdate(record)}
-            style={{ marginRight: "10px" }}
-          >
-            Update
-          </Button>
-          <Button
-            type="primary"
-            danger
-            ghost
-            onClick={() => this.handleDelete(record.id)}
-            style={{ color: "red" }}
-          >
-            Delete
-          </Button>
-        </div>
-      ),
-    },
-  ];
+  getColumns2 = () => {
+    const { user } = this.state;
+    const role = user.roles?.[0]?.role || -1;
+
+    const columns = [
+      {
+        title: "ID",
+        dataIndex: "id",
+        key: "id",
+      },
+      {
+        title: "Tên",
+        dataIndex: "name",
+        key: "name",
+      },
+      {
+        title: "Mô tả",
+        dataIndex: "description",
+        key: "description",
+      },
+      {
+        title: "Địa chỉ",
+        dataIndex: "address",
+        key: "address",
+      },
+      {
+        title: "Thành phố",
+        dataIndex: "city",
+        key: "city",
+      },
+      {
+        title: "Quốc gia",
+        dataIndex: "country",
+        key: "country",
+      },
+      {
+        title: "Ảnh",
+        dataIndex: "image",
+        key: "image",
+        render: (image) => (
+          <Image
+            src={image}
+            alt="Khách sạn"
+            style={{ width: "50px", height: "50px" }}
+          />
+        ),
+      },
+      {
+        title: "Lúc",
+        dataIndex: "created_At",
+        key: "created_At",
+        render: (created_At) =>
+          created_At ? new Date(created_At).toLocaleDateString() : "N/A",
+      },
+    ];
+
+    // Chỉ thêm cột "Action" nếu role không phải là 1
+    if (role == 2) {
+      columns.push({
+        title: "Action",
+        key: "action",
+        render: (record) => (
+          <div>
+            <Button
+              type="primary"
+              ghost
+              onClick={() => this.handleUpdate(record)}
+              style={{ marginRight: "10px" }}
+            >
+              Cập nhật
+            </Button>
+            <Button
+              type="primary"
+              danger
+              ghost
+              onClick={() => this.handleDelete(record.id)}
+              style={{ color: "red" }}
+            >
+              Xóa
+            </Button>
+          </div>
+        ),
+      });
+    }
+
+    return columns;
+  };
   handleUpdate = (record) => {
     this.toggleModal("update", true);
     this.setState({
@@ -351,6 +372,9 @@ class Hotel extends Component {
   render() {
     const { isLoggedIn } = this.props;
     let isModalOpen = this.state.isModalOpen;
+
+    const { user } = this.state;
+    const role = user.roles?.[0]?.role || -1;
     const {
       data,
       selectedReview,
@@ -679,11 +703,17 @@ class Hotel extends Component {
           )}
         </Modal>
 
-        <h1>HOTEl MANAGER</h1>
-        <PlusSquareOutlined
-          className="button-add-review"
-          onClick={() => this.toggleModal("add", true)}
-        />
+        <h1>Quản lý khách sạn</h1>
+        {role == 2 ? (
+          <Button
+            className="button-add"
+            size="large"
+            onClick={() => this.toggleModal("add", true)}
+          >
+            <i className="fa-solid fa-plus"></i> Tạo mới
+          </Button>
+        ) : null}
+
         <Popover
           placement="bottomRight"
           content={
@@ -701,7 +731,7 @@ class Hotel extends Component {
           destroyTooltipOnHide={false}
         >
           <Button className="filter-button">
-            Filter <FilterOutlined />
+            Lọc <FilterOutlined />
           </Button>
         </Popover>
         {data == null ? (
@@ -717,12 +747,15 @@ class Hotel extends Component {
 const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.user.isLoggedIn,
+    userInfo: state.user.userInfo,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     navigate: (path) => dispatch(push(path)),
+    fetchLoginSuccess: (userInfo) =>
+      dispatch(actions.fetchLoginSuccess(userInfo)),
   };
 };
 

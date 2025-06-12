@@ -234,12 +234,15 @@ class HomePage1 extends Component {
           </div>
         </div>
         <div className="trip-slider">
-          <h1 className="text-2xl font-bold mb-2">
-            Bạn đang định thực hiện chuyến đi ra sao?
-          </h1>
-          <p className="text-gray-600 mb-4">
-            Tìm điểm đến ở Việt Nam phù hợp với sở thích của bạn
-          </p>{" "}
+          <div className="title-slide">
+            <h1 className="text-2xl font-bold mb-2">
+              Bạn đang định thực hiện chuyến đi ra sao?
+            </h1>
+            <p className="text-gray-600 mb-4">
+              Tìm điểm đến ở Việt Nam phù hợp với sở thích của bạn
+            </p>{" "}
+          </div>
+
           <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={50}

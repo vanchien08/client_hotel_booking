@@ -138,6 +138,12 @@ const handleUpdateUserApi = (
   });
 };
 
+const handleSetUserRoleApi = (id, role) => {
+  return axios.put("/update-user-role", null, {
+    params: { id, role },
+  });
+};
+
 export {
   handleLoginApi,
   handleGetUserApi,
@@ -154,4 +160,5 @@ export {
   handleFilterUsersApi,
   handleSetStatusUser,
   handleUpdateUserApi,
+  handleSetUserRoleApi,
 };

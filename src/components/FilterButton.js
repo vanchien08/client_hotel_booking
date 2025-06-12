@@ -123,10 +123,19 @@ class FilterButton extends Component {
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Space>
-              <Button type="primary" htmlType="submit">
+              <Button
+                size="large"
+                type="primary"
+                htmlType="submit"
+                style={{ minWidth: 100 }}
+              >
                 Submit
               </Button>
-              <Button htmlType="button" onClick={this.props.onClose}>
+              <Button
+                size="large"
+                onClick={this.props.onClose}
+                style={{ minWidth: 100 }}
+              >
                 Cancel
               </Button>
             </Space>

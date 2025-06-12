@@ -67,7 +67,7 @@ class HeaderPage extends Component {
     localStorage.removeItem("persist:admin");
     localStorage.removeItem("persist:user");
     this.setState({ user: null });
-    this.props.fetchLoginSuccess(null);
+    this.props.processLogout();
     this.handleNavigate(path);
   };
   items = [
@@ -338,7 +338,7 @@ class HeaderPage extends Component {
                     Contact
                   </a>
                 </li>
-                {user.roles?.[0]?.role == 1 ? (
+                {user.roles?.[0]?.role == 1 || user.roles?.[0]?.role == 2 ? (
                   <img
                     className="dashboard-icon"
                     src={dashboardicon}
@@ -378,6 +378,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actions.fetchLoginStart(username, password)),
     fetchLoginSuccess: (userInfo) =>
       dispatch(actions.fetchLoginSuccess(userInfo)),
+    processLogout: () => dispatch(actions.processLogout()),
   };
 };
 
