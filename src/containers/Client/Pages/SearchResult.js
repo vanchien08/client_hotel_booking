@@ -48,8 +48,19 @@ class SearchResult extends Component {
       listAmenitiesHotel: amenitiesHotel.dataAmenities,
       priceRange: priceRange,
     });
+  }
 
-    console.log("responPrice", this.state.listHotel);
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.state !== this.props.location.state) {
+      this.setState({
+        address: this.props.location.state?.address || "",
+        checkIn: this.props.location.state?.checkIn || this.getCurrentDate(),
+        checkOut:
+          this.props.location.state?.checkOut || this.getCurrentDatePlus(),
+        listHotel: this.props.location.state?.listHotel || [],
+        listRoom: this.props.location.state?.listRoom || [],
+      });
+    }
   }
   handleClickSearch = async (address, checkIn, checkOut) => {
     let priceArr = this.state.priceRange;
@@ -169,6 +180,7 @@ class SearchResult extends Component {
               onSearch={this.handleClickSearch}
               checkIn={checkIn}
               checkOut={checkOut}
+              address={address}
             />
           </div>
 

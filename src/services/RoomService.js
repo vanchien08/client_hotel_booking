@@ -63,10 +63,15 @@ const handleAddRoomApi = (
     isAvailable,
   });
 };
+
+const handleGetAvailableRooms = (hotelId) => {
+  return axios.get(`/get-room-by-hotelid/${hotelId}`);
+};
 export {
   handleGetRoomsApi,
   handleFilterRoomApi,
   updateRoomApi,
   handleSetStatusRoom,
   handleAddRoomApi,
+  handleGetAvailableRooms,
 };

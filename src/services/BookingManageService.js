@@ -29,9 +29,12 @@ const handleSetStatusBooking = (id, status) => {
     params: { id, status },
   });
 };
-
+const handleAddBookingApi = (bookingData) => {
+  return axios.post("/create-booking", bookingData);
+};
 export {
   handleGetAllBookingApi,
   handleFilterBookingApi,
   handleSetStatusBooking,
+  handleAddBookingApi,
 };

@@ -14,15 +14,29 @@ class SearchButton extends Component {
       isModalOpen: false,
       checkOut: this.props.checkOut || this.getCurrentDate(),
       checkIn: this.props.checkIn || this.getCurrentDate(),
-      address: "",
+      address: this.props.address || "",
     };
   }
+
   getCurrentDate() {
     const today = new Date();
     return today.toISOString().split("T")[0]; // Format YYYY-MM-DD
   }
   // Lấy dữ liệu khi component mount
   async componentDidMount() {}
+
+  componentDidUpdate(prevProps) {
+    // Đồng bộ trạng thái khi props thay đổi
+    if (prevProps.address !== this.props.address) {
+      this.setState({ address: this.props.address || "" });
+    }
+    if (prevProps.checkIn !== this.props.checkIn) {
+      this.setState({ checkIn: this.props.checkIn || this.getCurrentDate() });
+    }
+    if (prevProps.checkOut !== this.props.checkOut) {
+      this.setState({ checkOut: this.props.checkOut || this.getCurrentDate() });
+    }
+  }
   handleClickSearch = () => {
     let { address, checkIn, checkOut } = this.state;
 
